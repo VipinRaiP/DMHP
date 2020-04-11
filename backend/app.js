@@ -62,7 +62,6 @@ app.post("/getAlcoholDataAllDistMonthly", (req, res) => {
   var year = req.body.year;
 
   sql = "select m.Month,m.DistrictId, d.District,d.Population,\
-
       (sum(old_alcohal_male)+sum(old_alcohal_female)+sum(new_alcohal_female)+sum(new_alcohal_male)) as `Total Cases`\
       from (SELECT CASE \
       WHEN MONTH(ReportingMonthyear)=1 THEN 1 \
@@ -131,7 +130,6 @@ app.post("/getSuicideDataAllDistMonthly", (req, res) => {
 app.post("/getAlcoholDataAllDistQuart", (req, res) => {
   var year = req.body.year;
   sql = "select q.Quarter,q.DistrictId,d.District,d.Population,\
-
           (sum(old_alcohal_male)+sum(old_alcohal_female)+sum(new_alcohal_female)+sum(new_alcohal_male)) as `Total Cases` \
            from (SELECT CASE \
                 WHEN MONTH(ReportingMonthYear)>=1 and MONTH(ReportingMonthYear)<=3 THEN 1 \
@@ -182,7 +180,6 @@ app.post("/getAlcoholDataAllDistAnnually", (req, res) => {
   var year = req.body.year;
   console.log(year)
   sql = "select m.DistrictId, d.District,d.Population,\
-
           (sum(old_alcohal_male)+sum(new_alcohal_male)+sum(old_alcohal_female)+sum(new_alcohal_female)) as `Total Cases` \
           from Clinical_Data m,Districts d\
           where year(ReportingMonthyear)=? and m.DistrictId = d.DistrictId\

@@ -36,7 +36,7 @@ import { CardComponent } from './Operational_Dashboard/Cards/card/card.component
     //DistrictMapDialogComponent,
     MapComponentComponent,
     DistrictMapDataComponentComponent,
-    DistrictMapComponentComponent
+    DistrictMapComponentComponent,
     CardComponent
   ],
   imports: [

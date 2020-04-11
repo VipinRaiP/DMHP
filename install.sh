@@ -7,3 +7,4 @@ npm install json-groupby
 ng add @angular/material
 npm install --save moment
 npm install @angular/material-moment-adapter
+npm install topojson
