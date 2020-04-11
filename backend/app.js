@@ -58,9 +58,11 @@ con.query(sql, function (err, res) {
  ******************************************************************************************************************/
 
 app.post("/getAlcoholDataAllDistMonthly", (req, res) => {
+
   var year = req.body.year;
 
   sql = "select m.Month,m.DistrictId, d.District,d.Population,\
+
       (sum(old_alcohal_male)+sum(old_alcohal_female)+sum(new_alcohal_female)+sum(new_alcohal_male)) as `Total Cases`\
       from (SELECT CASE \
       WHEN MONTH(ReportingMonthyear)=1 THEN 1 \
@@ -118,7 +120,6 @@ app.post("/getSuicideDataAllDistMonthly", (req, res) => {
           group by m.Month,d.DistrictId,d.Population \
           order by m.Month,`Total Cases`";
 
-
   con.query(sql, [year], function (err, response) {
     if (err) console.log(err);
     console.log(response);
@@ -130,6 +131,7 @@ app.post("/getSuicideDataAllDistMonthly", (req, res) => {
 app.post("/getAlcoholDataAllDistQuart", (req, res) => {
   var year = req.body.year;
   sql = "select q.Quarter,q.DistrictId,d.District,d.Population,\
+
           (sum(old_alcohal_male)+sum(old_alcohal_female)+sum(new_alcohal_female)+sum(new_alcohal_male)) as `Total Cases` \
            from (SELECT CASE \
                 WHEN MONTH(ReportingMonthYear)>=1 and MONTH(ReportingMonthYear)<=3 THEN 1 \
@@ -143,6 +145,7 @@ app.post("/getAlcoholDataAllDistQuart", (req, res) => {
                 where q.DistrictId = d.DistrictId \
                 group by q.Quarter,q.DistrictId,d.Population\
                 order by q.Quarter,`Total Cases`";
+
 
   con.query(sql, [year], function (err, response) {
     if (err) console.log(err);
@@ -179,6 +182,7 @@ app.post("/getAlcoholDataAllDistAnnually", (req, res) => {
   var year = req.body.year;
   console.log(year)
   sql = "select m.DistrictId, d.District,d.Population,\
+
           (sum(old_alcohal_male)+sum(new_alcohal_male)+sum(old_alcohal_female)+sum(new_alcohal_female)) as `Total Cases` \
           from Clinical_Data m,Districts d\
           where year(ReportingMonthyear)=? and m.DistrictId = d.DistrictId\
@@ -207,7 +211,6 @@ app.post("/getSuicideDataAllDistAnnually", (req, res) => {
     res.json(response);
   });
 })
-
 
 /*********************************************************************************************************************************
  *  Map APIs

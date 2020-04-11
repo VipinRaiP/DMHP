@@ -13,9 +13,12 @@ import { MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputM
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DistrictPatientService } from './Operational_Dashboard/District/services/district-patient.service';
 import { HttpClientModule } from '@angular/common/http';
-import { DistrictMapComponentComponent } from './Operational_Dashboard/District/district-map-component/district-map-component.component';
-import { DistrictMapDetailsComponent, DistrictMapDialogComponent } from './Operational_Dashboard/District/district-map-component/district-map-details/district-map-details.component';
+//import { DistrictMapComponentComponent } from './Operational_Dashboard/District/district-map-component/district-map-component.component';
+//import { DistrictMapDetailsComponent, DistrictMapDialogComponent } from './Operational_Dashboard/District/district-map-component/district-map-details/district-map-details.component';
 import { DistrictMapService } from './Operational_Dashboard/District/services/district-map.service';
+import { MapComponentComponent } from './Operational_Dashboard/District/map-component/map-component.component';
+import { DistrictMapDataComponentComponent } from './Operational_Dashboard/District/map-component/district-map-data-component/district-map-data-component.component';
+import { DistrictMapComponentComponent } from './Operational_Dashboard/District/map-component/district-map-component/district-map-component.component';
 import { CardComponent } from './Operational_Dashboard/Cards/card/card.component';
 
 
@@ -28,9 +31,12 @@ import { CardComponent } from './Operational_Dashboard/Cards/card/card.component
     DistrictBarChartComponentComponent,
     DistrictGranularComponentComponent,
     DistrictPatientMenuComponentComponent,
-    DistrictMapComponentComponent,
-    DistrictMapDetailsComponent,
-    DistrictMapDialogComponent,
+   // DistrictMapComponentComponent,
+    //DistrictMapDetailsComponent,
+    //DistrictMapDialogComponent,
+    MapComponentComponent,
+    DistrictMapDataComponentComponent,
+    DistrictMapComponentComponent
     CardComponent
   ],
   imports: [
@@ -50,7 +56,7 @@ import { CardComponent } from './Operational_Dashboard/Cards/card/card.component
     MatDialogModule
   ],
   entryComponents:[
-    DistrictMapDialogComponent
+   // DistrictMapDialogComponent
   ],
   providers: [
     DistrictPatientService,
