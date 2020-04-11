@@ -174,15 +174,10 @@ export class DistrictMapComponentComponent implements OnInit {
     .attr("stroke","#333333")
     .attr("stroke-width","1")
     .on('mouseover', function(d) {
-      // // d3.select(this).transition()
-      // //      .duration('50')
-      // //      .attr('stroke', '#cccccc')
-      // d3.select(this).classed('selected',true)
-      // console.log("1 "+this);
-      // const a = (d) =>{
-      //   console.log( "2 "+ this);
-      // }
-
+     
+      //scope of "this" here is to svg element so we can not call "regionSelected" directly
+      // when used function(d) scope of "this" is to current svg element
+      // when used (d)=> { } scope of "this" is same as angular "this"
       fu(d.properties.district);
 
       d3.select(this).transition()
