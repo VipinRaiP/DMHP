@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="sel1">Select list (select one):</label>
                 <select class="form-control" id="sel1" name="sellist1">
                     <option>Whole Year</option>
@@ -20,8 +20,11 @@
                 </select>
 
 
+            </div> -->
+            <div class="mb-2 card">
+                <!-- <div class="card-header">District Selected</div> -->
+                <div class="card-body">District: {{ district }}</div>
             </div>
-
         </div>
     </div>
 
@@ -31,7 +34,7 @@
         <div class="col">
             <div class="mb-2 card">
                 <div class="card-header">Total Cases</div>
-                <div class="card-body">123</div>
+                <div class="card-body">{{total_cases}}</div>
             </div>
             <!-- <br> -->
         </div>

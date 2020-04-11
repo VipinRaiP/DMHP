@@ -260,7 +260,8 @@ export class DistrictGranularComponentComponent implements OnInit {
         Monthly: "getAlcoholDataAllDistMonthly"
       }
       return {
-        yLabel: "Alcohol Cases", 
+        //yLabel: "Alcohol Cases", 
+        yLabel: "Total Cases",
         threshold : 2000, 
         yColumnName : this.parameterName
       }  
@@ -273,7 +274,8 @@ export class DistrictGranularComponentComponent implements OnInit {
         Monthly: "getSuicideDataAllDistMonthly"
       }
       return {
-        yLabel: "Suicide Cases",
+        //yLabel: "Suicide Cases",
+        yLabel: "Total Cases",
         threshold: 2000,
         yColumnName: this.parameterName
       }
@@ -312,11 +314,11 @@ export class DistrictGranularComponentComponent implements OnInit {
   resolveParameterName(parameterNumber) {
     switch (+parameterNumber) {
       case 1:
-        return 'Alcohol Cases';
+        return 'Total Cases';
         break;
       case 2:
         console.log("Suicide cases case")
-        return 'Suicide Cases';
+        return 'Total Cases';
         break;
     }
   }
