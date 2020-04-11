@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DistrictMapComponentComponent } from './Operational_Dashboard/District/district-map-component/district-map-component.component';
 import { DistrictMapDetailsComponent, DistrictMapDialogComponent } from './Operational_Dashboard/District/district-map-component/district-map-details/district-map-details.component';
 import { DistrictMapService } from './Operational_Dashboard/District/services/district-map.service';
+import { CardComponent } from './Operational_Dashboard/Cards/card/card.component';
 
 
 
@@ -29,7 +30,8 @@ import { DistrictMapService } from './Operational_Dashboard/District/services/di
     DistrictPatientMenuComponentComponent,
     DistrictMapComponentComponent,
     DistrictMapDetailsComponent,
-    DistrictMapDialogComponent
+    DistrictMapDialogComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

@@ -39,6 +39,7 @@ export class DistrictPatientMenuComponentComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log("Form submitted");
     let parameters: BarChartDistrictParameters;
     this.parameterNumber = (form.value.parameter == "") ? 1 : form.value.parameter;
     console.log("Choosen value : " + this.parameterType);
