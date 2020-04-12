@@ -1,41 +1,47 @@
 <div class="row">
-  <div class="col-md-6">
-    <mat-radio-group (change)="onGranularChange($event)" aria-label="Select an option">
-      <mat-radio-button [checked]="true" value="1">Annual</mat-radio-button>
-      <mat-radio-button value="2">Month</mat-radio-button>
-      <mat-radio-button value="3">Quarter</mat-radio-button>
-    </mat-radio-group>
-  </div>
-  <div *ngIf="displayMonthData" class="col-md-6">
-    <label for="MonthSelected">Month: {{monthName}}</label>
-    <br>
-    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="12" step="1" value="1"
-      (input)="onMonthChange($event)"></mat-slider>
-  </div>
-  <div *ngIf="displayQuarterData" class="col-md-6">
-    <label for="QuarterSelected">Quarter: {{quarterChoosen}}</label>
-    <br>
-    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="4" step="1" value="1"
-      (input)="onQuarterChange($event)"></mat-slider>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <label for="Sort by">Sort By : </label>
     <select ngModel class="select" (change)="onSortByChange($event)" name="parameter">
       <option value="">{{parameterName}}</option>
       <option value=2>District Name</option>
     </select>
   </div>
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <!--label for="Normalise">Data Type : </label-->
     <select ngModel class="select" (change)="onNormaliseChange($event)" name="Normalise">
       <option value="">Actual Data</option>
       <option value=2>Population Normalised</option>
     </select>
   </div>
+  <div class="col-lg-3">
+    <mat-radio-group (change)="onGranularChange($event)" aria-label="Select an option">
+      <mat-radio-button [checked]="true" value="1">Annual</mat-radio-button>
+      <mat-radio-button value="2">Month</mat-radio-button>
+      <mat-radio-button value="3">Quarter</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div *ngIf="granularChoosen==1" class="col-lg-3">
+    <label for="Dummy">Annual</label>
+    <br>
+    <mat-slider  [disabled]="granularChoosen==1" #slider min="1" max="12" step="1" value="1"></mat-slider>
+  </div>
+  <div *ngIf="displayMonthData" class="col-lg-3">
+    <label for="MonthSelected">Month: {{monthName}}</label>
+    <br>
+    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="12" step="1" value="1"
+      (input)="onMonthChange($event)"></mat-slider>
+  </div>
+  <div *ngIf="displayQuarterData" class="col-lg-3">
+    <label for="QuarterSelected">Quarter: {{quarterChoosen}}</label>
+    <br>
+    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="4" step="1" value="1"
+      (input)="onQuarterChange($event)"></mat-slider>
+  </div>
+<!--/div-->
+<!--div class="row"-->
+  
   <!-- view in table -->
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#allDistModal">
       View in table
     </button>
