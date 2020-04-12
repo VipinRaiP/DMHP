@@ -18,6 +18,10 @@
         </div>
     </form>
     <div class="row">
+        <app-district-granular-component [barChartService]="barChartService"></app-district-granular-component>
+    </div>
+
+    <div class="row">
         <!-- Map  -->
 
         <div class="col-md-6">
@@ -34,7 +38,7 @@
         </div>
         <!--Bar Chart-->
         <div class="col-md-6">
-            <app-district-bar-chart-component [barChartService]="barChartService"></app-district-bar-chart-component>
+            <app-district-bar-chart-component (chartLoaded)="onChartLoaded()" [barChartService]="barChartService"></app-district-bar-chart-component>
         </div>
     </div>
 </div>

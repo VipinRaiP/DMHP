@@ -18,7 +18,7 @@ export class DistrictPatientMenuComponentComponent implements OnInit {
   private parameterNumber: number = 1;
   private params = Array(3);
   private parameterType;
-
+  private chartLoaded= false;
   constructor(private barChartService: DistrictPatientService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -53,8 +53,13 @@ export class DistrictPatientMenuComponentComponent implements OnInit {
     this.barChartService.createDataReq(newDataReq);
   }
 
+  onChartLoaded(){
+    this.chartLoaded = true;
+  }
+
   ngOnDestroy() {
   }
+
 
 
 }

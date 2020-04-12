@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import * as d3 from 'd3';
 import { HttpClient } from "@angular/common/http";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -84,9 +84,12 @@ export class DistrictBarChartComponentComponent implements OnInit {
   private legendGroup_1:any;
   private legendGroup_2:any;
 
+  @Output()
+  public chartLoaded:EventEmitter<any> = new EventEmitter();
+
   constructor(private elementRef: ElementRef, private http: HttpClient, private titleService: Title,
     private router: Router) { }
-
+// I am vrp
   ngOnInit() {
     console.log("Barchart All dist loaded..");
     this.createChart();
@@ -95,6 +98,7 @@ export class DistrictBarChartComponentComponent implements OnInit {
         console.log(newParameter);
         this.chartParameters = newParameter;
         this.titleService.setTitle(this.chartParameters.yLabel);
+    
     })
 
     this.barChartService.getChartDataListener().subscribe((newData) => {
@@ -109,6 +113,8 @@ export class DistrictBarChartComponentComponent implements OnInit {
         this.monthName = this.months[this.choosenValue-1];
       this.updateChart();
     })
+
+    this.chartLoaded.emit();
   }
 
   /* Set up the chart */
