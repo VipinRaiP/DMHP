@@ -17,9 +17,9 @@
             </div-->
         </div>
     </form>
-    <div class="row">
-        <app-district-granular-component [barChartService]="barChartService"></app-district-granular-component>
-    </div>
+    
+    <app-district-granular-component *ngIf="chartLoaded" [barChartService]="barChartService"></app-district-granular-component>
+    
 
     <div class="row">
         <!-- Map  -->

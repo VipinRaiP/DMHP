@@ -89,7 +89,7 @@ export class DistrictBarChartComponentComponent implements OnInit {
 
   constructor(private elementRef: ElementRef, private http: HttpClient, private titleService: Title,
     private router: Router) { }
-// I am vrp
+
   ngOnInit() {
     console.log("Barchart All dist loaded..");
     this.createChart();
