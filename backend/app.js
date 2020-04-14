@@ -36,8 +36,8 @@ app.get("/", function (req, res, next) {
 
 var con = mysql.createConnection({
   host: "localhost",
-  user: "sameer",
-  password: "qwerty78900"
+  user: "root",
+  password: "root"
 });
 
 con.connect(function (err) {
@@ -45,7 +45,7 @@ con.connect(function (err) {
   console.log("connected");
 });
 
-sql = "use clinical_db";
+sql = "use DMH";
 con.query(sql, function (err, res) {
   if (err) console.log(err);
   console.log(res);
