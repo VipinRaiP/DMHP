@@ -1,0 +1,196 @@
+<!--div class=" d-flex justify-content-between pl-5 pr-5">
+  <div class="container">
+    <label class="font-weight-normal">Granularity</label>
+    <mat-radio-group (change)="onGranularChange($event)" aria-label="Select an option" style="  font-size: 15px; ">
+      <mat-radio-button [checked]="true" value="1">Annual</mat-radio-button>
+      <mat-radio-button value="2">Month</mat-radio-button>
+      <mat-radio-button value="3">Quarter</mat-radio-button>
+    </mat-radio-group>
+    <div *ngIf="displayMonthData">
+      <div class="pt-1">
+        <label style="display: inline; font-size: 18px; margin-right: 5px;" for="choosen">Month</label>
+        <label for="MonthSelected" style="display: inline; font-size: 30px;" for="choosen">{{monthName}}</label>
+      </div>
+      <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="12" step="1" value="1"
+        (input)="onMonthChange($event)"></mat-slider>
+    </div>
+    <div *ngIf="displayQuarterData">
+      <div class="pt-1">
+        <label style="display: inline; font-size: 18px;margin-right: 5px;" for="choosen"> Quarter</label>
+        <label for="QuarterSelected" style="display: inline;font-size: 30px;" for="choosen">{{quarterChoosen}}</label>
+      </div>
+
+      <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="4" step="1" value="1"
+        (input)="onQuarterChange($event)"></mat-slider>
+    </div>
+  </div>
+  <!--button class="btn btn-primary"
+          (click)="displayMonthData = !displayMonthData;displayQuarterData=!displayQuarterData">Check</!--button-->
+<!--div>
+    <mat-form-field>
+      <input matInput [matDatepicker]="dp" placeholder="Year" [formControl]="yearObj">
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp startView="multi-year" (yearSelected)="choosenYearHandler($event,dp)"
+        panelClass="example-month-picker">
+      </mat-datepicker>
+    </mat-form-field>
+  </div>
+
+</div>
+
+<div class="container-fluid d-flex justify-content-between pt-3">
+  <div class="col-md-4 ">
+    <label for="Sort by" >Sort By </label>
+    <select ngModel class="form-control select" (change)="onSortByChange($event)" name="parameter">
+      <option value="">{{parameterName}}</option>
+      <option value=2>District Name</option>
+    </select>
+  </div>
+  <!--div class="col-md-4 ">
+    <!--label for="Normalise">Data Type : </label-->
+<!--label >Normalisation </label>
+    <select ngModel class="form-control select" (change)="onNormaliseChange($event)" name="Normalise">
+      <option value="">Actual</option>
+      <option value=2>Population </option>
+    </select>
+  </div>
+  <!-- view in table -->
+<!--div >
+    <button type="button" class="btn btn-light  ml-auto" data-toggle="modal" data-target="#allDistModal">
+      View in table
+    </button>
+  </div>
+  <!--Modal content-->
+<!--div class="modal fade" id="allDistModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+<!--div class="modal-header">
+          <h1 class="modal-title">Data</h1>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+
+        <!-- Modal body -->
+<!--div class="modal-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">S.No</th>
+                <th scope="col">{{xColumnName}}</th>
+                <th scop="col">{{parameterName}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of data;let in = index">
+                <th scope="row">{{in+1}}</th>
+                <td>{{d[xColumnName]}}</td>
+                <td>{{d[parameterName]}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal footer -->
+<!--div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div-->
+
+
+
+
+<div class="row">
+  <div class="col-lg-2">
+    <label for="Sort by">Sort By </label>
+    <select ngModel class="select" (change)="onSortByChange($event)" name="parameter">
+      <option value="">{{parameterName}}</option>
+      <option value=2>District Name</option>
+    </select>
+  </div>
+  <div class="col-lg-3">
+    <!--label for="Normalise">Data Type : </label-->
+    <label>Normalisation </label>
+    <select ngModel class="select" (change)="onNormaliseChange($event)" name="Normalise">
+      <option value="">Actual Data</option>
+      <option value=2>Population Normalised</option>
+    </select>
+  </div>
+  <div class="col-lg-4">
+    <label class="font-weight-normal">Granularity</label>
+    <mat-radio-group (change)="onGranularChange($event)" aria-label="Select an option">
+      <mat-radio-button [checked]="true" value="1">Annual</mat-radio-button>
+      <mat-radio-button value="2">Month</mat-radio-button>
+      <mat-radio-button value="3">Quarter</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div *ngIf="granularChoosen==1" class="col-lg-3">
+    <label for="Dummy">Annual</label>
+    <br>
+    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="12" step="1" value="1"></mat-slider>
+  </div>
+  <div *ngIf="displayMonthData" class="col-lg-3">
+    <label for="MonthSelected">Month: {{monthName}}</label>
+    <br>
+    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="12" step="1" value="1"
+      (input)="onMonthChange($event)"></mat-slider>
+  </div>
+  <div *ngIf="displayQuarterData" class="col-lg-3">
+    <label for="QuarterSelected">Quarter: {{quarterChoosen}}</label>
+    <br>
+    <mat-slider [disabled]="granularChoosen==1" #slider min="1" max="4" step="1" value="1"
+      (input)="onQuarterChange($event)"></mat-slider>
+  </div>
+  <!--/div-->
+  <!--div class="row"-->
+
+  <!-- view in table -->
+  <div class="col-lg-3">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#allDistModal">
+      View in table
+    </button>
+  </div>
+  <!--Modal content-->
+  <div class="modal fade" id="allDistModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h1 class="modal-title">Data</h1>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">S.No</th>
+                <th scope="col">{{xColumnName}}</th>
+                <th scop="col">{{parameterName}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of data;let in = index">
+                <th scope="row">{{in+1}}</th>
+                <td>{{d[xColumnName]}}</td>
+                <td>{{d[parameterName]}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
