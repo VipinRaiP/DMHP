@@ -183,6 +183,8 @@ export class DistrictMapComponentComponent implements OnInit {
       d3.select(this).transition()
            .duration('50')
            .attr('fill', "grey")
+
+          
       //d3.select(this).style("fill","#cccccc");
       //abc(d.properties.district);
       //this.regionSelected(d.properties.district);
