@@ -1,16 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { BarChartDistrictParameters } from '../models/district-barChartParameters.model';
 import { DistrictDataReq } from '../models/district-dataReq.model';
 import { DistrictPatientService } from '../services/district-patient.service';
+import {TalukaMenuComponent} from '../Taluka/taluka-menu/taluka-menu.component';
 
 @Component({
   selector: 'app-district-patient-menu-component',
   templateUrl: './district-patient-menu-component.component.html',
-  styleUrls: ['./district-patient-menu-component.component.css']
+  styleUrls: ['./district-patient-menu-component.component.css'],
+  entryComponents: [TalukaMenuComponent]
 })
 export class DistrictPatientMenuComponentComponent implements OnInit {
+  @ViewChild(TalukaMenuComponent ,{static : false}) TalukaMenuComponentRef: TalukaMenuComponent;
+  private selectDistrictId: number = 1;
+  talukaView: boolean = false;
+
   mapView: boolean = false;
 
 
@@ -22,6 +28,9 @@ export class DistrictPatientMenuComponentComponent implements OnInit {
   constructor(private barChartService: DistrictPatientService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.selectDistrictId=1;
+    this.talukaView = false;
+
     console.log("All dist chart menu loaded")
     let newDataReq: DistrictDataReq = {
       onSubmit: true,
@@ -51,6 +60,10 @@ export class DistrictPatientMenuComponentComponent implements OnInit {
       parameterNumber: this.parameterNumber
     }
     this.barChartService.createDataReq(newDataReq);
+  }
+
+  loadComponent() {
+    this.talukaView = !this.talukaView;
   }
 
   onChartLoaded(){

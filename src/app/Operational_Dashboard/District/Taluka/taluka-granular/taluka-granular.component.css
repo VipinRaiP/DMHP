@@ -1,0 +1,13 @@
+label{
+    margin-bottom: 5px;
+    display: block;
+
+}
+mat-radio-button{
+    padding-left: 15px;
+    padding-top: 5px;
+}
+select ,button{
+    margin-top: 10px;
+    font-size: 15px;
+}

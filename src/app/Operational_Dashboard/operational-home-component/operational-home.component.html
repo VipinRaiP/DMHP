@@ -23,10 +23,10 @@
     <h2>Year : 2018</h2>
     <div class="row">
       <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-        <app-card CardName="CMD Cases" ></app-card>
+        <app-card CardName="CMD Cases"></app-card>
       </div>
       <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-        <app-card CardName="Alcohol Cases" ></app-card>
+        <app-card CardName="Alcohol Cases"></app-card>
       </div>
       <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
         <app-card CardName="SMD Cases"></app-card>
@@ -41,6 +41,25 @@
     style="padding-top:50px;padding-bottom:50px;background-color:rgb(159, 245, 202)">
     <app-district-patient-menu-component></app-district-patient-menu-component>
   </div>
+
+  <!--div class="pt-5">
+    <select ngModel class="form-control" name="districtId" [(ngModel)]='selectDistrictId'
+      (ngModelChange)='onSelected($event)'>
+      <option *ngFor="let dist of districtData" value={{dist.DistrictId}}>
+        {{dist.District}}
+      </option>
+    </select>
+    <button mat-raised-button color="primary" (click)="loadComponent()">
+      Show
+    </button>
+  </div>
+
+  <div *ngIf="boolval" id="PatientTaluka" class="container-fluid" 
+    style="padding-top:50px;padding-bottom:50px;background-color:rgb(159, 245, 202)">
+    <app-taluka-menu [districtId]="selectDistrictId"></app-taluka-menu>
+  </div-->
+
+
   <div id="Training" class="container-fluid bg-info" style="padding-top:50px;padding-bottom:50px">
     <p>Training</p>
   </div>
