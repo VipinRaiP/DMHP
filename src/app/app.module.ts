@@ -20,9 +20,11 @@ import { MapComponentComponent } from './Operational_Dashboard/District/map-comp
 import { DistrictMapDataComponentComponent } from './Operational_Dashboard/District/map-component/district-map-data-component/district-map-data-component.component';
 import { DistrictMapComponentComponent } from './Operational_Dashboard/District/map-component/district-map-component/district-map-component.component';
 import { CardComponent } from './Operational_Dashboard/Cards/card/card.component';
-
-
-
+import { TalukaBarChartComponent } from './Operational_Dashboard/District/Taluka/taluka-bar-chart/taluka-bar-chart.component';
+import { TalukaGranularComponent } from './Operational_Dashboard/District/Taluka/taluka-granular/taluka-granular.component';
+import { TalukaMenuComponent } from './Operational_Dashboard/District/Taluka/taluka-menu/taluka-menu.component';
+import { TalukaPatientService } from './Operational_Dashboard/District/services/taluka-patient.service';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,10 @@ import { CardComponent } from './Operational_Dashboard/Cards/card/card.component
     MapComponentComponent,
     DistrictMapDataComponentComponent,
     DistrictMapComponentComponent,
-    CardComponent
+    CardComponent,
+    TalukaBarChartComponent,
+    TalukaGranularComponent,
+    TalukaMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -53,14 +58,16 @@ import { CardComponent } from './Operational_Dashboard/Cards/card/card.component
     MatRadioModule,
     MatSlideToggleModule,
     MatSliderModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule
   ],
   entryComponents:[
    // DistrictMapDialogComponent
   ],
   providers: [
     DistrictPatientService,
-    DistrictMapService
+    DistrictMapService,
+    TalukaPatientService
   ],
   bootstrap: [AppComponent]
 })

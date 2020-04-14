@@ -1,15 +1,20 @@
-import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import * as d3 from 'd3';
+import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import * as d3 from 'd3';
+
+import { Title } from "@angular/platform-browser";
+import * as $ from 'jquery';
+//import { Options } from 'ng5-slider';
+import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material';
+import * as _moment from 'moment';
+import { FormControl } from '@angular/forms';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { default as _rollupMoment, Moment } from 'moment';
-import { BarChartDistrictParameters } from '../models/district-barChartParameters.model';
-import { Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import * as _moment from 'moment';
-
-/* For Date picker year */
+import { ChildActivationStart, Routes, Router } from '@angular/router';
+import { curveNatural } from 'd3';
+import { BarChartDistrictParameters } from '../../models/district-barChartParameters.model';
+import { TalukaPatientService } from '../../services/taluka-patient.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -24,9 +29,9 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-district-bar-chart-component',
-  templateUrl: './district-bar-chart-component.component.html',
-  styleUrls: ['./district-bar-chart-component.component.css'],
+  selector: 'app-taluka-bar-chart',
+  templateUrl: './taluka-bar-chart.component.html',
+  styleUrls: ['./taluka-bar-chart.component.css'],
   providers: [
     // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
     // application's root module. We provide it at the component level here, due to limitations of
@@ -39,10 +44,8 @@ export const MY_FORMATS = {
 
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ]
-
 })
-export class DistrictBarChartComponentComponent implements OnInit {
-
+export class TalukaBarChartComponent implements OnInit {
   @ViewChild('chart', { static: true }) private chartContainer: ElementRef;
   private data: Array<any> = [];
   private margin: any = { top: 40, bottom: 20, left: 50, right: 20 };
@@ -64,61 +67,51 @@ export class DistrictBarChartComponentComponent implements OnInit {
   private fromDate: string;
   private toDate: string;
 
-  public year: number;
+  private year: number;
   private quarterData: any;
   private monthlyData: any;
   private annualData: any;
   private quarterChoosen: number = 1;
   private monthChoosen: number = 1;
   private months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  public monthName = "Jan";
+  private monthName = "Jan";
   private displayMonthData = false;
   private displayQuarterData = false;
   private granularChoosen: number = 1; // Granualirity : 1: Annual , 2 : Month , 3: Quarter
   private dataURL: any;
-  public choosenValue: any;
+  choosenValue: any;
   granular: number;
-  @Input()
-  private barChartService;
 
-  private legendGroup_1: any;
-  private legendGroup_2: any;
-
-  @Output()
-  public chartLoaded: EventEmitter<any> = new EventEmitter();
-
-  constructor(private elementRef: ElementRef, private http: HttpClient, private titleService: Title,
+  private legendGroup_1:any;
+  private legendGroup_2:any;
+  constructor(private elementRef: ElementRef, private http: HttpClient, private barChartService: TalukaPatientService, private titleService: Title,
     private router: Router) { }
 
   ngOnInit() {
-    console.log("Barchart All dist loaded..");
+    console.log("[bar-chart-taluka] : Init");
     this.createChart();
-    this.barChartService.getParametersUpdateListener().subscribe((newParameter) => {
-      console.log("All dist bar chart : parameter received");
-      console.log(newParameter);
-      this.chartParameters = newParameter;
-      this.titleService.setTitle(this.chartParameters.yLabel);
-
+    this.barChartService.getParametersUpdateListener().subscribe( (newParameter)=>{
+        console.log("[bar-chart-taluka] : Parameter Received");
+        console.log(newParameter);
+        this.chartParameters = newParameter;
+        this.titleService.setTitle(this.chartParameters.yLabel);
     })
 
     this.barChartService.getChartDataListener().subscribe((newData) => {
-      console.log("Barchart All Dist: Data update received");
+      console.log("[bar-chart-taluka] : Data-Update received");
       console.log(newData);
       this.data = newData.data;
       this.year = newData.year;
       this.granular = newData.granular;
-      localStorage.setItem("granular_allDist", newData.granular + "");
+      localStorage.setItem("granular_allDist", newData.granular+"");
       this.choosenValue = newData.choosenValue;
       if (this.granular == 2)
-        this.monthName = this.months[this.choosenValue - 1];
+        this.monthName = this.months[this.choosenValue-1];
       this.updateChart();
     })
 
-    this.chartLoaded.emit();
   }
-
-  /* Set up the chart */
-
+  
   createChart() {
     let element = this.chartContainer.nativeElement;
 
@@ -146,17 +139,17 @@ export class DistrictBarChartComponentComponent implements OnInit {
 
     // X Label
     this.xLabel = this.chart.append("text")
-      .attr("y", this.height - 20)
+      .attr("y", this.height)
       .attr("x", this.width / 2 - 30)
-      .attr("font-size", "20px")
+      .attr("font-size", "15px")
       .attr("text-anchor", "middle")
-      .text("District");
+      .text("Taluka");
 
     // Y Label
     this.yLabel = this.chart.append("text")
-      .attr("y", -30)
-      .attr("x", -(this.height / 2))
-      .attr("font-size", "20px")
+      .attr("y", -25)
+      .attr("x", 50-(this.height / 2))
+      .attr("font-size", "15px")
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
 
@@ -165,40 +158,38 @@ export class DistrictBarChartComponentComponent implements OnInit {
 
     legendGroup
       .append("circle")
-      .attr("cx", 200)
-      .attr("cy", 130)
+      .attr("cx", 225)
+      .attr("cy", 133)
       .attr("r", 6)
       .style("fill", "green");
 
     legendGroup
       .append("circle")
-      .attr("cx", 200)
-      .attr("cy", 160)
+      .attr("cx", 225)
+      .attr("cy", 163)
       .attr("r", 6)
       .style("fill", "red");
 
 
     this.legendGroup_1 = legendGroup
       .append("text")
-      .attr("x", 220)
-      .attr("y", 130)
+      .attr("x", 245)
+      .attr("y", 133)
       .style("font-size", "15px")
       .attr("alignment-baseline", "middle");
 
-    this.legendGroup_2 = legendGroup
+      this.legendGroup_2 = legendGroup
       .append("text")
-      .attr("x", 220)
-      .attr("y", 160)
+      .attr("x", 245)
+      .attr("y", 163)
       .style("font-size", "15px")
       .attr("alignment-baseline", "middle");
   }
 
-  /* Update the chart with data */
-
   updateChart() {
-    console.log("Data to chart")
+    console.log("[bar-chart-taluka] : Data to chart")
     console.log(this.data);
-    let xValue = 'District';
+    let xValue = 'Taluka';
     let yValue = this.chartParameters.yColumnName;
 
     this.legendGroup_1.text("Less than " + this.chartParameters.threshold);
@@ -208,9 +199,10 @@ export class DistrictBarChartComponentComponent implements OnInit {
 
     // define X & Y domains
     let xDomain = this.data.map(d => d[xValue]);
-    let yDomain = [0, d3.max(this.data, d => d[yValue])];
-
-    console.log(yDomain)
+    var v=d3.max(this.data, d => d[yValue]);
+    let yDomain = [0, v==0?100:v];
+    //let yDomain = [0, 1000];
+    console.log(yDomain,v)
     // create scales
     this.xScale = d3.scaleBand().domain(xDomain).rangeRound([0, this.width - this.axisShortOffset]).padding(0.3);
 
@@ -222,14 +214,21 @@ export class DistrictBarChartComponentComponent implements OnInit {
 
     // update scales & axis
     this.xScale.domain(this.data.map(d => d[xValue]));
-    this.yScale.domain([0, d3.max(this.data, d => d[yValue])]);
+    //this.yScale.domain([0, v]);
     //  this.colors.domain([0, this.data.length]);
     this.xAxis.transition().call(d3.axisBottom(this.xScale))
       .selectAll("text")
       .attr("y", "3")
       .attr("x", "-5")
       .attr("text-anchor", "end")
-      .attr("transform", "rotate(-40)");;
+      .attr("transform", "rotate(-40)");
+
+      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(0));
+      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(65)); 
+      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(100));
+      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale);
+      console.log(">>>>>>>>>>>>>>>>2>"+(this.height - this.axisShortOffset));
+      console.log(">>>>>>>>>>>>>>>>3>"+d3.axisLeft(this.yScale));
     this.yAxis.transition().call(d3.axisLeft(this.yScale));
 
     // add labels
@@ -276,18 +275,26 @@ export class DistrictBarChartComponentComponent implements OnInit {
       .attr('y', d => this.yScale(d[yValue]))
       .attr('height', d => this.height - this.axisShortOffset - this.yScale(d[yValue]))
 
-    /*
-    function drillTaluka(actualData, mappedValue) {
+
+    /* Bar chart on click naviagate to Per disrct line chart */
+
+/*    let xScale_copy = this.xScale;
+    let columnName_copy = this.chartParameters.columnName;
+    let linechartPerDistService_copy = this.linechartPerDistService;
+    let router_copy = this.router;
+    function drillPerDist(actualData, mappedValue) {
       //d3.select(this).attr(‘opacity’, 1)
       console.log("bar clicked");
 
-      let barChartDistrictParameters: BarChartDistrictParameters;
-      barChartDistrictParameters = resolvePerDistParameter(actualData.DistrictId, columnName_copy, actualData.District);
-      console.log(barChartDistrictParameters);
+      let linechartParameters: LineChartPerDistParameters;
+      linechartParameters = resolvePerDistParameter(actualData.DistrictId, columnName_copy, actualData.District);
+      console.log(linechartParameters);
       linechartPerDistService_copy.updateParameters(linechartParameters);
-      router_copy.navigate(["perDistView", actualData.DistrictId]);
+      router_copy.navigate(["perDistView",actualData.DistrictId]);
     }
-
+*/
+    /* Resolve parameters */
+/*    let year_copy = this.year;
     function resolvePerDistParameter(districtId, parameter, district) {
       if (parameter == "AlcoholCases") {
         return {
@@ -311,49 +318,7 @@ export class DistrictBarChartComponentComponent implements OnInit {
           year: year_copy
         }
       }
-    }
-    /* Bar chart on click naviagate to Per disrct line chart */
-
-    /*    let xScale_copy = this.xScale;
-        let columnName_copy = this.chartParameters.columnName;
-        let linechartPerDistService_copy = this.linechartPerDistService;
-        let router_copy = this.router;
-        function drillPerDist(actualData, mappedValue) {
-          //d3.select(this).attr(‘opacity’, 1)
-          console.log("bar clicked");
-    
-          let linechartParameters: LineChartPerDistParameters;
-          linechartParameters = resolvePerDistParameter(actualData.DistrictId, columnName_copy, actualData.District);
-          console.log(linechartParameters);
-          linechartPerDistService_copy.updateParameters(linechartParameters);
-          router_copy.navigate(["perDistView",actualData.DistrictId]);
-        }
-    */
-    /* Resolve parameters */
-    /*    let year_copy = this.year;
-        function resolvePerDistParameter(districtId, parameter, district) {
-          if (parameter == "AlcoholCases") {
-            return {
-              yLabel: "Alcohol Cases",
-              data: "getAlcoholDataPerDist",
-              threshold: 30,
-              columnName: "AlcoholCases",
-              districtId: districtId,
-              district: district,
-              year: year_copy
-            }
-          }
-          if (parameter == "SuicideCases") {
-            return {
-              yLabel: "Suicide Cases",
-              data: "getSuicideDataPerDist",
-              threshold: 6,
-              columnName: "SuicideCases",
-              districtId: districtId,
-              district: district,
-              year: year_copy
-            }
-          }
-        }*/
+    }*/
   }
 }
+
