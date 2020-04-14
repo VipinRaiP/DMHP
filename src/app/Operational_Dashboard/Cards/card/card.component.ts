@@ -11,8 +11,8 @@ export class CardComponent implements OnInit {
 
   @ViewChild('smallChart', { static: true }) private chartContainer: ElementRef;
   @Input() CardName: String;
-  
-//  @Input() data: any;
+
+  //  @Input() data: any;
   private totalCases: number = 0;
   private year: number = 2019;
   private margin: any = { top: 25, right: 20, bottom: 30, left: 5 };
@@ -28,7 +28,8 @@ export class CardComponent implements OnInit {
 
   expenseData: any;
 
-
+  private xAxis;
+  private yAxis;
 
   constructor(private http: HttpClient) { }
 
@@ -83,11 +84,11 @@ export class CardComponent implements OnInit {
 
     this.svg = d3.select(element)
       .append('svg')
-      // .attr('width', 500)
-      .attr('height', 60);
+      .attr('width', 800)
+      .attr('height', 800);
 
-    this.width = element.offsetWidth - this.margin.left - this.margin.right;
-    this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
+    this.width = 600//element.offsetWidth - this.margin.left - this.margin.right;
+    this.height = 600//element.offsetHeight - this.margin.top - this.margin.bottom;
 
     //console.log(this.height);
 
@@ -105,15 +106,22 @@ export class CardComponent implements OnInit {
     this.y = d3.scaleLinear()
       .rangeRound([this.height, 0]);
 
+    this.xAxis = this.g.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', `translate(50, ${this.height})`)
+
+    this.yAxis = this.g.append('g')
+      .attr('class', 'axis axis-y')
+      .attr('transform', `translate(50,0)`)
   }
 
   createLineChart(data) {
     console.log("Card: ");
     console.log(data);
-    for(var i=0;i<data.length;i++){
+    for (var i = 0; i < data.length; i++) {
       this.totalCases += (+data[i]["Total Cases"])
     }
-    console.log("Card: "+this.totalCases);
+    console.log("Card: " + this.totalCases);
     //let yDomain = [0, d3.max(data, d => d["total"])];
     //let xDomain = data.map(function(d) { return d.district; });
 
@@ -129,12 +137,15 @@ export class CardComponent implements OnInit {
 
     this.yScaleLine.domain(yDomain);
 
+    this.xAxis.transition().call(d3.axisBottom(this.x));
+    this.yAxis.transition().call(d3.axisLeft(this.y));
+
     var line = d3.line()
       .x(d => this.x(d["Month"]) + (this.x.bandwidth() / 2)) // set the x values for the line generator
-      .y(d => this.yScaleLine(d["Total Cases"])) // set the y values for the line generator 
+      .y(d => this.y(d["Total Cases"])) // set the y values for the line generator 
       .curve(d3.curveMonotoneX) // apply smoothing to the line
     console.log(line);
-    
+
     this.g.append("path")
       .datum(data) // 10. Binds data to the line 
       .attr("class", "line") // Assign a class for styling 

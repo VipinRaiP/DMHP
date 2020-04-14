@@ -19,7 +19,7 @@ import { DistrictMapService } from './Operational_Dashboard/District/services/di
 import { MapComponentComponent } from './Operational_Dashboard/District/map-component/map-component.component';
 import { DistrictMapDataComponentComponent } from './Operational_Dashboard/District/map-component/district-map-data-component/district-map-data-component.component';
 import { DistrictMapComponentComponent } from './Operational_Dashboard/District/map-component/district-map-component/district-map-component.component';
-import { CardComponent } from './Operational_Dashboard/Cards/card/card.component';
+import { CardComponent} from './Operational_Dashboard/Cards/card/card.component';
 
 
 
@@ -57,6 +57,7 @@ import { CardComponent } from './Operational_Dashboard/Cards/card/card.component
   ],
   entryComponents:[
    // DistrictMapDialogComponent
+   //LineChartDialog
   ],
   providers: [
     DistrictPatientService,
