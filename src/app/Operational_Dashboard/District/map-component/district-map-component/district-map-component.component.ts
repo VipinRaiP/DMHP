@@ -213,6 +213,13 @@ export class DistrictMapComponentComponent implements OnInit {
 
 
       //console.log(this);
+      })
+      .on('click' , (d)=>{
+
+        console.log("Clicked");
+        this.mapService.onDistrictClicked.emit(d.properties.district);
+
+
       });
 
        let fu = (d) =>
