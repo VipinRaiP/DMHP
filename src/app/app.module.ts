@@ -26,6 +26,9 @@ import { TalukaGranularComponent } from './Operational_Dashboard/District/Taluka
 import { TalukaMenuComponent } from './Operational_Dashboard/District/Taluka/taluka-menu/taluka-menu.component';
 import { TalukaPatientService } from './Operational_Dashboard/District/services/taluka-patient.service';
 import {MatButtonModule} from '@angular/material/button';
+import { LineChartComponent } from './Operational_Dashboard/Cards/line-chart/line-chart.component';
+import { LineChartService } from './Operational_Dashboard/Cards/services/line-chart.service';
+
 
 
 @NgModule({
@@ -44,7 +47,8 @@ import {MatButtonModule} from '@angular/material/button';
     CardComponent,
     TalukaBarChartComponent,
     TalukaGranularComponent,
-    TalukaMenuComponent
+    TalukaMenuComponent,
+    LineChartComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +74,8 @@ import {MatButtonModule} from '@angular/material/button';
   providers: [
     DistrictPatientService,
     DistrictMapService,
-    TalukaPatientService
+    TalukaPatientService,
+    LineChartService
   ],
   bootstrap: [AppComponent]
 })

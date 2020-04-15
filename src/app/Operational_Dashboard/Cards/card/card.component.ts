@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
+import { LineChartService } from '../services/line-chart.service';
 
 @Component({
   selector: 'app-card',
@@ -31,7 +32,11 @@ export class CardComponent implements OnInit {
   private xAxis;
   private yAxis;
 
-  constructor(private http: HttpClient) { }
+  public chartData;
+  public loadChart=false;
+
+
+  constructor(private http: HttpClient,private lineChartService:LineChartService) { }
 
   ngOnInit() {
     this.getData();
@@ -44,7 +49,7 @@ export class CardComponent implements OnInit {
 
       this.http.get<any>("http://localhost:3000/getAlcoholCasesCurrentYear")
         .subscribe(responseData => {
-
+          this.chartData = responseData;
           this.createChart();
           this.createLineChart(responseData);
         })
@@ -52,7 +57,7 @@ export class CardComponent implements OnInit {
     else if (this.CardName == "SMD Cases") {
       this.http.get<any>("http://localhost:3000/getSMDCasesCurrentYear")
         .subscribe(responseData => {
-
+          this.chartData = responseData;  
           this.createChart();
           this.createLineChart(responseData);
 
@@ -61,7 +66,7 @@ export class CardComponent implements OnInit {
     else if (this.CardName == "CMD Cases") {
       this.http.get<any>("http://localhost:3000/getCMDCasesCurrentYear")
         .subscribe(responseData => {
-
+          this.chartData = responseData;  
           this.createChart();
           this.createLineChart(responseData);
 
@@ -70,10 +75,9 @@ export class CardComponent implements OnInit {
     else if (this.CardName == "Suicide Cases") {
       this.http.get<any>("http://localhost:3000/getSuicideCasesCurrentYear")
         .subscribe(responseData => {
-
+          this.chartData = responseData;  
           this.createChart();
           this.createLineChart(responseData);
-
         })
     }
   }
@@ -84,11 +88,11 @@ export class CardComponent implements OnInit {
 
     this.svg = d3.select(element)
       .append('svg')
-      .attr('width', 800)
-      .attr('height', 800);
+      //.attr('width', 800)
+      .attr('height', 60);
 
-    this.width = 600//element.offsetWidth - this.margin.left - this.margin.right;
-    this.height = 600//element.offsetHeight - this.margin.top - this.margin.bottom;
+    this.width = element.offsetWidth - this.margin.left - this.margin.right;
+    this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
 
     //console.log(this.height);
 
@@ -106,13 +110,13 @@ export class CardComponent implements OnInit {
     this.y = d3.scaleLinear()
       .rangeRound([this.height, 0]);
 
-    this.xAxis = this.g.append('g')
+   /* this.xAxis = this.g.append('g')
       .attr('class', 'x axis')
       .attr('transform', `translate(50, ${this.height})`)
 
     this.yAxis = this.g.append('g')
       .attr('class', 'axis axis-y')
-      .attr('transform', `translate(50,0)`)
+      .attr('transform', `translate(50,0)`) */
   }
 
   createLineChart(data) {
@@ -137,8 +141,8 @@ export class CardComponent implements OnInit {
 
     this.yScaleLine.domain(yDomain);
 
-    this.xAxis.transition().call(d3.axisBottom(this.x));
-    this.yAxis.transition().call(d3.axisLeft(this.y));
+  /*  this.xAxis.transition().call(d3.axisBottom(this.x));
+    this.yAxis.transition().call(d3.axisLeft(this.y));*/
 
     var line = d3.line()
       .x(d => this.x(d["Month"]) + (this.x.bandwidth() / 2)) // set the x values for the line generator
@@ -162,6 +166,16 @@ export class CardComponent implements OnInit {
       .attr("fill", "none")
       .attr("stroke", "black")
       .attr("stroke-width", 1.5); // 11. Calls the line generator
+  }
+
+  onClickLoadChart(){
+    //this.loadChart = true;
+    //this.lineChartService.updateChartData(this.chartData);
+  }  
+
+  @HostListener("click") onClick(){
+    console.log("User Click using Host Listener");
+    this.lineChartService.updateChartData(this.chartData);
   }
 
 }
