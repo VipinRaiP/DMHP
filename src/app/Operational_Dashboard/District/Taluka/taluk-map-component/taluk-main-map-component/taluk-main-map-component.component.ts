@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DistrictMapService } from 'src/app/Operational_Dashboard/District/services/district-map.service';
 import { Title } from '@angular/platform-browser';
 
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
+import { TalukaPatientService } from '../../../services/taluka-patient.service';
+import { BarChartDistrictParameters } from '../../../models/district-barChartParameters.model';
 @Component({
   selector: 'app-taluk-main-map-component',
   templateUrl: './taluk-main-map-component.component.html',
@@ -22,11 +24,60 @@ export class TalukMainMapComponentComponent implements OnInit {
   private districtname:String;
   @ViewChild('map', { static: true }) private chartContainer: ElementRef;
 
+
+  private mapdata: Array<any> = [];
+
+  private chartParameters: BarChartDistrictParameters;
+
+  private year: number;
+  private quarterData: any;
+  private monthlyData: any;
+  private annualData: any;
+  private quarterChoosen: number = 1;
+  private monthChoosen: number = 1;
+  private months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  private monthName = "Jan";
+  private displayMonthData = false;
+  private displayQuarterData = false;
+  private granularChoosen: number = 1; // Granualirity : 1: Annual , 2 : Month , 3: Quarter
+  private dataURL: any;
+  choosenValue: any;
+  granular: number;
+  private formattedData: any;
+
+
+  @Input()
+  private barChartService; 
+  
   constructor(private httpClient:HttpClient,private mapService : DistrictMapService,
     private titleService:Title) { }
 
 
   ngOnInit() {
+
+    console.log("TALUKA MAP INIT");
+
+    this.barChartService.getParametersUpdateListener().subscribe( (newParameter)=>{
+      console.log("[bar-chart-taluka-MAP] : Parameter Received");
+     // console.log(newParameter);
+     this.chartParameters = newParameter;
+     this.titleService.setTitle(this.chartParameters.yLabel);
+  })
+
+ this.barChartService.getChartDataListener().subscribe((newData) => {
+    console.log("[bar-chart-taluka-MAP] : Data-Update received");
+   // console.log(newData);
+   this.mapdata = newData.data;
+   this.year = newData.year;
+   this.granular = newData.granular;
+   localStorage.setItem("granular_allDist", newData.granular+"");
+   this.choosenValue = newData.choosenValue;
+   if (this.granular == 2)
+     this.monthName = this.months[this.choosenValue-1];
+   alert(this.mapdata);
+   this.createMap(this.mapdata);
+   //this.updateChart();
+ })
 
     this.mapService.onDistrictClicked.subscribe(
       (d) =>
@@ -49,31 +100,40 @@ export class TalukMainMapComponentComponent implements OnInit {
           console.log("TALUK JSON");
           console.log(data);
           this.jsondata = data;
-          this.createMap();
+          this.createMap(this.mapdata);
           //this.createMap(this.mapdata);
         })
+      });
 
-
-      }
-    );
 
     
+        // this.httpClient.get("assets/Bellary.topojson").subscribe(data =>{
+        //   console.log("TALUK JSON");
+        //   console.log(data);
+        //   this.jsondata = data;
+        //   this.districtname = "Bellary";
+        //   this.createMap(this.mapdata);
+        // });
       
     
   }
 
-  createMap()
+  createMap(mapdata)
   {
 
-    // console.log("MAP DATA FROM SERVICE");
-    // console.log(mapdata);
+    console.log("MAP DATA FROM SERVICE");
+    //console.log(mapdata);
 
-    //  this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.District]: cur["Total Cases"] }), {});
+    let caseString = Object.keys(mapdata[0])[2];
 
-    //   let formattedDataTempCopy = this.formattedData;
+    console.log(caseString);
 
-    // console.log("FORMATTED DATA");
-    // console.log(this.formattedData);
+    this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.Taluka]: cur[caseString] }), {});
+
+       let formattedDataTempCopy = this.formattedData;
+
+    console.log("FORMATTED DATA");
+    console.log(this.formattedData);
     
     // var maxVal = 0;
     // for(var v of mapdata)
@@ -150,54 +210,69 @@ export class TalukMainMapComponentComponent implements OnInit {
     .attr("stroke","#333333")
     .attr("stroke-width","1")
     .attr("fill","grey")
-    // .on('mouseover', function(d) {
+    .on('mouseover', function(d) {
      
-    //   //scope of "this" here is to svg element so we can not call "regionSelected" directly
-    //   // when used function(d) scope of "this" is to current svg element
-    //   // when used (d)=> { } scope of "this" is same as angular "this"
-    //   fu(d.properties.district);
+      //scope of "this" here is to svg element so we can not call "regionSelected" directly
+      // when used function(d) scope of "this" is to current svg element
+      // when used (d)=> { } scope of "this" is same as angular "this"
+      fu(d.properties.NAME_3);
+      //console.log(d.properties.NAME_3);
+      d3.select(this).transition()
+           .duration('50')
+           .attr('fill', "red")
+      //d3.select(this).style("fill","#cccccc");
+      //abc(d.properties.district);
+      //this.regionSelected(d.properties.district);
+    })
+    .on('mouseout', function(d){
+      // d3.select(this).transition()
+      //      .duration('50')
+      //      .attr('stroke', '#333333')
+      // d3.select(this).classed('selected',false)
+      //this.regionSelected(null);
 
-    //   d3.select(this).transition()
-    //        .duration('50')
-    //        .attr('fill', "grey")
-    //   //d3.select(this).style("fill","#cccccc");
-    //   //abc(d.properties.district);
-    //   //this.regionSelected(d.properties.district);
-    // })
-    // .on('mouseout', function(d){
-    //   // d3.select(this).transition()
-    //   //      .duration('50')
-    //   //      .attr('stroke', '#333333')
-    //   // d3.select(this).classed('selected',false)
-    //   //this.regionSelected(null);
+      // var n = formattedDataTempCopy[d.properties.district] || 0 ;
 
-    //   var n = formattedDataTempCopy[d.properties.district] || 0 ;
+      // const color =
+      //       n === 0
+      //         ? '#ffffff'
+      //         : d3.interpolateReds(
+      //             (0.8 * n) / (maxVal || 0.001)
+      //           );
 
-    //   const color =
-    //         n === 0
-    //           ? '#ffffff'
-    //           : d3.interpolateReds(
-    //               (0.8 * n) / (maxVal || 0.001)
-    //             );
-
-    //   //d3.select(this).style("fill",color);
+      //d3.select(this).style("fill","grey");
                 
-    //   d3.select(this).transition()
-    //        .duration('50')
-    //        .attr('fill', color)
+      d3.select(this).transition()
+           .duration('50')
+           .attr('fill', "grey")
 
 
-    //   //console.log(this);
-    //   });
+      //console.log(this);
+      });
 
-      //  let fu = (d) =>
-      // {
-      //     //console.log(this);
-      //     this.regionSelected(d);
+       let fu = (d) =>
+      {
+          //console.log(this);
+          this.talukaSelected(d);
    
-      // }
+      }
 
+  }
 
+  talukaSelected(data){
+    // console.log("HOVERED");
+    // console.log(data);
+
+    //var total_cases = this.formattedData[data];
+
+    let emitData = {
+      taluka : data,
+      total_cases : 0 //total_cases
+      // yColumnName : this.chartParameters.yColumnName,
+      // parameterNumber : this.parameterNumber,
+      // year: this.year
+    }
+    this.mapService.onTalukaSelected.emit(emitData);
 
   }
 

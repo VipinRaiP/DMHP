@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-taluk-map-component',
@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TalukMapComponentComponent implements OnInit {
 
+  @Input()
+  private barChartService; 
+  
   constructor() { }
 
   ngOnInit() {

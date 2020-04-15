@@ -10,8 +10,10 @@ import { StringifyOptions } from 'querystring';
 export class TalukMapDataComponentComponent implements OnInit {
 
   @Input()
-  private district_name:String;
+  private district_name:string;
 
+  private taluka_name:string;
+  private total_cases:number;
   constructor(private mapService : DistrictMapService) { }
   
 
@@ -22,6 +24,13 @@ export class TalukMapDataComponentComponent implements OnInit {
           this.district_name = d;
       }
     );
+
+    this.mapService.onTalukaSelected.subscribe(
+      (d)=>{
+          this.taluka_name = d.taluka;
+          this.total_cases = d.total_cases;
+      }
+    )
 
   }
 

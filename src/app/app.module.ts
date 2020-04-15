@@ -26,7 +26,6 @@ import { TalukaGranularComponent } from './Operational_Dashboard/District/Taluka
 import { TalukaMenuComponent } from './Operational_Dashboard/District/Taluka/taluka-menu/taluka-menu.component';
 import { TalukaPatientService } from './Operational_Dashboard/District/services/taluka-patient.service';
 import {MatButtonModule} from '@angular/material/button';
-import { TalukPatientMenuComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-patient-menu-component/taluk-patient-menu-component.component';
 import { TalukMapComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-map-component.component';
 import { TalukMainMapComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-main-map-component/taluk-main-map-component.component';
 import { TalukMapDataComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-map-data-component/taluk-map-data-component.component';
@@ -49,7 +48,6 @@ import { TalukMapDataComponentComponent } from './Operational_Dashboard/District
     TalukaBarChartComponent,
     TalukaGranularComponent,
     TalukaMenuComponent,
-    TalukPatientMenuComponentComponent,
     TalukMapComponentComponent,
     TalukMainMapComponentComponent,
     TalukMapDataComponentComponent

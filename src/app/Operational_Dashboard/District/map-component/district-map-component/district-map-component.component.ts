@@ -36,6 +36,8 @@ export class DistrictMapComponentComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log("DISTRICT MAP COMPONENT LOADED");
+
     this.httpClient.get("assets/karnataka.json").subscribe(data =>{
       console.log("KARNATAKA JSON");
       console.log(data);
@@ -54,6 +56,7 @@ export class DistrictMapComponentComponent implements OnInit {
 
  this.barChartService.getChartDataListener().subscribe((newData) => {
    console.log(" All Dist map: Data update received");
+   //alert("Map");
    console.log(newData);
    this.mapdata = newData.data;
    this.year = newData.year;
@@ -91,15 +94,15 @@ export class DistrictMapComponentComponent implements OnInit {
   createMap(mapdata:any)
   {
 
-    console.log("MAP DATA FROM SERVICE");
-    console.log(mapdata);
+    // console.log("MAP DATA FROM SERVICE");
+    // console.log(mapdata);
 
      this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.District]: cur["Total Cases"] }), {});
 
       let formattedDataTempCopy = this.formattedData;
 
-    console.log("FORMATTED DATA");
-    console.log(this.formattedData);
+    // console.log("FORMATTED DATA");
+    // console.log(this.formattedData);
     
     var maxVal = 0;
     for(var v of mapdata)
@@ -110,7 +113,7 @@ export class DistrictMapComponentComponent implements OnInit {
         }
     }
 
-    console.log("MAX VALUE" + maxVal);
+    //console.log("MAX VALUE" + maxVal);
 
 
     let element = this.chartContainer.nativeElement;
@@ -156,7 +159,7 @@ export class DistrictMapComponentComponent implements OnInit {
     .attr("d",path)
     .attr("fill",(d) =>
     {
-      console.log(this.formattedData[d.properties.district]+" "+d.properties.district);
+      //console.log(this.formattedData[d.properties.district]+" "+d.properties.district);
       var n = this.formattedData[d.properties.district] || 0 ;
 
       const color =
@@ -216,7 +219,7 @@ export class DistrictMapComponentComponent implements OnInit {
       })
       .on('click' , (d)=>{
 
-        console.log("Clicked");
+        //console.log("Clicked");
         this.mapService.onDistrictClicked.emit(d.properties.district);
 
 
