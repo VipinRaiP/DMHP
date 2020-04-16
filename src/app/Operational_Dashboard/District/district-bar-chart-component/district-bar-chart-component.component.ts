@@ -216,8 +216,8 @@ export class DistrictBarChartComponentComponent implements OnInit {
     this.xScale = d3.scaleBand().domain(xDomain).rangeRound([0, this.width - this.axisShortOffset]).padding(0.3);
 
     this.yScale = d3.scaleLinear().domain(yDomain).range([this.height - this.axisShortOffset, 0]);
-    console.log(this.height)
-    console.log(this.yScale(100));
+    // console.log(this.height)
+    // console.log(this.yScale(100));
 
     //...................................
 

@@ -54,20 +54,24 @@
     </form>
 
     <!-- <app-taluka-granular *ngIf="chartLoaded"></app-taluka-granular> -->
-    <app-taluka-granular *ngIf="chartLoaded" [barChartService]="barChartService"></app-taluka-granular>
 
+    <app-taluka-granular *ngIf="chartLoaded" [barChartService]="barChartService"></app-taluka-granular>
     <div class="row">
         <!-- Map  -->
 
         <div class="col-md-6">
             <!-- <app-taluk-map-component></app-taluk-map-component> -->
+            <div class="h-100 pt-5 pr-3 border rounded shadow-lg bg-white">
+
             <app-taluk-map-component [barChartService]="barChartService"></app-taluk-map-component>
+            </div>
         </div>
         <!--Bar Chart-->
         <div class="col-md-6">
+            <div class="h-100 pt-5 border rounded shadow bg-white">
             <!-- <app-taluka-bar-chart (chartLoaded)="onChartLoaded()"></app-taluka-bar-chart> -->
             <app-taluka-bar-chart (chartLoaded)="onChartLoaded()" [barChartService]="barChartService"></app-taluka-bar-chart>
-
+        </div>
         </div>
     </div>
 </div>

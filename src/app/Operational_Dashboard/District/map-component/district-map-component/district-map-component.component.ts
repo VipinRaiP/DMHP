@@ -17,10 +17,10 @@ export class DistrictMapComponentComponent implements OnInit {
   @Input()
   private barChartService;
   public chartParameters:BarChartDistrictParameters;
-  private mapdata:any;
+  private mapdata:any = null;
   private parameterNumber:number;
   private year:number;
-  private formattedData:any;
+  private formattedData:any = null;
   
   private margin: any = { top: 20, bottom: 20, left: 20, right: 20 };
   private width: number;
@@ -39,8 +39,8 @@ export class DistrictMapComponentComponent implements OnInit {
     console.log("DISTRICT MAP COMPONENT LOADED");
 
     this.httpClient.get("assets/karnataka.json").subscribe(data =>{
-      console.log("KARNATAKA JSON");
-      console.log(data);
+      // console.log("KARNATAKA JSON");
+      // console.log(data);
       this.jsondata = data;
       this.createMap(this.mapdata);
     })
@@ -97,9 +97,12 @@ export class DistrictMapComponentComponent implements OnInit {
     // console.log("MAP DATA FROM SERVICE");
     // console.log(mapdata);
 
+    let formattedDataTempCopy = null;
+    if(mapdata!=null)
+    {
      this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.District]: cur["Total Cases"] }), {});
 
-      let formattedDataTempCopy = this.formattedData;
+       formattedDataTempCopy = this.formattedData;
 
     // console.log("FORMATTED DATA");
     // console.log(this.formattedData);
@@ -112,7 +115,7 @@ export class DistrictMapComponentComponent implements OnInit {
           maxVal = v["Total Cases"];
         }
     }
-
+  }
     //console.log("MAX VALUE" + maxVal);
 
 
@@ -160,6 +163,9 @@ export class DistrictMapComponentComponent implements OnInit {
     .attr("fill",(d) =>
     {
       //console.log(this.formattedData[d.properties.district]+" "+d.properties.district);
+
+      if(this.formattedData!=null)
+      {
       var n = this.formattedData[d.properties.district] || 0 ;
 
       const color =
@@ -171,6 +177,12 @@ export class DistrictMapComponentComponent implements OnInit {
 
                 tempColor = color;
           return color;
+
+        }
+        else
+        {
+          return "white";
+        }
       //console.log(d.properties.district);
       //return "#cccccc";
     })
@@ -199,6 +211,8 @@ export class DistrictMapComponentComponent implements OnInit {
       // d3.select(this).classed('selected',false)
       //this.regionSelected(null);
 
+      if(formattedDataTempCopy!=null)
+      {
       var n = formattedDataTempCopy[d.properties.district] || 0 ;
 
       const color =
@@ -214,6 +228,12 @@ export class DistrictMapComponentComponent implements OnInit {
            .duration('50')
            .attr('fill', color)
 
+        }
+        else{
+          d3.select(this).transition()
+           .duration('50')
+           .attr('fill', "white")
+        }
 
       //console.log(this);
       })
