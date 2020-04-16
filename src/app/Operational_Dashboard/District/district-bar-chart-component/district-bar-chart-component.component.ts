@@ -103,6 +103,7 @@ export class DistrictBarChartComponentComponent implements OnInit {
 
     this.barChartService.getChartDataListener().subscribe((newData) => {
       console.log("Barchart All Dist: Data update received");
+      //alert("bar");
       console.log(newData);
       this.data = newData.data;
       this.year = newData.year;

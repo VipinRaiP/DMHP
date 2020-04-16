@@ -20,13 +20,14 @@ export class TalukaMenuComponent implements OnInit, OnDestroy {
   private parameterNumber: number = 1;
   private params = Array(3);
   private parameterType;
-  private chartLoaded = true;
+  private chartLoaded = false;
   private newDataReq: DistrictDataReq;
   private districtData: any;
 
   constructor(private barChartService: TalukaPatientService, private router: Router, private route: ActivatedRoute, private http: HttpClient) { }
 
-  ngOnInit() {
+
+    ngOnInit() {
     console.log("[taluka-menu.component] : Init DistrictId " + this.districtId)
     this.getDistrictData();
     this.newDataReq = {

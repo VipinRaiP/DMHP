@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import * as d3 from 'd3';
 
@@ -84,7 +84,17 @@ export class TalukaBarChartComponent implements OnInit {
 
   private legendGroup_1:any;
   private legendGroup_2:any;
-  constructor(private elementRef: ElementRef, private http: HttpClient, private barChartService: TalukaPatientService, private titleService: Title,
+
+  @Input()
+  private barChartService;
+
+  @Output()
+  public chartLoaded: EventEmitter<any> = new EventEmitter();
+  
+  // constructor(private elementRef: ElementRef, private http: HttpClient, private barChartService: TalukaPatientService, private titleService: Title,
+  //   private router: Router) { }
+
+  constructor(private elementRef: ElementRef, private http: HttpClient, private titleService: Title,
     private router: Router) { }
 
   ngOnInit() {
@@ -109,7 +119,8 @@ export class TalukaBarChartComponent implements OnInit {
         this.monthName = this.months[this.choosenValue-1];
       this.updateChart();
     })
-
+    
+    this.chartLoaded.emit();
   }
   
   createChart() {
@@ -223,12 +234,12 @@ export class TalukaBarChartComponent implements OnInit {
       .attr("text-anchor", "end")
       .attr("transform", "rotate(-40)");
 
-      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(0));
-      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(65)); 
-      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(100));
-      console.log(">>>>>>>>>>>>>>>>1>"+this.yScale);
-      console.log(">>>>>>>>>>>>>>>>2>"+(this.height - this.axisShortOffset));
-      console.log(">>>>>>>>>>>>>>>>3>"+d3.axisLeft(this.yScale));
+      // console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(0));
+      // console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(65)); 
+      // console.log(">>>>>>>>>>>>>>>>1>"+this.yScale(100));
+      // console.log(">>>>>>>>>>>>>>>>1>"+this.yScale);
+      // console.log(">>>>>>>>>>>>>>>>2>"+(this.height - this.axisShortOffset));
+      // console.log(">>>>>>>>>>>>>>>>3>"+d3.axisLeft(this.yScale));
     this.yAxis.transition().call(d3.axisLeft(this.yScale));
 
     // add labels
