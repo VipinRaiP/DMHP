@@ -152,7 +152,7 @@ export class CardComponent implements OnInit {
 
     this.g.append("path")
       .datum(data) // 10. Binds data to the line 
-      .attr("class", "line") // Assign a class for styling 
+      .attr("class", "lines") // Assign a class for styling 
       .attr("d", line)
       .attr("fill", "none")
       .attr("stroke", "lightgrey")
@@ -161,7 +161,7 @@ export class CardComponent implements OnInit {
 
     this.g.append("path")
       .datum(data) // 10. Binds data to the line 
-      .attr("class", "line") // Assign a class for styling 
+      .attr("class", "lines") // Assign a class for styling 
       .attr("d", line)
       .attr("fill", "none")
       .attr("stroke", "black")
@@ -175,7 +175,10 @@ export class CardComponent implements OnInit {
 
   @HostListener("click") onClick(){
     console.log("User Click using Host Listener");
-    this.lineChartService.updateChartData(this.chartData);
+    this.lineChartService.updateChartData({
+      caseName: this.CardName,
+      data: this.chartData
+    });
   }
 
 }

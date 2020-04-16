@@ -9,3 +9,34 @@
     width: 1000px;
     height: 500px;
 }
+
+.line {
+    fill: none;
+    stroke : grey;
+    stroke-width: 2;
+}
+
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.focus circle {
+    fill: steelblue;
+}
+
+.focus text {
+    font-size: 14px;
+}
+
+.tooltip {
+    fill: yellowgreen;
+    opacity: 1;
+    stroke: #000;
+}
+
+.tooltip-date, .tooltip-likes {
+    font-weight: bold;
+    color: red;
+}
