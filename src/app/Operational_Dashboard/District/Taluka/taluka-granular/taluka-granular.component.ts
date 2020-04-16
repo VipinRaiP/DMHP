@@ -70,9 +70,12 @@ export class TalukaGranularComponent implements OnInit {
   public xColumnName = "Taluka";
   private parameterNumber: any;
 
-  //@Input()
-  //private barChartService; 
-  constructor(private http: HttpClient, private barChartService: TalukaPatientService) { }
+  @Input()
+  private barChartService; 
+  
+  // constructor(private http: HttpClient, private barChartService: TalukaPatientService) { }
+  
+  constructor(private http: HttpClient ) { }
 
   ngOnInit() {
     console.log("[granular-taluka.component] : Init");

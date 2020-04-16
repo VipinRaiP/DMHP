@@ -29,6 +29,10 @@ import {MatButtonModule} from '@angular/material/button';
 import { LineChartComponent } from './Operational_Dashboard/Cards/line-chart/line-chart.component';
 import { LineChartService } from './Operational_Dashboard/Cards/services/line-chart.service';
 
+import { TalukMapComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-map-component.component';
+import { TalukMainMapComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-main-map-component/taluk-main-map-component.component';
+import { TalukMapDataComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-map-data-component/taluk-map-data-component.component';
+
 
 
 @NgModule({
@@ -48,7 +52,10 @@ import { LineChartService } from './Operational_Dashboard/Cards/services/line-ch
     TalukaBarChartComponent,
     TalukaGranularComponent,
     TalukaMenuComponent,
-    LineChartComponent
+    LineChartComponent,
+    TalukMapComponentComponent,
+    TalukMainMapComponentComponent,
+    TalukMapDataComponentComponent
   ],
   imports: [
     BrowserModule,
