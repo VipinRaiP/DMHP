@@ -19,7 +19,7 @@ export class TalukMapDataComponentComponent implements OnInit {
 
   ngOnInit() {
 
-    this.mapService.onDistrictClicked.subscribe(
+    this.mapService.onDistrictChanged.subscribe(
       (d)=>{
           this.district_name = d;
       }

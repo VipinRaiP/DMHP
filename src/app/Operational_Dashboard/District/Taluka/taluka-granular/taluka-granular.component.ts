@@ -66,6 +66,7 @@ export class TalukaGranularComponent implements OnInit {
   private normaliseChoosen=1;
   private sortByChoosen=1;
   private districtId: number;
+  private districtName:string;
 
   public xColumnName = "Taluka";
   private parameterNumber: any;
@@ -244,6 +245,8 @@ export class TalukaGranularComponent implements OnInit {
       granular: this.granularChoosen,
       choosenValue: (this.granularChoosen == 1) ? this.year : (this.granularChoosen == 2) ? this.monthChoosen : this.quarterChoosen,
       data: this.data,
+      districtId :  this.districtId,
+      districtName : this.districtName
     }
     this.barChartService.updateChartData(sendingData);
   }
@@ -294,6 +297,7 @@ processDataRequest(newDataReq) {
   // Update chart parameters
   this.parameterNumber  = newDataReq.parameterNumber;
   this.districtId = newDataReq.districtId;
+  this.districtName = newDataReq.districtName;
   this.chartParameters = this.resolveChartParameter(newDataReq.parameterNumber);
   this.barChartService.updateParameters(this.chartParameters);
 

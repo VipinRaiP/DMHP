@@ -17,8 +17,8 @@ export class DistrictMapDataComponentComponent implements OnInit {
     this.mapService.onDistrictSelected.subscribe(
       (emitData) => {
         
-        console.log("Map details: Data Received")
-        console.log(emitData);
+        // console.log("Map details: Data Received")
+        // console.log(emitData);
         this.district = emitData.district;
         this.total_cases = emitData.total_cases;
 

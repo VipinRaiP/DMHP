@@ -36,8 +36,11 @@ export class TalukaMenuComponent implements OnInit, OnDestroy {
       choosenValue: 2017,
       year: 2017,
       parameterNumber: 1,
-      districtId: this.districtId
+      districtId: this.districtId,
+      districtName: "Bagalkote" //added
     }
+    console.log("Data request to be created::::")
+    console.log(this.newDataReq);
     this.barChartService.createDataReq(this.newDataReq);
   }
 
@@ -49,7 +52,19 @@ export class TalukaMenuComponent implements OnInit, OnDestroy {
   setDistrictId(districtId: number) {
     this.districtId = districtId;
     this.newDataReq.districtId = this.districtId;
+    this.newDataReq.districtName= this.getDistrictName(districtId);
     this.barChartService.createDataReq(this.newDataReq);
+  }
+
+  getDistrictName(districtId: number)
+  {
+    for(var dist of this.districtData)
+    {
+        if(dist.DistrictId == districtId)
+        {
+            return dist.District;
+        }
+    }
   }
 
   onSubmit(form: NgForm) {
@@ -70,6 +85,7 @@ export class TalukaMenuComponent implements OnInit, OnDestroy {
   }
 
   onSelected(val: any) {
+    
     this.setDistrictId(this.districtId);
   }
 
