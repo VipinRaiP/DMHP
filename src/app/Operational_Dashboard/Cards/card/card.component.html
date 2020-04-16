@@ -3,35 +3,38 @@
         <h6 class="font-weight-bold text-uppercase">{{CardName}}</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
             <h6>Total cases: {{ totalCases}}</h6>
-            <button data-toggle="modal" data-target="#lineModal"></button>
+            <!--button (click)="onClickLoadChart()"></button-->
         </div>
     </div>
     <div class="card-body">
-        <!--div #smallChart id="smallChart">
-        </div-->
+        <div #smallChart id="smallChart">
+        </div>
     </div>
 </div>
 
+<!--app-line-chart *ngIf="loadChart" [needAxis]="true" data="chartData"></app-line-chart-->
+
 <!--Modal content-->
-<div class="modal fade" id="lineModal">
+<!--div class="modal fade" id="lineModal">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content"-->
 
             <!-- Modal Header -->
-            <div class="modal-header">
+            <!--div class="modal-header">
                 <h1 class="modal-title">Data</h1>
                 <button type="button" class="close" data-dismiss="modal">×</button>
-            </div>
+            </div-->
 
             <!-- Modal body -->
-            <div class="modal-body">
+            <!--div class="modal-body">
                 <div #smallChart id="smallChart" style="width: 800px;height: 800px;">
                 </div>
-            </div>
+            </div-->
 
             <!-- Modal footer -->
-            <div class="modal-footer">
+            <!--div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
-    </div>
+    </div-->
+    
