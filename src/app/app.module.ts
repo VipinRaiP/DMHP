@@ -5,9 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OperationalHomeComponent } from './Operational_Dashboard/operational-home-component/operational-home.component';
 
-import { DistrictBarChartComponentComponent } from './Operational_Dashboard/District/district-bar-chart-component/district-bar-chart-component.component';
-import { DistrictGranularComponentComponent } from './Operational_Dashboard/District/district-granular-component/district-granular-component.component';
-import { DistrictPatientMenuComponentComponent } from './Operational_Dashboard/District/district-patient-menu-component/district-patient-menu-component.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatInputModule, MatRadioModule, MatSlideToggleModule, MatSliderModule, MatDialogModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,9 +18,6 @@ import { DistrictMapDataComponentComponent } from './Operational_Dashboard/Distr
 import { DistrictMapComponentComponent } from './Operational_Dashboard/District/map-component/district-map-component/district-map-component.component';
 
 import { CardComponent } from './Operational_Dashboard/Cards/card/card.component';
-import { TalukaBarChartComponent } from './Operational_Dashboard/District/Taluka/taluka-bar-chart/taluka-bar-chart.component';
-import { TalukaGranularComponent } from './Operational_Dashboard/District/Taluka/taluka-granular/taluka-granular.component';
-import { TalukaMenuComponent } from './Operational_Dashboard/District/Taluka/taluka-menu/taluka-menu.component';
 import { TalukaPatientService } from './Operational_Dashboard/District/services/taluka-patient.service';
 import {MatButtonModule} from '@angular/material/button';
 import { LineChartComponent } from './Operational_Dashboard/Cards/line-chart/line-chart.component';
@@ -32,16 +26,20 @@ import { LineChartService } from './Operational_Dashboard/Cards/services/line-ch
 import { TalukMapComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-map-component.component';
 import { TalukMainMapComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-main-map-component/taluk-main-map-component.component';
 import { TalukMapDataComponentComponent } from './Operational_Dashboard/District/Taluka/taluk-map-component/taluk-map-data-component/taluk-map-data-component.component';
+import { StackedBarChartComponent } from './Operational_Dashboard/Charts/stacked-bar-chart/stacked-bar-chart.component';
+import { DistrictMainMenuComponent } from './Operational_Dashboard/District/district-main-menu/district-main-menu.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
+import {MatCardModule} from '@angular/material/card';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { TalukaMainMenuComponent } from './Operational_Dashboard/District/Taluka/taluka-main-menu/taluka-main-menu.component';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     OperationalHomeComponent,
-    DistrictBarChartComponentComponent,
-    DistrictGranularComponentComponent,
-    DistrictPatientMenuComponentComponent,
    // DistrictMapComponentComponent,
     //DistrictMapDetailsComponent,
     //DistrictMapDialogComponent,
@@ -49,13 +47,13 @@ import { TalukMapDataComponentComponent } from './Operational_Dashboard/District
     DistrictMapDataComponentComponent,
     DistrictMapComponentComponent,
     CardComponent,
-    TalukaBarChartComponent,
-    TalukaGranularComponent,
-    TalukaMenuComponent,
     LineChartComponent,
     TalukMapComponentComponent,
     TalukMainMapComponentComponent,
-    TalukMapDataComponentComponent
+    TalukMapDataComponentComponent,
+    StackedBarChartComponent,
+    DistrictMainMenuComponent,
+    TalukaMainMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +70,11 @@ import { TalukMapDataComponentComponent } from './Operational_Dashboard/District
     MatSlideToggleModule,
     MatSliderModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatSelectModule
   ],
   entryComponents:[
    // DistrictMapDialogComponent
@@ -82,7 +84,7 @@ import { TalukMapDataComponentComponent } from './Operational_Dashboard/District
     DistrictPatientService,
     DistrictMapService,
     TalukaPatientService,
-    LineChartService
+    LineChartService,
   ],
   bootstrap: [AppComponent]
 })
