@@ -33,7 +33,7 @@ app.get("/", function (req, res, next) {
     message: "Working I am fine"
   });
 })
-
+/*
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -45,7 +45,21 @@ con.connect(function (err) {
   console.log("connected");
 });
 
-sql = "use DMH";
+sql = "use DMH";*/
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "sameer",
+  password: "qwerty78900"
+});
+
+con.connect(function (err) {
+  if (err) console.log(err);
+  console.log("connected");
+});
+
+sql = "use clinical_db";
+
 con.query(sql, function (err, res) {
   if (err) console.log(err);
   console.log(res);
@@ -470,192 +484,6 @@ app.get("/getCMDCasesCurrentYear", (req, res) => {
   })
 });
 
-
-
-/* **************************************************************************************************************** 
- *
- * API to query data about TALUKAS under particular DISTRICT (Monthly, Annually, Quarterly)
- *
- * 
- *  
- * ****************************************************************************************************************/
-
-app.post("/getAlcoholDataTalukaMonthly", (req, res) => {
-  var year = req.body.year;
-  //var DistrictId = req.body.DistrictId;
-  var DistrictId = req.body.districtId;
-  console.log(req.body);
-  sql = `SELECT m.Month, t.Taluka, t.TalukaId, 
-            (sum(old_alcohal_male) + sum(old_alcohal_female) + sum(new_alcohal_female) + sum(new_alcohal_male)) as 'Alcohol Cases'
-          FROM	
-            (SELECT 
-              CASE 
-                WHEN MONTH(ReportingMonthyear) = 1 THEN 1 
-                WHEN MONTH(ReportingMonthyear) = 2 THEN 2 
-                WHEN MONTH(ReportingMonthyear) = 3 THEN 3 
-                WHEN MONTH(ReportingMonthyear) = 4 THEN 4 
-                WHEN MONTH(ReportingMonthyear) = 5 THEN 5 
-                WHEN MONTH(ReportingMonthyear) = 6 THEN 6 
-                WHEN MONTH(ReportingMonthyear) = 7 THEN 7 
-                WHEN MONTH(ReportingMonthyear) = 8 THEN 8 
-                WHEN MONTH(ReportingMonthyear) = 9 THEN 9 
-                WHEN MONTH(ReportingMonthyear) = 10 THEN 10 
-                WHEN MONTH(ReportingMonthyear) = 11 THEN 11 
-                WHEN MONTH(ReportingMonthyear) = 12 THEN 12 
-              END as Month, DistrictId, new_alcohal_male, old_alcohal_male, new_alcohal_female, old_alcohal_female 
-            FROM Clinical_Data 
-            WHERE year(ReportingMonthyear) = ?) m, Taluka t 
-          WHERE m.DistrictId = t.DistrictId and t.DistrictId = ?
-          GROUP  BY m.Month, t.Taluka, t.TalukaId
-          ORDER BY Month, 'Alcohol Cases'`;
-
-  con.query(sql, [year, DistrictId], function (err, response) {
-    if (err) console.log(err);
-    console.log(response);
-    if (response != null) {
-      var responseGrouped = jsonGroupBy(response, ['Month']);
-      res.json(responseGrouped);
-    }
-    else
-      res.json(response);
-  });
-})
-
-app.post("/getSuicideDataTalukaMonthly", (req, res) => {
-  var year = req.body.year;
-  var DistrictId = req.body.DistrictId;
-  //var DistrictId = 1;
-  console.log(req.body);
-  console.log(year);
-  sql = `SELECT m.Month, t.Taluka, t.TalukaId, 
-            (sum(old_male_suicidecases) + sum(new_male_suicidecases) + sum(old_female_suicidecases) + sum(new_female_suicidecases)) as 'Suicide Cases'
-          FROM	
-            (SELECT 
-              CASE 
-                WHEN MONTH(ReportingMonthyear) = 1 THEN 1 
-                WHEN MONTH(ReportingMonthyear) = 2 THEN 2 
-                WHEN MONTH(ReportingMonthyear) = 3 THEN 3 
-                WHEN MONTH(ReportingMonthyear) = 4 THEN 4 
-                WHEN MONTH(ReportingMonthyear) = 5 THEN 5 
-                WHEN MONTH(ReportingMonthyear) = 6 THEN 6 
-                WHEN MONTH(ReportingMonthyear) = 7 THEN 7 
-                WHEN MONTH(ReportingMonthyear) = 8 THEN 8 
-                WHEN MONTH(ReportingMonthyear) = 9 THEN 9 
-                WHEN MONTH(ReportingMonthyear) = 10 THEN 10 
-                WHEN MONTH(ReportingMonthyear) = 11 THEN 11 
-                WHEN MONTH(ReportingMonthyear) = 12 THEN 12 
-              END as Month, DistrictId, old_male_suicidecases, new_male_suicidecases, old_female_suicidecases, new_female_suicidecases 
-            FROM Clinical_Data 
-          WHERE year(ReportingMonthyear) = ?) m, Taluka t 
-          WHERE m.DistrictId = t.DistrictId and t.DistrictId = ? 
-          GROUP  BY m.Month, t.Taluka, t.TalukaId
-          ORDER BY Month, 'Suicide Cases'`;
-
-
-  con.query(sql, [year, DistrictId], function (err, response) {
-    if (err) console.log(err);
-    console.log(response);
-    var responseGrouped = jsonGroupBy(response, ['Month']);
-    res.json(responseGrouped);
-  });
-})
-
-app.post("/getAlcoholDataTalukaQuart", (req, res) => {
-  var year = req.body.year;
-  var DistrictId = req.body.districtId;
-  console.log(req.body);
-  sql = `SELECT q.Quarter, t.Taluka, t.TalukaId, 
-            (sum(old_alcohal_male) + sum(old_alcohal_female) + sum(new_alcohal_female) + sum(new_alcohal_male)) as 'Alcohol Cases'
-          FROM	
-            (SELECT 
-              CASE 
-                WHEN MONTH(ReportingMonthYear) >= 1 and MONTH(ReportingMonthYear) <= 3 THEN 1 
-                WHEN MONTH(ReportingMonthYear) >= 4 and MONTH(ReportingMonthYear) <= 6 THEN 2 
-                WHEN MONTH(ReportingMonthYear) >= 7 and MONTH(ReportingMonthYear) <= 9 THEN 3 
-                WHEN MONTH(ReportingMonthYear) >= 10 and MONTH(ReportingMonthYear) <= 12 THEN 4 
-              END as Quarter, DistrictId, new_alcohal_male, old_alcohal_male, new_alcohal_female, old_alcohal_female 
-            FROM Clinical_Data 
-            WHERE year(ReportingMonthyear) = ?) q, Taluka t 
-          WHERE q.DistrictId = t.DistrictId and t.DistrictId = ?
-          GROUP  BY q.Quarter, t.Taluka, t.TalukaId
-          ORDER BY q.Quarter, 'Alcohol Cases'`;
-
-  con.query(sql, [year, DistrictId], function (err, response) {
-    if (err) console.log(err);
-    console.log(response);
-    var responseGrouped = jsonGroupBy(response, ['Quarter']);
-    res.json(responseGrouped);
-  });
-})
-
-app.post("/getSuicideDataTalukaQuart", (req, res) => {
-  var year = req.body.year;
-  var DistrictId = req.body.districtId;
-  console.log(req.body);
-  console.log(year);
-  sql = `SELECT q.Quarter, t.Taluka, t.TalukaId, 
-            (sum(old_male_suicidecases) + sum(new_male_suicidecases) + sum(old_female_suicidecases) + sum(new_female_suicidecases)) as 'Suicide Cases'
-          FROM	
-            (SELECT 
-              CASE 
-                WHEN MONTH(ReportingMonthYear) >= 1 and MONTH(ReportingMonthYear) <= 3 THEN 1 
-                WHEN MONTH(ReportingMonthYear) >= 4 and MONTH(ReportingMonthYear) <= 6 THEN 2 
-                WHEN MONTH(ReportingMonthYear) >= 7 and MONTH(ReportingMonthYear) <= 9 THEN 3 
-                WHEN MONTH(ReportingMonthYear) >= 10 and MONTH(ReportingMonthYear) <= 12 THEN 4 
-              END as Quarter, DistrictId, old_male_suicidecases, new_male_suicidecases, old_female_suicidecases, new_female_suicidecases
-            FROM Clinical_Data 
-            WHERE year(ReportingMonthyear) = ?) q, Taluka t 
-          WHERE q.DistrictId = t.DistrictId and t.DistrictId = ? 
-          GROUP  BY q.Quarter, t.Taluka, t.TalukaId
-          ORDER BY q.Quarter, 'Suicide Cases'`;
-
-  con.query(sql, [year, DistrictId], function (err, response) {
-    if (err) console.log(err);
-    console.log(response);
-    var responseGrouped = jsonGroupBy(response, ['Quarter']);
-    res.json(responseGrouped);
-  });
-})
-
-app.post("/getAlcoholDataTalukaAnnually", (req, res) => {
-  var year = req.body.year;
-  var DistrictId = req.body.districtId;
-  console.log(req.body);
-  console.log(year)
-  sql = `SELECT t.Taluka, t.TalukaId, 
-            (sum(old_alcohal_male) + sum(new_alcohal_male) + sum(old_alcohal_female) + sum(new_alcohal_female)) as 'Alcohol Cases' 
-          FROM Clinical_Data m, Taluka t 
-          WHERE year(ReportingMonthyear) = ? and m.DistrictId = t.DistrictId and t.DistrictId = ? 
-          GROUP BY t.Taluka, t.TalukaId
-          ORDER BY 'Alcohol Cases' `;
-
-  con.query(sql, [year, DistrictId], function (err, response) {
-    console.log(sql)
-    if (err) console.log(err);
-    console.log(response);
-    res.json(response);
-  });
-})
-
-app.post("/getSuicideDataTalukaAnnually", (req, res) => {
-  var year = req.body.year;
-  var DistrictId = req.body.districtId;
-  console.log(req.body);
-
-  sql = `SELECT t.Taluka, t.TalukaId, 
-            (sum(old_male_suicidecases) + sum(old_female_suicidecases) + sum(new_male_suicidecases) + sum(new_male_suicidecases)) as 'Suicide Cases'
-          FROM Clinical_Data m, Taluka t 
-          WHERE year(ReportingMonthyear) = ? and m.DistrictId = t.DistrictId and t.DistrictId = ? 
-          GROUP BY t.Taluka, t.TalukaId
-          ORDER BY 'Suicide Cases'`;
-
-  con.query(sql, [year, DistrictId], function (err, response) {
-    if (err) console.log(err);
-    console.log(response);
-    res.json(response);
-  });
-})
-
 /*********************************************************************************************************************************
  *  Get Districts and Id
  * 
@@ -671,4 +499,180 @@ app.get("/getDistrictData", (req, res) => {
   })
 });
 
+/* **************************************************************************************************************** 
+ *
+ * API to query data about all districts (Monthly, Annually, Quarterly)
+ *
+ * 
+ *  
+ * ****************************************************************************************************************/
+var cases = ` (sum(old_alcohal_male + old_alcohal_female + new_alcohal_female + new_alcohal_male)) as 'Alcohol Cases', 
+(sum(old_male_suicidecases + new_male_suicidecases + old_female_suicidecases + new_female_suicidecases)) as 'Suicide Cases',
+(sum(old_smd_male + old_smd_female + new_smd_male + new_smd_female)) as 'SMD Cases',
+(sum(old_cmd_male + old_cmd_female + new_cmd_male + new_cmd_female)) as 'CMD Cases',
+(sum(old_psychiatricdisorders_male + old_psychiatricdisorders_female + new_psychiatricdisorders_male + new_psychiatricdisorders_female)) as 'Psychiatric Disorder Cases',
+(sum(old_o1_male + old_o1_female + new_o1_male + new_o1_female)) as 'O1 Cases',
+(sum(old_o2_male + old_o2_female + new_o2_male + new_o2_female)) as 'O2 Cases',
+(sum(old_o3_male + old_o3_female + new_o3_male + new_o3_female)) as 'O3 Cases',
+(sum(old_o4_male + old_o4_female + new_o4_male + new_o4_female)) as 'O4 Cases',
+(sum(old_o5_male + old_o5_female + new_o5_male + new_o5_female)) as 'O5 Cases' `;
+
+app.post("/getDataAllDistrictMonthly", (req, res) => {
+  var year = req.body.year;
+
+  sql = `select m.Month, m.DistrictId, d.District, d.Population,` + cases +
+    `from (SELECT *,CASE 
+      WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+      WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+      WHEN MONTH(ReportingMonthyear)=3  THEN 3
+      WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+      WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+      WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+      WHEN MONTH(ReportingMonthyear)=7 THEN 7
+      WHEN MONTH(ReportingMonthyear)=8 THEN 8
+      WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+      WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+      WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+      WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+    END as Month         
+    from Clinical_Data 
+    where year(ReportingMonthyear)=?) m, Districts d 
+    where m.DistrictId = d.DistrictId 
+    group by m.Month, m.DistrictId, d.Population, d.District
+    order by m.Month`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(responseGrouped);
+    }
+    else
+      res.json(response);
+  });
+})
+
+app.post("/getDataAllDistrictQuarterly", (req, res) => {
+  var year = req.body.year;
+  sql = `select q.Quarter, q.DistrictId, d.District, d.Population,` + cases +
+    `from (SELECT *, CASE 
+      WHEN MONTH(ReportingMonthYear)>=1 and MONTH(ReportingMonthYear)<=3 THEN 1 
+      WHEN MONTH(ReportingMonthYear)>=4 and MONTH(ReportingMonthYear)<=6 THEN 2 
+      WHEN MONTH(ReportingMonthYear)>=7 and MONTH(ReportingMonthYear)<=9 THEN 3 
+      WHEN MONTH(ReportingMonthYear)>=10 and MONTH(ReportingMonthYear)<=12 THEN 4 
+      END as Quarter
+      from Clinical_Data 
+      where year(ReportingMonthyear)=?) q, Districts d
+    where q.DistrictId = d.DistrictId 
+    group by q.Quarter, q.DistrictId, d.Population, d.District
+    order by q.Quarter`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    var responseGrouped = jsonGroupBy(response, ['Quarter']);
+    res.json(responseGrouped);
+  });
+})
+
+app.post("/getDataAllDistrictAnnually", (req, res) => {
+  var year = req.body.year;
+
+  sql = `select m.DistrictId, d.District, d.Population,` + cases +
+    `from Clinical_Data m, Districts d
+    where year(ReportingMonthyear)=? and m.DistrictId = d.DistrictId
+    group by m.DistrictId,d.Population, d.District
+    order by d.District`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    res.json(response);
+  });
+})
+
+/* **************************************************************************************************************** 
+ *
+ * API to query data about TALUKAS under particular DISTRICT (Monthly, Annually, Quarterly)
+ *
+ * 
+ *  
+ * ****************************************************************************************************************/
+
+app.post("/getAllDataTalukaMonthly", (req, res) => {
+  var year = req.body.year;
+  //var DistrictId = req.body.DistrictId;
+  var DistrictId = req.body.districtId;
+
+  sql = `SELECT m.Month, t.Taluka, t.TalukaId,` + cases +
+    `from (SELECT *,CASE 
+              WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+              WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+              WHEN MONTH(ReportingMonthyear)=3  THEN 3
+              WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+              WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+              WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+              WHEN MONTH(ReportingMonthyear)=7 THEN 7
+              WHEN MONTH(ReportingMonthyear)=8 THEN 8
+              WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+              WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+              WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+              WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+            END as Month         
+            from Clinical_Data 
+            WHERE year(ReportingMonthyear) = ?) m, Taluka t 
+          WHERE m.DistrictId = t.DistrictId and t.DistrictId = ?
+          GROUP  BY m.Month, t.Taluka, t.TalukaId
+          order by m.Month`;
+
+  con.query(sql, [year, DistrictId], function (err, response) {
+    if (err) console.log(err);
+
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(responseGrouped);
+    }
+    else
+      res.json(response);
+  });
+})
+
+app.post("/getAllDataTalukaQuarterly", (req, res) => {
+  var year = req.body.year;
+  var DistrictId = req.body.districtId;
+
+  sql = `SELECT q.Quarter, t.Taluka, t.TalukaId,` + cases +
+    `from (SELECT *, CASE 
+          WHEN MONTH(ReportingMonthYear)>=1 and MONTH(ReportingMonthYear)<=3 THEN 1 
+          WHEN MONTH(ReportingMonthYear)>=4 and MONTH(ReportingMonthYear)<=6 THEN 2 
+          WHEN MONTH(ReportingMonthYear)>=7 and MONTH(ReportingMonthYear)<=9 THEN 3 
+          WHEN MONTH(ReportingMonthYear)>=10 and MONTH(ReportingMonthYear)<=12 THEN 4 
+          END as Quarter
+          from Clinical_Data 
+            WHERE year(ReportingMonthyear) = ?) q, Taluka t 
+          WHERE q.DistrictId = t.DistrictId and t.DistrictId = ?
+          GROUP  BY q.Quarter, t.Taluka, t.TalukaId
+          ORDER BY q.Quarter`;
+
+  con.query(sql, [year, DistrictId], function (err, response) {
+    if (err) console.log(err);
+    var responseGrouped = jsonGroupBy(response, ['Quarter']);
+    res.json(responseGrouped);
+  });
+})
+
+app.post("/getAllDataTalukaAnnually", (req, res) => {
+  var year = req.body.year;
+  var DistrictId = req.body.districtId;
+
+  sql = `SELECT t.Taluka, t.TalukaId,` + cases +
+         `from Clinical_Data m, Taluka t 
+          WHERE year(ReportingMonthyear) = ? and m.DistrictId = t.DistrictId and t.DistrictId = ? 
+          GROUP BY t.Taluka, t.TalukaId
+          ORDER BY t.Taluka `;
+
+  con.query(sql, [year, DistrictId], function (err, response) {
+    if (err) console.log(err);
+    res.json(response);
+  });
+
+})
 module.exports = app;

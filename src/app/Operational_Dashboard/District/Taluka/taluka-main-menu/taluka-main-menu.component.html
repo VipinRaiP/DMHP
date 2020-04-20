@@ -1,0 +1,124 @@
+<div class="col-md-2">    
+    <strong>Select District</strong>
+    <select ngModel class="form-control" name="districtId" [(ngModel)]='district'
+        (ngModelChange)='onDistrictSelect($event)'>
+        <option *ngFor="let dist of districts | keyvalue" value={{dist.key}}>
+            {{dist.key}}
+        </option>
+    </select>
+</div>
+
+
+<div class="d-flex pt-3 bd-highlight mb-3">
+    <div class="mr-auto p-2 bd-highlight">
+        <div style="float:left">
+            <mat-button-toggle-group #granularityGroup="matButtonToggleGroup" [(value)]="granularChoosen"
+                (change)="onToggleChange_Granularity(granularityGroup.value)">
+                <mat-button-toggle *ngFor="let item of toggleOptions_Granularity;let in = index" [value]="in">
+                    {{item}}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div *ngIf="granularChoosen==1" style="float:left; padding-left: 5;">
+            <div class="pl-5" style="float:left;"><strong>Month <br></strong>{{monthName}}</div>
+            <div class="pl-5" style="float:left;">
+                <mat-slider class="pl-5" color="primary" #slider min="1" max="12" step="1" value="1" tickInterval="1"
+                    thumbLabel="thumbLabel" (input)="onMonthChange($event)" style="width: 400px;"></mat-slider>
+            </div>
+        </div>
+        <div *ngIf="granularChoosen==2" style="float:left; padding-left: 5;">
+            <div class="pl-5" style="float:left;"><strong>Quarter <br></strong>{{quarterChoosen}}</div>
+            <div class="pl-5" style="float:left;">
+                <mat-slider class="pl-5" color="primary" #slider min="1" max="4" step="1" value="1" tickInterval="1"
+                    thumbLabel="thumbLabel" (input)="onQuarterChange($event)" style="width: 200px;"></mat-slider>
+            </div>
+        </div>
+
+    </div>
+    <div class="p-3 bd-highlight">
+        <h6>
+            <mat-slide-toggle color="primary" disabled="true" [(ngModel)]="checkedNormalize" (change)="onNormaliseChange()">
+                Normalize wrt population
+            </mat-slide-toggle>
+        </h6>
+    </div>
+    <div class="p-2 bd-highlight">
+        <button mat-button color="primary" data-toggle="modal" data-target="#allDistModal">
+            View in table
+        </button>
+    </div>
+</div>
+
+<div class="pl-5 pr-5 ">
+    <div class="row border border-light">
+        <!--Map-->
+        <div class="col-md-5">
+            <h6>{{district}} District</h6>
+            <strong>Year - {{year}}</strong>
+            <strong *ngIf="granularChoosen==1" class="pl-3">Month - {{monthName}}</strong>
+            <strong *ngIf="granularChoosen==2" class="pl-3">Qaurter - {{quarterChoosen}}</strong>
+            <app-taluk-map-component [barChartService]="barChartService"></app-taluk-map-component>
+        </div>
+
+        <!--Bar Chart-->
+        <div class="col-md-7">
+            <!--strong style="float: right;">Select type of cases</strong-->
+            <h6>Taluka v Cases</h6>
+            <strong>District - {{district}}<br></strong>
+            <strong>Year - {{year}}</strong>
+            <strong *ngIf="granularChoosen==1" class="pl-3">Month - {{monthName}}</strong>
+            <strong *ngIf="granularChoosen==2" class="pl-3">Qaurter - {{quarterChoosen}}</strong>
+            <app-stacked-bar-chart *ngIf="chartLoaded" [barChartService]="barChartService">
+            </app-stacked-bar-chart>
+            Sort by
+            <mat-button-toggle-group #sortGroup="matButtonToggleGroup" [(value)]="toggleValue_Sort"
+                (change)="onToggleChange_Sort(sortGroup.value)">
+                <mat-button-toggle *ngFor="let item of toggleOptions_Sort;" [value]="item">
+                    {{item}}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+
+        </div>
+    </div>
+</div>
+
+
+<!--Modal content-->
+<div class="modal fade" id="allDistModal" style="font-size: 13px;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h1 class="modal-title">Data</h1>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">S.No</th>
+                            <th scope="col">{{xColumnName}}</th>
+                            <th scop="col" *ngFor="let col of columns;">{{col}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let d of data;let in = index;">
+                            <th scope="row">{{in+1}}</th>
+                            <td>{{d[xColumnName]}}</td>
+                            <td *ngFor="let col of columns;">{{d[col]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

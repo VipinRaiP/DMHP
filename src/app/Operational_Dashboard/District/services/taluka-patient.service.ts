@@ -1,63 +1,85 @@
-import { BarChartDistrictParameters } from '../models/district-barChartParameters.model';
+import { StackedBarChartParameters } from '../models/stackedBarChartParameters.model';
 import { Subject } from 'rxjs';
 import { DistrictDataReq } from '../models/district-dataReq.model';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable()
 export class TalukaPatientService {
-  private parameters:BarChartDistrictParameters;
-  private parametersUpdated = new Subject<BarChartDistrictParameters>();
-  private dataReq:DistrictDataReq;
-  private dataReqUpdated = new Subject<DistrictDataReq>();
+    public onDoubleClick = new EventEmitter<any>();
 
-  private chartData:any;
-  private chartDataUpdated = new Subject<any>();
+    private parameters: StackedBarChartParameters;
+    private parametersUpdated = new Subject<StackedBarChartParameters>();
+    private dataReq: DistrictDataReq;
+    private dataReqUpdated = new Subject<DistrictDataReq>();
 
-  getParametersUpdateListener(){
-      return this.parametersUpdated.asObservable();
-  }
+    private chartData: any;
+    private chartDataUpdated = new Subject<any>();
 
-  getParameters(){
-      return this.parameters;
-  }
+    private data: any;
+    private dataUpdated = new Subject<any>();
 
-  updateParameters(newParameters:BarChartDistrictParameters){
-      console.log("called")
-      this.parameters = newParameters;
-      this.parametersUpdated.next(this.parameters);
-  }
+    getParametersUpdateListener() {
+        return this.parametersUpdated.asObservable();
+    }
 
-  /* Listner for data requesting */
+    getParameters() {
+        return this.parameters;
+    }
 
-  getDataReqListener(){
-      return this.dataReqUpdated.asObservable();
-  }
+    updateParameters(newParameters: StackedBarChartParameters) {
+        console.log("called")
+        this.parameters = newParameters;
+        this.parametersUpdated.next(this.parameters);
+    }
 
-  getDataReq(){
-      return this.dataReq;
-  }
+    /* Listner for data requesting */
 
-  createDataReq(newDataReq:DistrictDataReq){
-      console.log("Data req created in service.... ")
-      this.dataReq = newDataReq;
-      console.log(this.dataReq);
-      this.dataReqUpdated.next(this.dataReq);
-  }
+    getDataReqListener() {
+        return this.dataReqUpdated.asObservable();
+    }
 
-  /* Chart Data Listener */
+    getDataReq() {
+        return this.dataReq;
+    }
 
-  getChartDataListener(){
-      return this.chartDataUpdated.asObservable();
-  }
+    createDataReq(newDataReq: DistrictDataReq) {
+        console.log("Data req created in service.... ")
+        this.dataReq = newDataReq;
+        console.log(this.dataReq);
+        this.dataReqUpdated.next(this.dataReq);
+    }
 
-  getChartData(){
-      return this.chartData;
-  }
+    /* Chart Data Listener */
 
-  updateChartData(newData:any){
-      console.log("Update recived");
-      console.log(newData);
-      this.chartData = newData;
-      this.chartDataUpdated.next(this.chartData);
-  }
+    getChartDataListener() {
+        return this.chartDataUpdated.asObservable();
+    }
+
+    getChartData() {
+        return this.chartData;
+    }
+
+    updateChartData(newData: any) {
+        console.log("Update recived");
+        console.log(newData);
+        this.chartData = newData;
+        this.chartDataUpdated.next(this.chartData);
+    }
+
+    /* Data Listener */
+
+    getDataListener() {
+        return this.dataUpdated.asObservable();
+    }
+
+    getData() {
+        return this.data;
+    }
+
+    updateData(newData: any) {
+        console.log("Update recived");
+        console.log(newData);
+        this.data = newData;
+        this.dataUpdated.next(this.data);
+    }
 }

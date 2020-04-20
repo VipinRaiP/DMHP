@@ -1,28 +1,28 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
 import { DistrictMapService } from '../../services/district-map.service';
 import { Title } from '@angular/platform-browser';
-import { BarChartDistrictParameters } from '../../models/district-barChartParameters.model';
+import { StackedBarChartParameters } from '../../models/stackedBarChartParameters.model';
 
 @Component({
   selector: 'app-district-map-component',
   templateUrl: './district-map-component.component.html',
   styleUrls: ['./district-map-component.component.css']
 })
-export class DistrictMapComponentComponent implements OnInit {
+export class DistrictMapComponentComponent implements AfterViewInit {
 
   @Input()
   private barChartService;
-  public chartParameters:BarChartDistrictParameters;
+  public chartParameters: StackedBarChartParameters;
   private mapdata:any = null;
   private parameterNumber:number;
   private year:number;
   private formattedData:any = null;
   
-  private margin: any = { top: 20, bottom: 20, left: 20, right: 20 };
+  private margin: any = { top: 50, bottom: 30, left: 20, right: 20 };
   private width: number;
   private height: number;
   private jsondata:any;
@@ -34,7 +34,7 @@ export class DistrictMapComponentComponent implements OnInit {
   constructor(private httpClient:HttpClient,private mapService : DistrictMapService,
     private titleService:Title) { }
 
-  ngOnInit() {
+    ngAfterViewInit() {
 
     console.log("DISTRICT MAP COMPONENT LOADED");
 
@@ -51,16 +51,16 @@ export class DistrictMapComponentComponent implements OnInit {
      console.log(" All dist map  : parameter received");
      console.log(newParameter);
      this.chartParameters = newParameter;
-     this.titleService.setTitle(this.chartParameters.yLabel);
+     //this.titleService.setTitle(this.chartParameters.yLabel);
  })
 
- this.barChartService.getChartDataListener().subscribe((newData) => {
+ this.barChartService.getDataListener().subscribe((newData) => {
    console.log(" All Dist map: Data update received");
    //alert("Map");
    console.log(newData);
    this.mapdata = newData.data;
-   this.year = newData.year;
-   this.parameterNumber = newData.parameterNumber;
+   //this.year = newData.year;
+   //this.parameterNumber = newData.parameterNumber;
    //this.granular = newData.granular;
    //localStorage.setItem("granular_allDist",newData.granular+"");
    //this.choosenValue = newData.choosenValue;
@@ -98,21 +98,27 @@ export class DistrictMapComponentComponent implements OnInit {
     // console.log(mapdata);
 
     let formattedDataTempCopy = null;
+    this.formattedData={};
     if(mapdata!=null)
     {
-     this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.District]: cur["Total Cases"] }), {});
+      //for (let d of mapdata){
+        //.append({District : d.District, DistrictId : d.DistrictId, Total: d.Total});
+
+
+      //}
+     this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.District]: cur["Total"] }), {});
 
        formattedDataTempCopy = this.formattedData;
 
-    // console.log("FORMATTED DATA");
-    // console.log(this.formattedData);
+     console.log("FORMATTED DATA");
+   console.log(this.formattedData);
     
     var maxVal = 0;
     for(var v of mapdata)
     {
-        if(v["Total Cases"] > maxVal)
+        if(v["Total"] > maxVal)
         {
-          maxVal = v["Total Cases"];
+          maxVal = v["Total"];
         }
     }
   }
@@ -128,7 +134,7 @@ export class DistrictMapComponentComponent implements OnInit {
       .append('svg')
       .attr("id","the_SVG_ID")
       .attr('width',element.offsetWidth )//500)
-      .attr('height',550)//element.offsetHeight)
+      .attr('height',500)//element.offsetHeight)
       //.attr('viewBox',"0 0 480 450")
       .attr('preserveAspectRatio',"xMinYMax meet")
       .append('g')
@@ -160,6 +166,7 @@ export class DistrictMapComponentComponent implements OnInit {
     .append("path")
     .attr("class","country")
     .attr("d",path)
+    
     .attr("fill",(d) =>
     {
       //console.log(this.formattedData[d.properties.district]+" "+d.properties.district);
@@ -172,7 +179,7 @@ export class DistrictMapComponentComponent implements OnInit {
             n === 0
               ? '#ffffff'
               : d3.interpolateReds(
-                  (0.8 * n) / (maxVal || 0.001)
+                  (0.8 * n) / (maxVal || 0.009)
                 );
 
                 tempColor = color;
@@ -237,10 +244,12 @@ export class DistrictMapComponentComponent implements OnInit {
 
       //console.log(this);
       })
-      .on('click' , (d)=>{
+      .on('dblclick' , (d)=>{
 
         //console.log("Clicked");
-        this.mapService.onDistrictClicked.emit(d.properties.district);
+        //alert(d.properties);
+        //this.mapService.onDistrictClicked.emit(d.properties.district);
+        this.barChartService.onDoubleClick.emit(d.properties.district);
 
 
       });
@@ -264,7 +273,7 @@ export class DistrictMapComponentComponent implements OnInit {
 
     let emitData = {
       district : data,
-      total_cases : total_cases
+      total_cases : total_cases.toLocaleString()
       // yColumnName : this.chartParameters.yColumnName,
       // parameterNumber : this.parameterNumber,
       // year: this.year
