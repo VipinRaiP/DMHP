@@ -107,6 +107,7 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
       if (this.talukaPanelState)
         this.TalukaMainMenuRef.updateYearDataFromServer(this.year, this.selectDistrict);
       this.talukaPanelState = true;
+      setTimeout(()=>location.href = "#TalukaPanel" ,200);
     });
 
   }
