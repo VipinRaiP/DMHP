@@ -250,8 +250,7 @@ export class DistrictMapComponentComponent implements AfterViewInit {
         //alert(d.properties);
         //this.mapService.onDistrictClicked.emit(d.properties.district);
         this.barChartService.onDoubleClick.emit(d.properties.district);
-
-
+        location.href = "#TalukaPanel";  
       });
 
        let fu = (d) =>

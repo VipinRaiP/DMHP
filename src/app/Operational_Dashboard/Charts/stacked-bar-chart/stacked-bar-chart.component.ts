@@ -290,7 +290,9 @@ export class StackedBarChartComponent implements OnInit {
         .on("dblclick", function (d) {
           console.log(d.data[xLabelName]);
           barChartService.onDoubleClick.emit(d.data[xLabelName]);
-
+        
+          location.href = "#TalukaPanel";  
+          //document.getElementById("TalukaPanel").scrollIntoView()
         })
         .transition().duration(speed)
         .attr("y", d => y(d[1]))

@@ -80,7 +80,7 @@
     </mat-card-content>
     <mat-card-footer>
 
-        <mat-expansion-panel (opened)="talukaPanelState = true" (closed)="talukaPanelState = false"
+        <mat-expansion-panel  (opened)="talukaPanelState = true" (closed)="talukaPanelState = false"
             [expanded]="talukaPanelState" (click)="onPanelExpand()">
             <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -91,7 +91,7 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <div *ngIf="talukaPanelState">
+            <div id="TalukaPanel"  *ngIf="talukaPanelState" >
                 <app-taluka-main-menu  [district]="selectDistrict"></app-taluka-main-menu>
             </div>
         </mat-expansion-panel>
