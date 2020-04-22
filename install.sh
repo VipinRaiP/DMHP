@@ -8,3 +8,5 @@ ng add @angular/material
 npm install --save moment
 npm install @angular/material-moment-adapter
 npm install topojson
+npm i loadash
+npm i d3-tip
