@@ -7,6 +7,9 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson';
 import { TalukaPatientService } from '../../../services/taluka-patient.service';
 import { StackedBarChartParameters } from '../../../models/stackedBarChartParameters.model';
+import d3Tip from "d3-tip";
+import * as _ from "lodash";
+
 @Component({
   selector: 'app-taluk-main-map-component',
   templateUrl: './taluk-main-map-component.component.html',
@@ -88,7 +91,7 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
       //  this.monthName = this.months[this.choosenValue - 1];
       //alert(this.mapdata);
 
-      if(this.districtname!=newData.parameterValue)
+      if (this.districtname != newData.parameterValue)
         this.updateMap(newData.parameterValue);
       else
         this.createMap(this.mapdata);
@@ -96,7 +99,7 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
       //this.updateChart();
     })
 
-   
+
 
     /*this.mapService.onDistrictClicked.subscribe(
       (d) => {
@@ -145,7 +148,7 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
       this.districtname = d;
     }
     //alert(this.districtname);
-    
+
     let topojsonPath = "assets/" + this.districtname + ".topojson";
     //alert(this.districtname +"    "+ topojsonPath);
 
@@ -166,13 +169,18 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
 
     let formattedDataTempCopy = null;
     this.formattedData = null;
+
+    let talukaWiseData = _.groupBy(mapdata, 'Taluka');
+    console.log("Taluka wise data")
+    console.log(talukaWiseData);
+
     if (mapdata.length != 0) {
       //let caseString = Object.keys(mapdata[0])[Object.keys(mapdata[0]).length-1]; //consindering the last column of data received for number of cases
 
       //console.log(caseString);
 
       //this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.Taluka]: cur[caseString] }), {});
-      this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.Taluka]: cur["Total"] }), {});
+      this.formattedData = mapdata.reduce((acc, cur) => ({ ...acc, [cur.Taluka]: talukaWiseData[cur.Taluka][0] }), {});
 
       formattedDataTempCopy = this.formattedData;
 
@@ -225,6 +233,24 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
     const path = d3.geoPath(projection);
     let tempColor = "";
 
+    /* Tooltip code */
+    const tip = d3Tip();
+    tip
+      .attr("class", "d3-tip")
+      .offset([-10, 0])
+      .html(d => {
+        console.log(d);
+        let keys = Object.keys(formattedDataTempCopy[d.properties.NAME_3]);
+        let values = Object.values(formattedDataTempCopy[d.properties.NAME_3]);
+        let ret = "";
+
+        for (var i = 0; i < keys.length; i++) {
+          ret += keys[i] + " : " + values[i] + "<br>"
+        }
+        return (ret)
+      })
+
+    this.svg.call(tip);
 
     this.svg.selectAll(".taluk")
       .data(state.features)
@@ -234,8 +260,11 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
       .attr("d", path)
       .attr("fill", (d) => {
         //console.log(this.formattedData[d.properties.NAME_3]+" "+d.properties.NAME_3);
-        if (this.formattedData != null) {
-          var n = this.formattedData[d.properties.NAME_3] || 0;
+
+        if (this.formattedData != null && this.formattedData[d.properties.NAME_3] != null) {
+          console.log("Taluka map color")
+          console.log(d);
+          var n = this.formattedData[d.properties.NAME_3]["Total"] || 0;
 
           // console.log(n);
           const color =
@@ -259,7 +288,7 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
       .attr("stroke-width", "1")
       //.attr("fill", "grey")
       .on('mouseover', function (d) {
-
+        tip.show(d,this);
         //scope of "this" here is to svg element so we can not call "regionSelected" directly
         // when used function(d) scope of "this" is to current svg element
         // when used (d)=> { } scope of "this" is same as angular "this"
@@ -273,15 +302,15 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
         //this.regionSelected(d.properties.district);
       })
       .on('mouseout', function (d) {
-
+        tip.hide(d,this);
         //d3.select(this).style("fill","grey");
 
         // d3.select(this).transition()
         //   .duration('50')
         //   .attr('fill', "grey")
 
-        if (formattedDataTempCopy != null) {
-          var n = formattedDataTempCopy[d.properties.NAME_3] || 0;
+        if (formattedDataTempCopy != null && formattedDataTempCopy[d.properties.NAME_3] != null) {
+          var n = formattedDataTempCopy[d.properties.NAME_3]["Total"] || 0;
 
           const color =
             n === 0
@@ -316,15 +345,17 @@ export class TalukMainMapComponentComponent implements AfterViewInit {
   talukaSelected(data) {
     // console.log("HOVERED");
     // console.log(data);
+    if (this.formattedData[data] != null) {
+      console.log("Taluka")
+      console.log(data);
+      var total_cases = this.formattedData[data]["Total"];
 
-    var total_cases = this.formattedData[data];
-
-    let emitData = {
-      taluka: data,
-      total_cases: total_cases
-
+      let emitData = {
+        taluka: data,
+        total_cases: total_cases
+      }
+      this.mapService.onTalukaSelected.emit(emitData);
     }
-    this.mapService.onTalukaSelected.emit(emitData);
 
   }
 
