@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 import d3Tip from "d3-tip";
@@ -9,7 +9,8 @@ import * as topojson from 'topojson';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MapComponent implements OnInit {
   // Input Parameter
@@ -53,6 +54,7 @@ export class MapComponent implements OnInit {
 
   getMap() {
     this.http.get(this.mapDirPath + this.mapName + this.fileExt).subscribe(responseData => {
+      this.mapName = this.mapName.replace(" ", "_");
       this.jsondata = responseData;
     })
   }
