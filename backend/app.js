@@ -33,7 +33,7 @@ app.get("/", function (req, res, next) {
     message: "Working I am fine"
   });
 })
-
+/*
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -45,7 +45,7 @@ con.connect(function (err) {
   console.log("connected");
 });
 
-sql = "use DMH";/*
+sql = "use DMH";*/
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -58,7 +58,7 @@ con.connect(function (err) {
   console.log("connected");
 });
 
-sql = "use clinical_db";*/
+sql = "use clinical_db";
 
 con.query(sql, function (err, res) {
   if (err) console.log(err);

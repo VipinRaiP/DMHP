@@ -32,6 +32,7 @@ export class PatienCountTalukaService extends PatientCountService {
     this.setLabels("Taluka", "Cases");
     this.setxColumn("Taluka");
     this.setYear(2018);
+    this.setNormalizeDisabled(true);
   }
 
   start() {
@@ -58,7 +59,7 @@ export class PatienCountTalukaService extends PatientCountService {
       this.districtName = this.districts.keys().next(0).value;
     this.districtId = this.districts.get(this.districtName);
     super.setMapParameter("assets/", this.districtName, ".topojson");
-    this.updateMapParameter();
+    this.updateParameter();
     let postData = {
       year: this.getYear(),
       districtId: this.districtId

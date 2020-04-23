@@ -32,6 +32,7 @@ import { PatientCountDistrictService } from './Operational_Dashboard/Services/pa
 import { PatienCountTalukaService } from './Operational_Dashboard/Services/patient-count-taluka.service';
 import { MenuComponent } from './Operational_Dashboard/Menu/menu/menu.component';
 import { MapInfoComponent } from './Operational_Dashboard/Menu/map-info/map-info.component';
+import { MultiLineChartComponent } from './Operational_Dashboard/Charts/multi-line-chart/multi-line-chart.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { MapInfoComponent } from './Operational_Dashboard/Menu/map-info/map-info
     TalukaMainMenuComponent,
     MapComponent,
     MenuComponent,
-    MapInfoComponent
+    MapInfoComponent,
+    MultiLineChartComponent
   ],
   imports: [
     BrowserModule,

@@ -28,7 +28,7 @@
     </div>
     <div class="p-3 bd-highlight">
         <h6>
-            <mat-slide-toggle color="primary" [(ngModel)]="checkedNormalize" (change)="onNormaliseChange()">
+            <mat-slide-toggle color="primary" [disabled]="normalizeDisabled" [(ngModel)]="checkedNormalize" (change)="onNormaliseChange()">
                 Normalize wrt population
             </mat-slide-toggle>
         </h6>

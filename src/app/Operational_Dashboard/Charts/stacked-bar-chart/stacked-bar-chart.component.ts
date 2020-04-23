@@ -1,12 +1,15 @@
-import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import * as d3 from 'd3';
+import d3Tip from "d3-tip";
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
   selector: 'app-stacked-bar-chart',
   templateUrl: './stacked-bar-chart.component.html',
-  styleUrls: ['./stacked-bar-chart.component.css']
+  styleUrls: ['./stacked-bar-chart.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class StackedBarChartComponent implements OnInit {
   // Input Parameter
@@ -51,7 +54,7 @@ export class StackedBarChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.chartService.getChartParameterListener().subscribe((newParameter) => {
+    this.chartService.getParameterListener().subscribe((newParameter) => {
       this.xLabelName = newParameter.xLabel;
       this.yLabelName = newParameter.yLabel;
       this.xColumn = newParameter.xColumn
@@ -71,13 +74,21 @@ export class StackedBarChartComponent implements OnInit {
   createChart() {
     // Chart parameters
     let element = this.chartContainer.nativeElement;
+
+    //d3.select(this.xColumn).remove();
+    //d3.select(element)
+    //.append(this.xColumn);
+    d3.select("#" + this.xColumn + "sbc").remove();
+
     this.svg = d3.select(element)
       .append('svg')
+      .attr("id", this.xColumn + "sbc")
       .attr('width', element.offsetWidth + 300)
       .attr('height', element.offsetHeight + 60);
 
     this.width = element.offsetWidth - this.margin.left - this.margin.right;
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
+
     this.g = this.svg.append('g').attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
     // X Axis
@@ -114,25 +125,6 @@ export class StackedBarChartComponent implements OnInit {
     // set the colors 
     this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired]);
     this.z.domain(this.keys);
-
-    // Prep the tooltip bits, initial display is hidden
-    this.tooltip = this.svg.append("g")
-      .attr("class", "tooltip")
-      .style("display", "none");
-
-    this.tooltip.append("rect")
-      .attr("width", 30)
-      .attr("height", 20)
-      .attr("fill", "white")
-      .attr("opacity", 0.5);
-
-    this.tooltip.append("text")
-      .attr("x", 15)
-      .attr("dy", "1.2em")
-      .attr("text-anchor", "middle")
-      .attr("font-size", "12px")
-      .attr("font-weight", "bold");
-    //const yAxisGrid = d3.axisLeft(this.y).tickSize(-this.width).ticks(10);
   }
 
   // Update the chart
@@ -177,14 +169,23 @@ export class StackedBarChartComponent implements OnInit {
       .text(function (d) { return d; });
 
 
-    // tooltips
-    /*
-    var div =  svg.selectAll(".tooltip").enter().append('div')
-      .attr('class', 'tooltip')
-      .style('display', 'none')
-      //.attr("width", 18)
-      //.attr("height", 15)
-      .html('<strong>Frequency:</strong>');*/
+    /* tooptip */
+    const tip = d3Tip();
+    tip.attr("class", "d3-tip")
+      .offset([-10, 0])
+      .html((data) => {
+        let keys = [...this.currkeys];
+
+        let ret = "<div style='text-align: center;'><strong>" + data[this.xColumn] + "</strong></div><br>";
+        ret += "<table style='width:200px;font-size: 17px;'><tbody>";
+        for (let key of keys.reverse()) {
+          ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + "</td></tr>"
+        }
+        ret += "</tbody></table>";
+        return ret;
+      });
+
+    this.svg.call(tip);
 
     // Set X & Y domains
     let xDomain = this.data.map(d => d[this.xColumn]);
@@ -224,9 +225,10 @@ export class StackedBarChartComponent implements OnInit {
       .merge(bars)
       .attr("x", d => this.x(d.data[this.xColumn]))
       .attr('y', d => this.y(0))
-      .attr('height', 0).on("mouseover", mouseover)
-      .on("mouseout", mouseout)
-      .on("mousemove", mousemove)
+      .attr('height', 0)
+      .on("mouseover", function (d) { tip.show(tipFunction(d), this); })
+      .on("mouseout", function (d) { tip.hide(d, this); })
+      //.on("mousemove", function (d) { tip.show(tipFunction(d), this); })
       .on("dblclick", (d) => {
         this.chartService.onDoubleClick.emit(d.data[this.xColumn]);
         //location.href = "#TalukaPanel";  
@@ -237,23 +239,9 @@ export class StackedBarChartComponent implements OnInit {
       .attr("height", d => this.y(d[0]) - this.y(d[1]))
       .attr("cursor", "pointer");
 
-
-
-    function mouseover() {
-      //div.style('display', 'inline');
+    let tipFunction = (d) => {
+      return d.data;
     }
-    function mousemove() {
-      // var d = d3.select(this).data()[0]
-      /*console.log((d3.event.pageX - 34), (d3.event.pageY - 12));
-      div.html('<strong>Frequency:</strong>')
-        .style('left', (100 - 34) + 'px')
-        .style('top', (100 - 12) + 'px');*/
-    }
-    function mouseout() {
-      //div.style('display', 'none');
-    }
-
-
 
     // Update Y Axis
     this.svg.selectAll(".y-axis").transition().duration(this.speed)

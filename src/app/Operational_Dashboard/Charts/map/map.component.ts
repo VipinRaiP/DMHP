@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 import d3Tip from "d3-tip";
@@ -9,7 +9,8 @@ import * as topojson from 'topojson';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MapComponent implements OnInit {
   // Input Parameter
@@ -28,16 +29,20 @@ export class MapComponent implements OnInit {
   private jsondata: any;
   private formattedData: any = null;
   private xColumn: string;
+  private keys: string[];
+  private currkeys: string[];
+  private z: any;
   @ViewChild('map', { static: true }) private chartContainer: ElementRef;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.mapService.getMapParameterListener().subscribe((newParameter) => {
+    this.mapService.getParameterListener().subscribe((newParameter) => {
       this.mapName = newParameter.mapName;
       this.mapDirPath = newParameter.mapDirPath;
       this.fileExt = newParameter.fileExt;
       this.xColumn = newParameter.xColumn;
+      this.keys = newParameter.keys;
       this.getMap();
       //this.mapService.onDistrictChanged.emit(this.mapName);
 
@@ -46,6 +51,7 @@ export class MapComponent implements OnInit {
     this.mapService.getDataListener().subscribe((newData) => {
       this.mapdata = newData.data;
       this.normalize = newData.normalise;
+      this.currkeys = newData.currkeys;
       this.createMap();
     });
 
@@ -53,8 +59,12 @@ export class MapComponent implements OnInit {
 
   getMap() {
     this.http.get(this.mapDirPath + this.mapName + this.fileExt).subscribe(responseData => {
+      this.mapName = this.mapName.replace(" ", "_");
       this.jsondata = responseData;
     })
+    // set the colors 
+    this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired]);
+    this.z.domain(this.keys);
   }
 
   createMap() {
@@ -121,20 +131,16 @@ export class MapComponent implements OnInit {
     tip.attr("class", "d3-tip")
       .offset([-10, 0])
       .html(d => {
-        let keys = Object.keys(formattedDataTempCopy[d.properties.NAME_3]);
-        let values = Object.values(formattedDataTempCopy[d.properties.NAME_3]);
-        let ret = "";
+        let data = formattedDataTempCopy[d.properties.NAME_3];
+        let keys = [...this.currkeys];
 
-        for (var i = 0; i < keys.length; i++) {
-          ret += keys[i] + " : " + values[i] + "<br>"
+        let ret = "<div style='text-align: center;'><strong>" + data[this.xColumn] + "</strong></div><br>";
+        ret += "<table style='width:200px;font-size: 17px;'><tbody>";
+        for (let key of keys.reverse()) {
+          ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + "</td></tr>"
         }
-
-        return (
-          //`<div style="width:300px;height:10px;opacity:10px;border:15px solid green;padding:50px;margin:20px;background-color:white"` +
-          //`<strong>Frequency:</strong> <span style="color:red">` + d.properties.district+","+formattedDataTempCopy[d.properties.district]["Total"] + "</span>"
-          //+ "</div>"
-          ret
-        )
+        ret += "</tbody></table>";
+        return ret;
       });
 
     this.svg.call(tip);
@@ -151,7 +157,7 @@ export class MapComponent implements OnInit {
         //console.log(this.formattedData[d.properties[this.xColumn]]+" "+d.properties[this.xColumn]);
 
         if (formattedDataTempCopy[d.properties.NAME_3] != null) {
-          var n = formattedDataTempCopy[d.properties.NAME_3]["Total"]  || 0;
+          var n = formattedDataTempCopy[d.properties.NAME_3]["Total"] || 0;
 
           const color =
             n === 0
@@ -183,7 +189,7 @@ export class MapComponent implements OnInit {
           .duration('50')
           .attr('fill', "grey")
 
-          tip.show(d,this);
+        tip.show(d, this);
 
         //d3.select(this).style("fill","#cccccc");
         //abc(d.properties.district);
@@ -195,10 +201,10 @@ export class MapComponent implements OnInit {
         //      .attr('stroke', '#333333')
         // d3.select(this).classed('selected',false)
         //this.regionSelected(null);
-        tip.hide(d,this);
+        tip.hide(d, this);
 
         if (formattedDataTempCopy[d.properties.NAME_3] != null) {
-          var n = formattedDataTempCopy[d.properties.NAME_3]["Total"]  || 0;
+          var n = formattedDataTempCopy[d.properties.NAME_3]["Total"] || 0;
 
           const color =
             n === 0
@@ -224,7 +230,7 @@ export class MapComponent implements OnInit {
       })
       .on('dblclick', (d) => {
 
-        console.log("Clicked",d.properties.NAME_3);
+        console.log("Clicked", d.properties.NAME_3);
         //alert(d.properties);
         //this.mapService.onDistrictClicked.emit(d.properties.district);
         this.mapService.onDoubleClick.emit(d.properties.NAME_3);
