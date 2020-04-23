@@ -10,7 +10,7 @@ import * as d3 from 'd3';
 })
 export class StackedBarChartComponent implements OnInit {
   // Input Parameter
-  @Input() private barChartService: any;
+  @Input() private chartService: any;
 
   // Chart Variables
   @ViewChild('chart', { static: true }) private chartContainer: ElementRef;
@@ -31,11 +31,13 @@ export class StackedBarChartComponent implements OnInit {
   private speed: number = 500;
   private xLabelName: string;
   private yLabelName: string;
+  private xColumn: string;
 
   // Request Variables
   private normalize: boolean;
   private data: Array<any> = [];
   private keys: string[];
+  private currkeys: string[];
 
   // Other Variables
   private columns = new Map<string, boolean>();
@@ -45,34 +47,24 @@ export class StackedBarChartComponent implements OnInit {
   // Output Parameter
   @Output() public chartLoaded: EventEmitter<any> = new EventEmitter();
 
-  constructor(private titleService: Title) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.barChartService.getParametersUpdateListener().subscribe((newParameter) => {
+    this.chartService.getChartParameterListener().subscribe((newParameter) => {
       this.xLabelName = newParameter.xLabel;
       this.yLabelName = newParameter.yLabel;
-      this.titleService.setTitle(this.xLabelName + " | " + this.yLabelName);
-
-      this.keys = newParameter.columnNames;
+      this.xColumn = newParameter.xColumn
+      this.keys = newParameter.keys;
       this.createChart();
-
-      // Set initially all columns visible
-      for (let cn of this.keys.reverse()) {
-        this.columns.set(cn, true);
-      }
-
     });
 
-    this.barChartService.getChartDataListener().subscribe((newData) => {
+    this.chartService.getDataListener().subscribe((newData) => {
+      this.currkeys = newData.currkeys;
       this.data = newData.data;
       this.normalize = newData.normalise;
-      this.sortColumn = newData.sortColumn;
-      this.parameterValue = newData.parameterValue;
       this.updateChart();
     });
-
-    //this.chartLoaded.emit();
   }
 
   // Set up the chart
@@ -145,27 +137,6 @@ export class StackedBarChartComponent implements OnInit {
 
   // Update the chart
   updateChart() {
-    // Declaring local variables
-    let keys = []       // Coloumn Names 
-    let columns = this.columns;
-    let x = this.x;
-    let y = this.y;
-    let z = this.z;
-    let data = this.data;
-    let height = this.height;
-    let width = this.width;
-    let margin = this.margin;
-    let svg = this.svg;
-    let tooltip = this.tooltip;
-    let speed = this.speed;
-    let legend = svg.selectAll(".legend").remove();
-    let normalise = this.normalize;
-    let sortColumn = this.sortColumn;
-    let barChartService = this.barChartService;
-    let xLabelName = this.xLabelName;
-    let parameterValue = this.parameterValue;
-    update();
-
     /*svg.append("rect")
     .attr("x", this.width+15)
     .attr("width", this.width-this.margin.right)
@@ -175,20 +146,19 @@ export class StackedBarChartComponent implements OnInit {
     .style("opacity", 0.1);*/
 
     // Set Legend  
-    legend = svg.selectAll(".legend")
+    this.svg.selectAll(".legend").remove();
+    let legend = this.svg.selectAll(".legend")
       .attr("font-family", "sans-serif")
       .attr("font-size", 10)
-      .data(this.keys.slice().reverse())
+      .data(this.keys.slice())
       .enter().append("g")
       .attr("class", "legend")
-      .style("opacity", (d) => this.columns.get(d) ? 1 : 0.2)
+      .style("opacity", (d) => this.currkeys.includes(d) ? 1 : 0.2)
       .attr("transform", function (d, i) { return "translate(30," + i * 19 + ")"; })
       .attr("cursor", "pointer")
-      .on('click', function (d) {
-        columns.set(d, !columns.get(d));
-        d3.select(this).style("opacity", columns.get(d) ? 1 : 0.2);
-        resetVariables();
-        update();
+      .on('click', (d) => {
+        //d3.select(this).style("opacity", !this.currkeys.includes(d) ? 1 : 0.2);
+        this.chartService.onLegendClick.emit(d);
       });
 
     legend.append("rect")
@@ -205,10 +175,7 @@ export class StackedBarChartComponent implements OnInit {
       .attr("font-size", "15px")
       .attr("text-anchor", "start")
       .text(function (d) { return d; });
-    // Function will reset local variables
-    function resetVariables() {
-      keys = [];
-    }
+
 
     // tooltips
     /*
@@ -219,153 +186,125 @@ export class StackedBarChartComponent implements OnInit {
       //.attr("height", 15)
       .html('<strong>Frequency:</strong>');*/
 
-    // Function will update chart 
-    function update() {
-      // Get only selected Coloumns
-      for (let [cn, cb] of columns) {
-        if (cb)
-          keys.push(cn);
-      }
+    // Set X & Y domains
+    let xDomain = this.data.map(d => d[this.xColumn]);
+    let yDomain = [0, d3.max(this.data, d => (d.Total == 0) ? 100 : d.Total)];
 
-      // Get total of selected Columns
-      for (let d1 of data) {
-        let tempTotal = 0;
-        for (let cn of keys) {
-          tempTotal += d1[cn];
-        }
-        d1.Total = Number(tempTotal.toFixed(2));
-      }
+    // Set x scale
+    this.x = d3.scaleBand()
+      .range([this.margin.left, this.width - this.margin.right])
+      .paddingInner(0.3)
+      .align(0.1);
 
-      barChartService.updateData({
-        data: data,
-        parameterValue: parameterValue
-      });
+    // Set y scale
+    this.y = d3.scaleLinear()
+      .rangeRound([this.height - this.margin.bottom, this.margin.top])
 
-      // Sort data acocording to particular column
-      data.sort(function (a, b) {
-        return a[sortColumn] < b[sortColumn] ? -1 : a[sortColumn] > b[sortColumn] ? 1 : 0;
+    this.x.domain(xDomain)
+    this.y.domain(yDomain).nice();
+
+    // Plot bars
+    let group = this.svg.selectAll("g.layer")
+      .data(d3.stack().keys(this.currkeys)(this.data))
+      .attr("fill", d => this.z(d.key));
+
+    group.exit().remove();
+
+    group.enter().append("g")
+      .classed("layer", true)
+      .attr("fill", d => this.z(d.key));
+
+    let bars = this.svg.selectAll("g.layer").selectAll("rect")
+      .data(function (d) { return d; });
+
+    bars.exit().remove();
+
+    bars.enter().append("rect")
+      .attr("width", this.x.bandwidth())
+      .merge(bars)
+      .attr("x", d => this.x(d.data[this.xColumn]))
+      .attr('y', d => this.y(0))
+      .attr('height', 0).on("mouseover", mouseover)
+      .on("mouseout", mouseout)
+      .on("mousemove", mousemove)
+      .on("dblclick", (d) => {
+        this.chartService.onDoubleClick.emit(d.data[this.xColumn]);
+        //location.href = "#TalukaPanel";  
+        //document.getElementById("TalukaPanel").scrollIntoView()
       })
-
-      // Set X & Y domains
-      let xDomain = data.map(d => d[xLabelName]);
-      let yDomain = [0, d3.max(data, d => (d.Total == 0) ? 100 : d.Total)];
-
-      // Set x scale
-      x = d3.scaleBand()
-        .range([margin.left, width - margin.right])
-        .paddingInner(0.3)
-        .align(0.1);
-
-      // Set y scale
-      y = d3.scaleLinear()
-        .rangeRound([height - margin.bottom, margin.top])
-
-      x.domain(xDomain)
-      y.domain(yDomain).nice();
-
-      // Plot bars
-      let group = svg.selectAll("g.layer")
-        .data(d3.stack().keys(keys)(data))
-        .attr("fill", d => z(d.key));
-
-      group.exit().remove();
-
-      group.enter().append("g")
-        .classed("layer", true)
-        .attr("fill", d => z(d.key));
-
-      let bars = svg.selectAll("g.layer").selectAll("rect")
-        .data(function (d) { return d; });
-
-      bars.exit().remove();
-
-      bars.enter().append("rect")
-        .attr("width", x.bandwidth())
-        .merge(bars)
-        .attr("x", d => x(d.data[xLabelName]))
-        .attr('y', d => y(0))
-        .attr('height', 0).on("mouseover", mouseover)
-        .on("mouseout", mouseout)
-        .on("mousemove", mousemove)
-        .on("dblclick", function (d) {
-          console.log(d.data[xLabelName]);
-          barChartService.onDoubleClick.emit(d.data[xLabelName]);
-          //location.href = "#TalukaPanel";  
-          //document.getElementById("TalukaPanel").scrollIntoView()
-        })
-        .transition().duration(speed)
-        .attr("y", d => y(d[1]))
-        .attr("height", d => y(d[0]) - y(d[1]))
-        .attr("cursor", "pointer");
+      .transition().duration(this.speed)
+      .attr("y", d => this.y(d[1]))
+      .attr("height", d => this.y(d[0]) - this.y(d[1]))
+      .attr("cursor", "pointer");
 
 
 
-      function mouseover() {
-        //div.style('display', 'inline');
-      }
-      function mousemove() {
-        // var d = d3.select(this).data()[0]
-        /*console.log((d3.event.pageX - 34), (d3.event.pageY - 12));
-        div.html('<strong>Frequency:</strong>')
-          .style('left', (100 - 34) + 'px')
-          .style('top', (100 - 12) + 'px');*/
-      }
-      function mouseout() {
-        //div.style('display', 'none');
-      }
-
-
-
-      // Update Y Axis
-      svg.selectAll(".y-axis").transition().duration(speed)
-        .call(d3.axisLeft(y)
-          //.tickSize(-width+margin.left-margin.right)
-          .ticks(10))
-        .attr("font-size", "14px")
-        ;
-
-
-      //d3.axisLeft(y).tickSize(-width+margin.left-margin.right).ticks(10);
-      /*      function make_y_gridlines() {
-              return d3.axisLeft(y)
-                .ticks(5)
-            }
-            svg.append("g")
-              .attr("class", "grid")
-              .call(make_y_gridlines()
-                .tickSize(-width)
-              )*/
-
-      // Update X Axis 
-      svg.selectAll(".x-axis").transition().duration(speed)
-        .call(d3.axisBottom(x).tickSizeOuter(0)).selectAll("text")
-        .attr("y", "3")
-        .attr("x", "-5")
-        .attr("font-size", "14px")
-        .attr("text-anchor", "end")
-        .attr("transform", "rotate(-55)");
-
-      // Text above each bar  
-      let text = svg.selectAll(".text")
-        .data(data, d => d[xLabelName]);
-
-      text.exit().remove();
-
-      text.enter().append("text")
-        .attr("class", "text")
-        .attr("text-anchor", "middle")
-        .attr("transform", function (d) { return "rotate(-0)" })
-        .attr("font-size", "14px")
-        .attr("fill", "#787878")
-        .merge(text)
-        .transition().duration(speed)
-        .attr("transform", function (d, i) {
-          return ("translate(" + x(d[xLabelName]) + "," + y(d.Total) + ")rotate(-90)")
-        })
-        .attr("y", x.bandwidth() / 2 + 3)
-        .attr("x", 30)
-        .text(d => (normalise) ? d.Total + " %" : d.Total.toLocaleString());
+    function mouseover() {
+      //div.style('display', 'inline');
     }
+    function mousemove() {
+      // var d = d3.select(this).data()[0]
+      /*console.log((d3.event.pageX - 34), (d3.event.pageY - 12));
+      div.html('<strong>Frequency:</strong>')
+        .style('left', (100 - 34) + 'px')
+        .style('top', (100 - 12) + 'px');*/
+    }
+    function mouseout() {
+      //div.style('display', 'none');
+    }
+
+
+
+    // Update Y Axis
+    this.svg.selectAll(".y-axis").transition().duration(this.speed)
+      .call(d3.axisLeft(this.y)
+        //.tickSize(-width+margin.left-margin.right)
+        .ticks(10))
+      .attr("font-size", "14px")
+      ;
+
+
+    //d3.axisLeft(y).tickSize(-width+margin.left-margin.right).ticks(10);
+    /*      function make_y_gridlines() {
+            return d3.axisLeft(y)
+              .ticks(5)
+          }
+          svg.append("g")
+            .attr("class", "grid")
+            .call(make_y_gridlines()
+              .tickSize(-width)
+            )*/
+
+    // Update X Axis 
+    this.svg.selectAll(".x-axis").transition().duration(this.speed)
+      .call(d3.axisBottom(this.x).tickSizeOuter(0)).selectAll("text")
+      .attr("y", "3")
+      .attr("x", "-5")
+      .attr("font-size", "14px")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-55)");
+
+    // Text above each bar  
+    let text = this.svg.selectAll(".text")
+      .data(this.data, d => d[this.xColumn]);
+
+    text.exit().remove();
+
+    text.enter().append("text")
+      .attr("class", "text")
+      .attr("text-anchor", "middle")
+      .attr("transform", function (d) { return "rotate(-0)" })
+      .attr("font-size", "14px")
+      .attr("fill", "#787878")
+      .merge(text)
+      .transition().duration(this.speed)
+      .attr("transform", (d) => {
+        return ("translate(" + this.x(d[this.xColumn]) + "," + this.y(d.Total) + ")rotate(-90)")
+      })
+      .attr("y", this.x.bandwidth() / 2 + 3)
+      .attr("x", 30)
+      .text(d => (this.normalize) ? d.Total + " %" : d.Total.toLocaleString());
+
 
 
   }
