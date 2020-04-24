@@ -16,12 +16,12 @@ export class MenuComponent implements OnInit {
   public granularChoosen: number = 0; // Granualirity : 0: Annual , 1 : Month , 2: Quarter
   private checkedNormalize: boolean = false;
   private columns: string[] = ["Alcohol Cases", "Suicide Cases", "SMD Cases", "CMD Cases", "Psychiatric Disorder Cases", "O1 Cases", "O2 Cases", "O3 Cases", "O4 Cases", "O5 Cases"];
-  private toggleOptions_Sort: string[] = ["Rank", "District"];
+  private toggleOptions_Sort: string[];
   private toggleValue_Sort: number;
   private toggleOptions_Granularity: string[] = ["Annual", "Month", "Quarter"];
-  private mapName : string;
-  private xColumn : string;
-
+  private mapName: string;
+  private xColumn: string;
+  private normalizeDisabled: boolean;
   constructor() { }
 
   ngOnInit() {
@@ -31,6 +31,8 @@ export class MenuComponent implements OnInit {
     this.year = this.menuService.getYear();
     this.xColumn = this.menuService.getxColumn();
     this.mapName = this.menuService.getMapName();
+    this.normalizeDisabled = this.menuService.getNormalizeDisabled();
+    this.toggleOptions_Sort = ["Rank", this.xColumn];
   }
 
   onMonthChange(event: any) {

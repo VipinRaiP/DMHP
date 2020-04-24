@@ -59,7 +59,7 @@ export class TalukaMainMenuComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.talukaService.setDistrictName(this.districtName);
-    this.talukaService.updateChartParameter();
+    //this.talukaService.updateChartParameter();
     this.talukaService.getDistrictNames().subscribe((newData) => {
       this.districts = newData;
       this.districtName = this.talukaService.getDistrictName();

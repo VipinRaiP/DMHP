@@ -48,8 +48,7 @@ export class PatientCountService {
   };
   private currData: any;
   private newData = new Subject<any>();
-  private chartParameter = new Subject<any>();
-  private mapParameter = new Subject<any>();
+  private parameter = new Subject<any>();
   private sortKey: string;
   private xLabel: string;
   private yLabel: string;
@@ -57,7 +56,7 @@ export class PatientCountService {
   private mapName: string;
   private mapDirPath: string;
   private fileExt: string;
-
+  private normalizeDisabled: boolean;
   private port: number;
 
   constructor(protected http: HttpClient) {
@@ -78,6 +77,7 @@ export class PatientCountService {
     this.year = 2018;
     this.month = 1;
     this.quarter = 1;
+    this.normalizeDisabled = false;
   }
 
   getYearDataFromServer(postData: { year: number, districtId?: number }) {
@@ -169,32 +169,16 @@ export class PatientCountService {
   }
 
   updateParameter() {
-    this.updateChartParameter();
-    this.updateMapParameter();
-  }
-
-  updateChartParameter() {
-    let chartParameter = {
+    let parameter = {
       xLabel: this.xLabel,
       yLabel: this.yLabel,
       xColumn: this.xColumn,
-      keys: this.keys
-    };
-    console.log("chartParameter", this, chartParameter);
-
-    this.chartParameter.next(chartParameter);
-  }
-
-  updateMapParameter() {
-    let mapParameter = {
+      keys: this.keys,
       mapName: this.mapName,
       mapDirPath: this.mapDirPath,
       fileExt: this.fileExt,
-      xColumn: this.xColumn
     };
-    console.log("mapParameter", this, mapParameter);
-
-    this.mapParameter.next(mapParameter);
+    this.parameter.next(parameter);
   }
 
   setSortOption(sortOption: number) {
@@ -269,16 +253,16 @@ export class PatientCountService {
     this.yLabel = yLabel;
   }
 
+  setNormalizeDisabled(bool: boolean) {
+    this.normalizeDisabled = bool;
+  }
+  
   getDataListener() {
     return this.newData.asObservable();
   }
 
-  getChartParameterListener() {
-    return this.chartParameter.asObservable();
-  }
-
-  getMapParameterListener() {
-    return this.mapParameter.asObservable();
+  getParameterListener() {
+    return this.parameter.asObservable();
   }
 
   getGranularity() {
@@ -305,7 +289,11 @@ export class PatientCountService {
     return this.xColumn;
   }
 
-  getMapName(){
+  getMapName() {
     return this.mapName;
+  }
+
+  getNormalizeDisabled() {
+    return this.normalizeDisabled;
   }
 }
