@@ -21,7 +21,6 @@ export class PatientCountDistrictService extends PatientCountService {
 
     let keys = ["Alcohol Cases", "Suicide Cases", "SMD Cases", "CMD Cases", "Psychiatric Disorder Cases", "O1 Cases", "O2 Cases", "O3 Cases", "O4 Cases", "O5 Cases"];
     this.setKeys(keys);
-    
     this.setLabels("District", "Cases");
     this.setxColumn("District");
     this.setDataType("patient");

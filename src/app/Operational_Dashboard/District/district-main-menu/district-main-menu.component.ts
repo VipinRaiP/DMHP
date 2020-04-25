@@ -65,12 +65,16 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   
     //this.columns = this.districtService.getKeys();
     this.districtService.onDoubleClick.subscribe((districtName) => {
-      this.districtName = districtName;
-      //console.log(" this.districtName", this.districtName);
-      if (this.talukaPanelState)
-       this.TalukaMainMenuRef.onDistrictSelect(this.districtName);
-      this.talukaPanelState = true;
-      setTimeout(() => location.href = "#TalukaPanel", 200);
+      if(districtName!="Bbmp"){
+        this.districtName = districtName;
+        //console.log(" this.districtName", this.districtName);
+        if (this.talukaPanelState)
+        this.TalukaMainMenuRef.onDistrictSelect(this.districtName);
+        this.talukaPanelState = true;
+        setTimeout(() => location.href = "#TalukaPanel", 200);
+      }
+      else
+          alert("No taluka view found for BBMP")  
     });
   }
 

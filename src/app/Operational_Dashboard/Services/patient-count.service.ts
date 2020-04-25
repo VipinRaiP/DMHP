@@ -59,7 +59,7 @@ export class PatientCountService {
   private fileExt: string;
   private normalizeDisabled: boolean;
   private port: number;
-
+  
   constructor(protected http: HttpClient) {
     this.initialize();
     this.port = 3000;
@@ -263,7 +263,7 @@ export class PatientCountService {
   setNormalizeDisabled(bool: boolean) {
     this.normalizeDisabled = bool;
   }
-  
+
   getDataListener() {
     return this.newData.asObservable();
   }

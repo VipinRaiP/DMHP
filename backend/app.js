@@ -677,6 +677,7 @@ app.post("/getAllDataTalukaAnnually", (req, res) => {
 })
 
 
+
 /* **************************************************************************************************************** 
  *
  * API to query EXPENSE data about all districts (Monthly, Annually, Quarterly)
@@ -783,5 +784,5 @@ app.post("/getExpenseDataAllDistrictAnnually", (req, res) => {
   });
 })
 
-
 module.exports = app;
+
