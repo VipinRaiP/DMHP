@@ -82,6 +82,7 @@ export class PatientCountService {
   }
 
   getYearDataFromServer(postData: { year: number, districtId?: number }) {
+
     this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['annual'], postData)
       .subscribe(resAnnualData => {
 
@@ -164,7 +165,7 @@ export class PatientCountService {
       currkeys: this.currkeys,
       data: this.currData
     }
-    console.log("Data", this, newData);
+    console.log("Data", this.newData);
 
     this.newData.next(newData);
   }

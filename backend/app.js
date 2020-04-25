@@ -784,5 +784,96 @@ app.post("/getExpenseDataAllDistrictAnnually", (req, res) => {
   });
 })
 
+/* **************************************************************************************************************** 
+ *
+ * API to query TRAINING data about all districts (Monthly, Annually, Quarterly)
+ *
+ * 
+ *  
+ * ****************************************************************************************************************/
+var TrainingFields = ` (sum(old_alcohal_male + old_alcohal_female + new_alcohal_female + new_alcohal_male)) as 'ANM/Health Workers', 
+(sum(old_male_suicidecases + new_male_suicidecases + old_female_suicidecases + new_female_suicidecases)) as 'ASHA',
+(sum(old_smd_male + old_smd_female + new_smd_male + new_smd_female)) as 'Ayush Doctors',
+(sum(old_cmd_male + old_cmd_female + new_cmd_male + new_cmd_female)) as 'Counselor',
+(sum(old_psychiatricdisorders_male + old_psychiatricdisorders_female + new_psychiatricdisorders_male + new_psychiatricdisorders_female)) as 'Medical Officers',
+(sum(old_o1_male + old_o1_female + new_o1_male + new_o1_female)) as 'Nursing Staff',
+(sum(old_o2_male + old_o2_female + new_o2_male + new_o2_female)) as 'Pharmacist',
+(sum(old_o3_male + old_o3_female + new_o3_male + new_o3_female)) as 'RBSK/RKSK',
+(sum(old_o4_male + old_o4_female + new_o4_male + new_o4_female)) as 'Teachers(College)',
+(sum(old_o5_male + old_o5_female + new_o5_male + new_o5_female)) as 'Others' `;
+
+app.post("/getTrainingDataAllDistrictMonthly", (req, res) => {
+  var year = req.body.year;
+
+  sql = `select m.Month, m.DistrictId, d.District, d.Population,` + TrainingFields +
+    `from (SELECT *,CASE 
+      WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+      WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+      WHEN MONTH(ReportingMonthyear)=3  THEN 3
+      WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+      WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+      WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+      WHEN MONTH(ReportingMonthyear)=7 THEN 7
+      WHEN MONTH(ReportingMonthyear)=8 THEN 8
+      WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+      WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+      WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+      WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+    END as Month         
+    from District_Training 
+    where year(ReportingMonthyear)=?) m, Districts d 
+    where m.DistrictId = d.DistrictId 
+    group by m.Month, m.DistrictId, d.Population, d.District
+    order by m.Month`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(responseGrouped);
+    }
+    else
+      res.json(response);
+  });
+})
+
+app.post("/getTrainingDataAllDistrictQuarterly", (req, res) => {
+  var year = req.body.year;
+  sql = `select q.Quarter, q.DistrictId, d.District, d.Population,` + TrainingFields +
+    `from (SELECT *, CASE 
+      WHEN MONTH(ReportingMonthYear)>=1 and MONTH(ReportingMonthYear)<=3 THEN 1 
+      WHEN MONTH(ReportingMonthYear)>=4 and MONTH(ReportingMonthYear)<=6 THEN 2 
+      WHEN MONTH(ReportingMonthYear)>=7 and MONTH(ReportingMonthYear)<=9 THEN 3 
+      WHEN MONTH(ReportingMonthYear)>=10 and MONTH(ReportingMonthYear)<=12 THEN 4 
+      END as Quarter
+      from District_Training 
+      where year(ReportingMonthyear)=?) q, Districts d
+    where q.DistrictId = d.DistrictId 
+    group by q.Quarter, q.DistrictId, d.Population, d.District
+    order by q.Quarter`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    var responseGrouped = jsonGroupBy(response, ['Quarter']);
+    res.json(responseGrouped);
+  });
+})
+
+app.post("/getTrainingDataAllDistrictAnnually", (req, res) => {
+  var year = req.body.year;
+
+  sql = `select m.DistrictId, d.District, d.Population,` + TrainingFields +
+    `from District_Training m, Districts d
+    where year(ReportingMonthyear)=? and m.DistrictId = d.DistrictId
+    group by m.DistrictId,d.Population, d.District
+    order by d.District`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    res.json(response);
+  });
+})
+
+
 module.exports = app;
 

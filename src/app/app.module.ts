@@ -35,6 +35,8 @@ import { MapInfoComponent } from './Operational_Dashboard/Menu/map-info/map-info
 import { MultiLineChartComponent } from './Operational_Dashboard/Charts/multi-line-chart/multi-line-chart.component';
 import { DistrictExpenseMainMenuComponent } from './Operational_Dashboard/District/district-expense-main-menu/district-expense-main-menu.component';
 import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/expense-count-district.service';
+import { DistrictTrainingMainMenuComponent } from './Operational_Dashboard/District/district-training-main-menu/district-training-main-menu.component';
+import { TrainingCountDistrictService } from './Operational_Dashboard/Services/training-count-district.service';
 
 
 @NgModule({
@@ -56,7 +58,8 @@ import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/ex
     MapInfoComponent,
     MultiLineChartComponent,
     DistrictExpenseMainMenuComponent,
-    TabularDialog
+    TabularDialog,
+    DistrictTrainingMainMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +92,8 @@ import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/ex
     PatientCountService,
     PatientCountDistrictService,
     PatienCountTalukaService,
-    ExpenseCountDistrictService
+    ExpenseCountDistrictService,
+    TrainingCountDistrictService
   ],
   bootstrap: [AppComponent]
 })
