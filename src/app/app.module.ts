@@ -30,7 +30,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { PatientCountService } from './Operational_Dashboard/Services/patient-count.service';
 import { PatientCountDistrictService } from './Operational_Dashboard/Services/patient-count-district.service';
 import { PatienCountTalukaService } from './Operational_Dashboard/Services/patient-count-taluka.service';
-import { MenuComponent } from './Operational_Dashboard/Menu/menu/menu.component';
+import { MenuComponent, TabularDialog } from './Operational_Dashboard/Menu/menu/menu.component';
 import { MapInfoComponent } from './Operational_Dashboard/Menu/map-info/map-info.component';
 import { MultiLineChartComponent } from './Operational_Dashboard/Charts/multi-line-chart/multi-line-chart.component';
 
@@ -52,7 +52,8 @@ import { MultiLineChartComponent } from './Operational_Dashboard/Charts/multi-li
     MapComponent,
     MenuComponent,
     MapInfoComponent,
-    MultiLineChartComponent
+    MultiLineChartComponent,
+    TabularDialog
   ],
   imports: [
     BrowserModule,
@@ -78,6 +79,7 @@ import { MultiLineChartComponent } from './Operational_Dashboard/Charts/multi-li
   entryComponents:[
    // DistrictMapDialogComponent
    //LineChartDialog
+   TabularDialog
   ],
   providers: [
     LineChartService,

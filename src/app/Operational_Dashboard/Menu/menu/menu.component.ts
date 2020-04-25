@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Normalise } from '../../Services/patient-count.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-menu',
@@ -15,14 +16,15 @@ export class MenuComponent implements OnInit {
   public monthName = "January";
   public granularChoosen: number = 0; // Granualirity : 0: Annual , 1 : Month , 2: Quarter
   private checkedNormalize: boolean = false;
-  private columns: string[] = ["Alcohol Cases", "Suicide Cases", "SMD Cases", "CMD Cases", "Psychiatric Disorder Cases", "O1 Cases", "O2 Cases", "O3 Cases", "O4 Cases", "O5 Cases"];
+  private columns: string[] = [];// = ["Alcohol Cases", "Suicide Cases", "SMD Cases", "CMD Cases", "Psychiatric Disorder Cases", "O1 Cases", "O2 Cases", "O3 Cases", "O4 Cases", "O5 Cases"];
   private toggleOptions_Sort: string[];
   private toggleValue_Sort: number;
   private toggleOptions_Granularity: string[] = ["Annual", "Month", "Quarter"];
   private mapName: string;
   private xColumn: string;
   private normalizeDisabled: boolean;
-  constructor() { }
+  public data:any;
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
     this.granularChoosen = this.menuService.getGranularity();
@@ -33,6 +35,10 @@ export class MenuComponent implements OnInit {
     this.mapName = this.menuService.getMapName();
     this.normalizeDisabled = this.menuService.getNormalizeDisabled();
     this.toggleOptions_Sort = ["Rank", this.xColumn];
+    this.menuService.getDataListener().subscribe((d)=>{
+      this.columns = d.currkeys;
+      this.data = d.data;
+    })
   }
 
   onMonthChange(event: any) {
@@ -73,4 +79,35 @@ export class MenuComponent implements OnInit {
     this.getYearDataFromServer(this.year);
   }*/
 
+  viewTable(){
+    let inputData =  {
+      data : this.data,
+      columns : this.columns,
+      xColumn : this.xColumn
+    };
+    this.dialog.open(TabularDialog,{
+      width: '1500px',
+      data : inputData
+    })
+  }
+
+}
+
+@Component({
+  selector: 'app-tabular',
+  templateUrl: 'tabular-data.html',
+})
+export class TabularDialog {
+  private columns;
+  private data;
+  private xColumn;
+  constructor(public dialogRef: MatDialogRef<TabularDialog>,@Inject(MAT_DIALOG_DATA) public inputData) {
+    this.columns = inputData.columns;
+    this.data = inputData.data;
+    this.xColumn = inputData.xColumn;
+  }
+
+  onClickDownload(){
+    
+  }
 }

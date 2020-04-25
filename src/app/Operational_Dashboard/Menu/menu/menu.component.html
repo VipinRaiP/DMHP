@@ -34,7 +34,7 @@
         </h6>
     </div>
     <div class="p-2 bd-highlight">
-        <button mat-button color="primary" data-toggle="modal" data-target="#allDistModal">
+        <button mat-button color="primary" (click)="viewTable()" >
             View in table
         </button>
     </div>
@@ -72,43 +72,3 @@
     </div>
 </div>
 
-
-<!--Modal content-->
-<div class="modal fade" id="allDistModal" style="font-size: 13px;">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h1 class="modal-title">Data</h1>
-                <button type="button" class="close" data-dismiss="modal">×</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">S.No</th>
-                            <th scope="col">{{xColumnName}}</th>
-                            <th scop="col" *ngFor="let col of columns;">{{col}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let d of data;let in = index;">
-                            <th scope="row">{{in+1}}</th>
-                            <td>{{d[xColumnName]}}</td>
-                            <td *ngFor="let col of columns;">{{d[col]}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-
-        </div>
-    </div>
-</div>
