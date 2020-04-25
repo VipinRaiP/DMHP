@@ -676,5 +676,3 @@ app.post("/getAllDataTalukaAnnually", (req, res) => {
 
 })
 module.exports = app;
-
-//comment
