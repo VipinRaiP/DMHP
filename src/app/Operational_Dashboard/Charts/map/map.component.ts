@@ -29,6 +29,7 @@ export class MapComponent implements OnInit {
   private jsondata: any;
   private formattedData: any = null;
   private xColumn: string;
+  private dataType:string;
   private keys: string[];
   private currkeys: string[];
   private z: any;
@@ -42,6 +43,7 @@ export class MapComponent implements OnInit {
       this.mapDirPath = newParameter.mapDirPath;
       this.fileExt = newParameter.fileExt;
       this.xColumn = newParameter.xColumn;
+      this.dataType = newParameter.dataType;
       this.keys = newParameter.keys;
       this.getMap();
       //this.mapService.onDistrictChanged.emit(this.mapName);
@@ -95,13 +97,14 @@ export class MapComponent implements OnInit {
 
     let element = this.chartContainer.nativeElement;
 
-    d3.select("#" + this.xColumn).remove();
+    d3.select("#" + this.xColumn + this.dataType).remove();
+    //console.log("MAP XCOLUMN"+this.xColumn);
     this.width = element.offsetWidth - this.margin.left - this.margin.right;   //800
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom; //400
 
     this.svg = d3.select(element)
       .append('svg')
-      .attr("id", this.xColumn)
+      .attr("id", this.xColumn + this.dataType)
       .attr('width', this.width + 50)//500)
       .attr('height', this.height + 60)//element.offsetHeight)
       //.attr('viewBox',"0 0 480 450")

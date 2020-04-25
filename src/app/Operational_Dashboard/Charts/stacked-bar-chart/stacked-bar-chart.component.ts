@@ -35,6 +35,7 @@ export class StackedBarChartComponent implements OnInit {
   private xLabelName: string;
   private yLabelName: string;
   private xColumn: string;
+  private dataType:string;
 
   // Request Variables
   private normalize: boolean;
@@ -58,6 +59,7 @@ export class StackedBarChartComponent implements OnInit {
       this.xLabelName = newParameter.xLabel;
       this.yLabelName = newParameter.yLabel;
       this.xColumn = newParameter.xColumn
+      this.dataType = newParameter.dataType;
       this.keys = newParameter.keys;
       this.createChart();
     });
@@ -78,11 +80,11 @@ export class StackedBarChartComponent implements OnInit {
     //d3.select(this.xColumn).remove();
     //d3.select(element)
     //.append(this.xColumn);
-    d3.select("#" + this.xColumn + "sbc").remove();
+    d3.select("#" + this.xColumn +this.dataType+ "sbc").remove();
 
     this.svg = d3.select(element)
       .append('svg')
-      .attr("id", this.xColumn + "sbc")
+      .attr("id", this.xColumn + this.dataType+"sbc")
       .attr('width', element.offsetWidth + 300)
       .attr('height', element.offsetHeight + 60);
 
@@ -189,7 +191,7 @@ export class StackedBarChartComponent implements OnInit {
 
     // Set X & Y domains
     let xDomain = this.data.map(d => d[this.xColumn]);
-    let yDomain = [0, d3.max(this.data, d => (d.Total == 0) ? 100 : d.Total)];
+    let yDomain = [0, d3.max(this.data, d => (d.Total == 0) ? 0.1 : d.Total)];
 
     // Set x scale
     this.x = d3.scaleBand()

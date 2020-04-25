@@ -53,6 +53,7 @@ export class PatientCountService {
   private xLabel: string;
   private yLabel: string;
   private xColumn: string;
+  private dataType:string;
   private mapName: string;
   private mapDirPath: string;
   private fileExt: string;
@@ -173,6 +174,7 @@ export class PatientCountService {
       xLabel: this.xLabel,
       yLabel: this.yLabel,
       xColumn: this.xColumn,
+      dataType:this.dataType,
       keys: this.keys,
       mapName: this.mapName,
       mapDirPath: this.mapDirPath,
@@ -248,6 +250,11 @@ export class PatientCountService {
     this.xColumn = xColumn;
   }
 
+  setDataType(dataType:string)
+  {
+    this.dataType = dataType;
+  }
+
   setLabels(xLabel: string, yLabel: string) {
     this.xLabel = xLabel;
     this.yLabel = yLabel;
@@ -289,6 +296,9 @@ export class PatientCountService {
     return this.xColumn;
   }
 
+  getDataType(){
+    return this.dataType;
+  }
   getMapName() {
     return this.mapName;
   }

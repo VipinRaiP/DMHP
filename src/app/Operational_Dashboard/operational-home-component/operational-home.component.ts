@@ -1,5 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { LineChartService } from '../Cards/services/line-chart.service';
+import { ExpenseCountDistrictService } from '../Services/expense-count-district.service';
+import { PatientCountDistrictService } from '../Services/patient-count-district.service';
 
 @Component({
   selector: 'app-operational-home',
@@ -10,7 +12,7 @@ export class OperationalHomeComponent implements OnInit {
   public lineChartLoaded = false;
   public chartData;
 
-  constructor(private lineChartService:LineChartService) { }
+  constructor(private lineChartService:LineChartService,private districtExpenseService: ExpenseCountDistrictService,   private districtService: PatientCountDistrictService) { }
 
   ngOnInit() {
     this.lineChartService.getChartDataListener().subscribe((d)=>{

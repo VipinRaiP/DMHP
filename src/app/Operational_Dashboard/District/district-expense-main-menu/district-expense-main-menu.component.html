@@ -1,0 +1,32 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h5>Expense</h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <h6>Total expense across karnataka state</h6>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <app-menu [menuService]="districtExpenseService"></app-menu>
+    </mat-card-content>
+    <!-- <mat-card-footer>
+
+        <mat-expansion-panel (opened)="talukaPanelState = true" (closed)="talukaPanelState = false"
+            [expanded]="talukaPanelState" (click)="onPanelExpand()" id="TalukaPanel">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <h6>Taluka View</h6>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <h6> Taluka v Cases</h6>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div *ngIf="talukaPanelState" >
+                <app-taluka-main-menu [districtName]="districtName"></app-taluka-main-menu>
+            </div>
+        </mat-expansion-panel>
+    </mat-card-footer> -->
+
+</mat-card>

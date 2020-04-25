@@ -11,7 +11,7 @@ export class PatientCountDistrictService extends PatientCountService {
 
   initialize(){
     super.initialize();
-
+    console.log("DISTRICT SERVICE");
     let dataURL = {
       annual: "getDataAllDistrictAnnually",
       monthly: "getDataAllDistrictMonthly",
@@ -24,6 +24,7 @@ export class PatientCountDistrictService extends PatientCountService {
     
     this.setLabels("District", "Cases");
     this.setxColumn("District");
+    this.setDataType("patient");
     super.setMapParameter("assets/", "Karnataka", ".json");
 
     this.setYear(2018);
