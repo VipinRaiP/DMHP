@@ -1,5 +1,5 @@
 
-import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild, Input } from '@angular/core';
 import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material';
 import * as _moment from 'moment';
 import { FormControl } from '@angular/forms';
@@ -54,7 +54,9 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   private talukaPanelState = false;
    private districtName: string = "";
 
-  constructor(private http: HttpClient, private titleService: Title, private districtService: PatientCountDistrictService) {
+  //  @Input()
+  //  private districtService: PatientCountDistrictService;
+  constructor(private http: HttpClient, private titleService: Title,private districtService: PatientCountDistrictService) {
   }
 
   ngOnInit() {

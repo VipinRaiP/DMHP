@@ -675,4 +675,114 @@ app.post("/getAllDataTalukaAnnually", (req, res) => {
   });
 
 })
+
+
+
+/* **************************************************************************************************************** 
+ *
+ * API to query EXPENSE data about all districts (Monthly, Annually, Quarterly)
+ *
+ * 
+ *  
+ * ****************************************************************************************************************/
+
+
+
+
+expenseFields = `
+(sum(B3032_Psychiatrists)) as 'B3032_Psychiatrists',
+(sum(B30112_Psyst_Counsellor)) as 'B30112_Psyst_Counsellor',
+(sum(B30114_SocialWorker))  as 'B30114_SocialWorker',
+(sum(B3012_StaffNurse)) as 'B3012_StaffNurse',
+(sum(B3012_PsyNurse)) as 'B3012_PsyNurse',
+(sum(B30137_MedialRedAsst)) as 'B30137_MedialRedAsst',
+(sum(B30137_WardAsst))  as 'B30137_WardAsst',
+(sum(Infrastucture))  as 'Infrastucture',
+(sum(Training)) as 'Training',
+(sum(IEC)) as 'IEC',
+(sum(TargetIntervention)) as 'TargetIntervention',
+(sum(Drugs)) as 'Drugs',
+(sum(Equipments)) as 'Equipments',
+(sum(OperationExpense)) as 'OperationExpense',
+sum(AmbulatoryService) as 'AmbulatoryService', 
+sum(Miscellanious) as 'Miscellanious', 
+sum(B3032_PsychiatristsTA) as 'B3032_PsychiatristsTA', 
+sum(B30114_SocialWorkerTA) as 'B30114_SocialWorkerTA', 
+sum(B10162_Awarness) as 'B10162_Awarness', 
+sum(J17_Contingency) as 'J17_Contingency', 
+sum(B2030_AnnualIncrement) as 'B2030_AnnualIncrement'`
+
+app.post("/getExpenseDataAllDistrictMonthly", (req, res) => {
+  var year = req.body.year;
+
+  sql = `select m.Month, m.DistrictId, d.District, d.Population,` + expenseFields +
+    `from (SELECT *,CASE 
+      WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+      WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+      WHEN MONTH(ReportingMonthyear)=3  THEN 3
+      WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+      WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+      WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+      WHEN MONTH(ReportingMonthyear)=7 THEN 7
+      WHEN MONTH(ReportingMonthyear)=8 THEN 8
+      WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+      WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+      WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+      WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+    END as Month         
+    from District_Expense 
+    where year(ReportingMonthyear)=?) m, Districts d 
+    where m.DistrictId = d.DistrictId and d.DistrictId!=46
+    group by m.Month, m.DistrictId, d.Population, d.District
+    order by m.Month`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(responseGrouped);
+    }
+    else
+      res.json(response);
+  });
+})
+
+app.post("/getExpenseDataAllDistrictQuarterly", (req, res) => {
+  var year = req.body.year;
+  sql = `select q.Quarter, q.DistrictId, d.District, d.Population,` + expenseFields +
+    `from (SELECT *, CASE 
+      WHEN MONTH(ReportingMonthYear)>=1 and MONTH(ReportingMonthYear)<=3 THEN 1 
+      WHEN MONTH(ReportingMonthYear)>=4 and MONTH(ReportingMonthYear)<=6 THEN 2 
+      WHEN MONTH(ReportingMonthYear)>=7 and MONTH(ReportingMonthYear)<=9 THEN 3 
+      WHEN MONTH(ReportingMonthYear)>=10 and MONTH(ReportingMonthYear)<=12 THEN 4 
+      END as Quarter
+      from District_Expense 
+      where year(ReportingMonthyear)=?) q, Districts d
+    where q.DistrictId = d.DistrictId and d.DistrictId!=46
+    group by q.Quarter, q.DistrictId, d.Population, d.District
+    order by q.Quarter`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    var responseGrouped = jsonGroupBy(response, ['Quarter']);
+    res.json(responseGrouped);
+  });
+})
+
+app.post("/getExpenseDataAllDistrictAnnually", (req, res) => {
+  var year = req.body.year;
+
+  sql = `select m.DistrictId, d.District, d.Population,` + expenseFields +
+    `from District_Expense m, Districts d
+    where year(ReportingMonthyear)=? and m.DistrictId = d.DistrictId and d.DistrictId!=46
+    group by m.DistrictId,d.Population, d.District
+    order by d.District`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+    res.json(response);
+  });
+})
+
 module.exports = app;
+
