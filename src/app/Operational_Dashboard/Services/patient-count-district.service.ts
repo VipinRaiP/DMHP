@@ -23,7 +23,7 @@ export class PatientCountDistrictService extends PatientCountService {
     this.setKeys(keys);
     this.setLabels("District", "Cases");
     this.setxColumn("District");
-    this.setDataType("patient");
+    this.setDataType("Patient");
     super.setMapParameter("assets/", "Karnataka", ".json");
 
     this.setYear(2018);

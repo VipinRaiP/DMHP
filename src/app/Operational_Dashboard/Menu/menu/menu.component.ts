@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Normalise } from '../../Services/patient-count.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import * as XLSX from 'xlsx'; 
 
 @Component({
   selector: 'app-menu',
@@ -93,6 +94,7 @@ export class MenuComponent implements OnInit {
     })
   }
 
+
 }
 
 @Component({
@@ -109,7 +111,24 @@ export class TabularDialog {
     this.xColumn = inputData.xColumn;
   }
 
-  onClickDownload(){
-    
-  }
+
+  /*name of the excel-file which will be downloaded. */ 
+fileName= 'ExcelSheet.xlsx';  
+
+onClickDownload()
+    {
+       /* table id is passed over here */   
+       let element = document.getElementById('excel-table'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+       /* generate workbook and add the worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
+			
+    }
+
+   
 }
