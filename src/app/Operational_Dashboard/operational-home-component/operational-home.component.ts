@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { LineChartService } from '../Cards/services/line-chart.service';
 import { ExpenseCountDistrictService } from '../Services/expense-count-district.service';
 import { PatientCountDistrictService } from '../Services/patient-count-district.service';
@@ -7,6 +7,7 @@ import { PatientCountDistrictService } from '../Services/patient-count-district.
   selector: 'app-operational-home',
   templateUrl: './operational-home.component.html',
   styleUrls: ['./operational-home.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class OperationalHomeComponent implements OnInit {
   public lineChartLoaded = false;
