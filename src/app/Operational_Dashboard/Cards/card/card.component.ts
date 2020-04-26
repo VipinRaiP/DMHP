@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 import { LineChartService } from '../services/line-chart.service';
@@ -6,7 +6,8 @@ import { LineChartService } from '../services/line-chart.service';
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css']
+  styleUrls: ['./card.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CardComponent implements OnInit {
 
@@ -88,8 +89,8 @@ export class CardComponent implements OnInit {
 
     this.svg = d3.select(element)
       .append('svg')
-      //.attr('width', 800)
-      .attr('height', 60);
+      .attr('width', 400)
+      .attr('height', 130);
 
     this.width = element.offsetWidth - this.margin.left - this.margin.right;
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
