@@ -10,3 +10,6 @@ npm install @angular/material-moment-adapter
 npm install topojson
 npm i loadash
 npm i d3-tip
+npm install xlsx
+npm install file-saver
+npm install html2canvas
