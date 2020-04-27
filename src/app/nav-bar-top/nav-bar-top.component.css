@@ -30,15 +30,3 @@
 .topnav-right {
   float: right;
 }
-
-.side-nav-button{
-  
-  background-color:inherit;
-  border: 0;
-  text-align: left;
-  text-indent: 0%;
-  width: 100%;
-  font-size: large;
-  padding: 10px;
-  color: lightgray;
-}

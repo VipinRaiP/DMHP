@@ -15,7 +15,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { CardComponent } from './Operational_Dashboard/Cards/card/card.component';
 import {MatButtonModule} from '@angular/material/button';
 import { LineChartComponent } from './Operational_Dashboard/Cards/line-chart/line-chart.component';
-import { LineChartService } from './Operational_Dashboard/Cards/services/line-chart.service';
 
 import { StackedBarChartComponent } from './Operational_Dashboard/Charts/stacked-bar-chart/stacked-bar-chart.component';
 import { DistrictMainMenuComponent } from './Operational_Dashboard/District/district-main-menu/district-main-menu.component';
@@ -26,17 +25,28 @@ import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { TalukaMainMenuComponent } from './Operational_Dashboard/District/Taluka/taluka-main-menu/taluka-main-menu.component';
 import {MatSelectModule} from '@angular/material/select';
+import {MatIconModule} from '@angular/material/icon'
+import {MatSidenavModule} from '@angular/material/sidenav';
 
-import { PatientCountService } from './Operational_Dashboard/Services/patient-count.service';
-import { PatientCountDistrictService } from './Operational_Dashboard/Services/patient-count-district.service';
-import { PatienCountTalukaService } from './Operational_Dashboard/Services/patient-count-taluka.service';
+
 import { MenuComponent, TabularDialog } from './Operational_Dashboard/Menu/menu/menu.component';
 import { MapInfoComponent } from './Operational_Dashboard/Menu/map-info/map-info.component';
 import { MultiLineChartComponent } from './Operational_Dashboard/Charts/multi-line-chart/multi-line-chart.component';
 import { DistrictExpenseMainMenuComponent } from './Operational_Dashboard/District/district-expense-main-menu/district-expense-main-menu.component';
-import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/expense-count-district.service';
 import { DistrictTrainingMainMenuComponent } from './Operational_Dashboard/District/district-training-main-menu/district-training-main-menu.component';
+import { MultiLineMenuComponent } from './Operational_Dashboard/Menu/multi-line-menu/multi-line-menu.component';
+import {MatTabsModule} from '@angular/material/tabs';
+
+
+//Services
+import { LineChartService } from './Operational_Dashboard/Cards/services/line-chart.service';
+import { PatientCountService } from './Operational_Dashboard/Services/patient-count.service';
+import { PatientCountDistrictService } from './Operational_Dashboard/Services/patient-count-district.service';
+import { PatientCountTalukaService } from './Operational_Dashboard/Services/patient-count-taluka.service';
+import { PatientCountLineDistrictService } from './Operational_Dashboard/Services/Multi-line-Services/patient-count-line-district.service';
 import { TrainingCountDistrictService } from './Operational_Dashboard/Services/training-count-district.service';
+import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/expense-count-district.service';
+import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
 
 
 @NgModule({
@@ -59,7 +69,9 @@ import { TrainingCountDistrictService } from './Operational_Dashboard/Services/t
     MultiLineChartComponent,
     DistrictExpenseMainMenuComponent,
     TabularDialog,
-    DistrictTrainingMainMenuComponent
+    DistrictTrainingMainMenuComponent,
+    MultiLineMenuComponent,
+    NavBarTopComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +92,10 @@ import { TrainingCountDistrictService } from './Operational_Dashboard/Services/t
     MatButtonToggleModule,
     MatCardModule,
     MatExpansionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatTabsModule
   ],
   entryComponents:[
    // DistrictMapDialogComponent
@@ -91,9 +106,10 @@ import { TrainingCountDistrictService } from './Operational_Dashboard/Services/t
     LineChartService,
     PatientCountService,
     PatientCountDistrictService,
-    PatienCountTalukaService,
+    PatientCountTalukaService,
     ExpenseCountDistrictService,
-    TrainingCountDistrictService
+    TrainingCountDistrictService,
+    PatientCountLineDistrictService
   ],
   bootstrap: [AppComponent]
 })

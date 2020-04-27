@@ -1,32 +1,55 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>
-            <h5>Patient Count</h5>
-        </mat-card-title>
-        <mat-card-subtitle>
-            <h6>Total cases across karnataka state</h6>
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <app-menu [menuService]="districtService"></app-menu>
-    </mat-card-content>
-    <mat-card-footer>
+<div  class="container-fluid">
+    <span style="color: #555555; font-family: Arial, Helvetica, sans-serif;">
+        <h4><strong>Patient Count</strong></h4>
+        <h6><strong>Total cases across karnataka state</strong></h6>
+        <h6>Year 2018</h6>
+    </span>
+    <nav mat-tab-nav-bar>
+        <a mat-tab-link href="#Cards">Summary </a>
+        <a mat-tab-link href="#Months">Across Months </a>
+        <a mat-tab-link href="#Districts">Across Districts </a>
+        <a mat-tab-link href="#Talukas">Across Talukas </a>
+    </nav>
+</div>
+<div id="Cards" class="container-fluid pt-3">
+    <div class="row">
+        <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
+            <app-card CardName="CMD Cases"></app-card>
+        </div>
+        <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
+            <app-card CardName="Alcohol Cases"></app-card>
+        </div>
+        <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
+            <app-card CardName="SMD Cases"></app-card>
+        </div>
+        <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
+            <app-card CardName="Suicide Cases"></app-card>
+        </div>
+    </div>
+    <app-line-chart *ngIf="lineChartLoaded" (close)="onLineChartClose()" [data]="chartData"></app-line-chart>
+</div>
 
-        <mat-expansion-panel (opened)="talukaPanelState = true" (closed)="talukaPanelState = false"
-            [expanded]="talukaPanelState" (click)="onPanelExpand()" id="TalukaPanel">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    <h6>Taluka View</h6>
-                </mat-panel-title>
-                <mat-panel-description>
-                    <h6> Taluka v Cases</h6>
-                </mat-panel-description>
-            </mat-expansion-panel-header>
+<div id="Months" class="container-fluid pt-3">
+    <app-multi-line-menu [menuService]="districtLineService"></app-multi-line-menu>
+</div>
+<div id="Districts" class="container-fluid pt-3">
+    <app-menu [menuService]="districtService"></app-menu>
+</div>
 
-            <div *ngIf="talukaPanelState" >
-                <app-taluka-main-menu [districtName]="districtName"></app-taluka-main-menu>
-            </div>
-        </mat-expansion-panel>
-    </mat-card-footer>
+<div id="Talukas" class="container-fluid pt-3">
+    <mat-expansion-panel (opened)="talukaPanelState = true" (closed)="talukaPanelState = false"
+        [expanded]="talukaPanelState" (click)="onPanelExpand()">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <h6>Taluka View</h6>
+            </mat-panel-title>
+            <mat-panel-description>
+                <h6> Taluka v Cases</h6>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
 
-</mat-card>
+        <div *ngIf="talukaPanelState">
+            <app-taluka-main-menu [districtName]="districtName"></app-taluka-main-menu>
+        </div>
+    </mat-expansion-panel>
+</div>

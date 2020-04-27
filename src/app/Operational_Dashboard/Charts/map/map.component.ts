@@ -29,7 +29,7 @@ export class MapComponent implements OnInit {
   private jsondata: any;
   private formattedData: any = null;
   private xColumn: string;
-  private dataType:string;
+  private dataType: string;
   private keys: string[];
   private currkeys: string[];
   private z: any;
@@ -65,7 +65,7 @@ export class MapComponent implements OnInit {
       this.jsondata = responseData;
     })
     // set the colors 
-    this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired]);
+    this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired, ...d3.schemeTableau10]);
     this.z.domain(this.keys);
   }
 
@@ -132,16 +132,19 @@ export class MapComponent implements OnInit {
     /* tooptip */
     const tip = d3Tip();
     tip.attr("class", "d3-tip")
+      .style('z-index', '99999999999')
       .offset([-10, 0])
       .html(d => {
         let data = formattedDataTempCopy[d.properties.NAME_3];
         let keys = [...this.currkeys];
-
-        let ret = "<div style='text-align: center;'><strong>" + data[this.xColumn] + "</strong></div><br>";
+        let a = (this.normalize) ? "%" : "";
+        let ret = "<div style='text-align: center;font-size: 19px;'>" + data[this.xColumn] + "</div><br>";
         ret += "<table style='width:200px;font-size: 17px;'><tbody>";
         for (let key of keys.reverse()) {
-          ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + "</td></tr>"
+          ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + a + "</td></tr>"
         }
+        ret += "<tr  style='font-size: 19px;'><td>Total</td><td style='text-align:right; padding-left:15px;'> " + data["Total"].toLocaleString() + a + "</td></tr>"
+
         ret += "</tbody></table>";
         return ret;
       });
@@ -155,7 +158,7 @@ export class MapComponent implements OnInit {
       .append("path")
       .attr("class", "country")
       .attr("d", path)
-
+      .attr("cursor", "pointer")
       .attr("fill", (d) => {
         //console.log(this.formattedData[d.properties[this.xColumn]]+" "+d.properties[this.xColumn]);
 
@@ -179,8 +182,8 @@ export class MapComponent implements OnInit {
         //console.log(d.properties[this.xColumn]);
         //return "#cccccc";
       })
-      .attr("stroke", "#333333")
-      .attr("stroke-width", "1")
+      .attr("stroke", "#660000")
+      .attr("stroke-width", "0.5")
       .on('mouseover', function (d) {
 
         //scope of "this" here is to svg element so we can not call "regionSelected" directly
@@ -190,7 +193,8 @@ export class MapComponent implements OnInit {
 
         d3.select(this).transition()
           .duration('50')
-          .attr('fill', "grey")
+          .attr("stroke-width", "3");
+        //.attr('fill', "grey")
 
         tip.show(d, this);
 
@@ -207,21 +211,10 @@ export class MapComponent implements OnInit {
         tip.hide(d, this);
 
         if (formattedDataTempCopy[d.properties.NAME_3] != null) {
-          var n = formattedDataTempCopy[d.properties.NAME_3]["Total"] || 0;
-
-          const color =
-            n === 0
-              ? '#ffffff'
-              : d3.interpolateReds(
-                (0.8 * n) / (maxVal || 0.001)
-              );
-
-          //d3.select(this).style("fill",color);
-
           d3.select(this).transition()
             .duration('50')
-            .attr('fill', color)
-
+            .attr("stroke", "#660000")
+            .attr("stroke-width", "0.5")
         }
         else {
           d3.select(this).transition()
@@ -245,6 +238,26 @@ export class MapComponent implements OnInit {
       this.regionHovered(d);
 
     }
+
+    this.svg.append("g")
+      .selectAll("labels")
+      .data(state.features)
+      .enter()
+      .append("text")
+      .attr("x", function (d) { return path.centroid(d)[0] })
+      .attr("y", function (d) { return path.centroid(d)[1] })
+      .attr("dy", ".35em")
+      .text((d) => d.properties.NAME_3)
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "central")
+      .style("font-size", "11.5px")
+      .attr("font-family", "san-serif arial ")
+      .style("font-weight", "bold")
+      .style("fill", "rgba(30, 0, 0, 0.9)")
+      .attr("cursor", "pointer")
+      .on('mouseover', function (d) { tip.show(d, this); })
+      .on('mouseout', function (d) { tip.hide(d, this); })
+      .on('dblclick', (d) => { this.mapService.onDoubleClick.emit(d.properties.NAME_3) });
 
   }
 

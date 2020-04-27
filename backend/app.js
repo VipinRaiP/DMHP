@@ -51,14 +51,14 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "sameer",
   password: "qwerty78900"
-});
+});*/
 
 con.connect(function (err) {
   if (err) console.log(err);
   console.log("connected");
 });
 
-sql = "use clinical_db";*/
+sql = "use clinical_db";
 
 con.query(sql, function (err, res) {
   if (err) console.log(err);
@@ -619,7 +619,7 @@ app.post("/getAllDataTalukaMonthly", (req, res) => {
             END as Month         
             from Clinical_Data 
             WHERE year(ReportingMonthyear) = ?) m, Taluka t 
-          WHERE m.DistrictId = t.DistrictId and t.DistrictId = ?
+          WHERE m.TalukaId = t.TalukaId and t.DistrictId = ?
           GROUP  BY m.Month, t.Taluka, t.TalukaId
           order by m.Month`;
 
@@ -648,7 +648,7 @@ app.post("/getAllDataTalukaQuarterly", (req, res) => {
           END as Quarter
           from Clinical_Data 
             WHERE year(ReportingMonthyear) = ?) q, Taluka t 
-          WHERE q.DistrictId = t.DistrictId and t.DistrictId = ?
+          WHERE q.TalukaId = t.TalukaId and t.DistrictId = ?
           GROUP  BY q.Quarter, t.Taluka, t.TalukaId
           ORDER BY q.Quarter`;
 
@@ -665,7 +665,7 @@ app.post("/getAllDataTalukaAnnually", (req, res) => {
 
   sql = `SELECT t.Taluka, t.TalukaId,` + cases +
          `from Clinical_Data m, Taluka t 
-          WHERE year(ReportingMonthyear) = ? and m.DistrictId = t.DistrictId and t.DistrictId = ? 
+          WHERE year(ReportingMonthyear) = ? and m.TalukaId = t.TalukaId and t.DistrictId = ? 
           GROUP BY t.Taluka, t.TalukaId
           ORDER BY t.Taluka `;
 
@@ -874,6 +874,48 @@ app.post("/getTrainingDataAllDistrictAnnually", (req, res) => {
   });
 })
 
+/* **************************************************************************************************************** 
+ *
+ * API to query monthly total of all cases in state for a year
+ *
+ * 
+ *  
+ * ****************************************************************************************************************/
+
+app.post("/getMonthlyTotalCases", (req, res) => {
+  var year = req.body.year;
+
+  sql = `SELECT  
+    CASE 
+      WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+      WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+      WHEN MONTH(ReportingMonthyear)=3  THEN 3
+      WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+      WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+      WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+      WHEN MONTH(ReportingMonthyear)=7 THEN 7
+      WHEN MONTH(ReportingMonthyear)=8 THEN 8
+      WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+      WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+      WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+      WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+      END as Month,`+ cases + `        
+    FROM Clinical_Data 
+    WHERE year(ReportingMonthyear) = ?
+    GROUP BY Month
+    order by Month`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(response);
+    }
+    else
+      res.json(response);
+  });
+})
 
 module.exports = app;
 

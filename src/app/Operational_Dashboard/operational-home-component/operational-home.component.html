@@ -1,5 +1,13 @@
-<div class="bg">
-  <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+<mat-sidenav-container style="padding-top: 4%;">
+  <mat-sidenav mode="side" opened="true" class="sidenav"
+    style="background-color : 	#3b4147; width: 250px;  position: fixed; margin-top: 4%; margin-bottom: 2%;">
+    <div class="pt-5"><button class="btn btn-light side-nav-button" (click)="onSideNavClick(1)">Patient Count </button>
+    </div>
+    <div><button class="btn btn-light side-nav-button" (click)="onSideNavClick(2)">Expense </button></div>
+    <div><button class="btn btn-light side-nav-button" (click)="onSideNavClick(3)">Training </button></div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <!--nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">DMHP : Operational Dashboard</a>
     </div>
@@ -17,61 +25,22 @@
         <a class="nav-link" href="#Training">Training</a>
       </li>
       <div class="topnav-right">
-      <!-- <li class="nav-item"> -->
         <a class="nav-link" href="#" (click)="Capture()">
           <img src="/assets/came-icon.png" alt="" height="25" width="30"> Screenshot</a>
-      <!-- </li> -->
     </div>
     </ul>
-  </nav>
+  </nav-->
 
-  <div id="Cards" class="container-fluid" style="padding-top:100px;padding-bottom:50px;background-color: rgb(55, 5, 102);">
-    <h2 style="color: cornsilk;">Year : 2018</h2>
-    <div class="row">
-      <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-        <app-card  CardName="CMD Cases"></app-card>
-      </div>
-      <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-        <app-card CardName="Alcohol Cases"></app-card>
-      </div>
-      <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-        <app-card CardName="SMD Cases"></app-card>
-      </div>
-      <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-        <app-card CardName="Suicide Cases"></app-card>
-      </div>
+    <div *ngIf="sideNavOption==1" id="Patient" class="container-fluid p-3">
+      <app-district-main-menu></app-district-main-menu>
     </div>
-    <app-line-chart *ngIf="lineChartLoaded" (close)="onLineChartClose()" [data]="chartData"></app-line-chart>
-  </div>
 
-  <div id="Patient" class="container-fluid"
-    style="padding-top:50px;padding-bottom:50px;background-color:rgb(245, 245, 245)">
-    <app-district-main-menu ></app-district-main-menu>
-  </div>
+    <div *ngIf="sideNavOption==2" id="Expense" class="container-fluid p-3">
+      <app-district-expense-main-menu></app-district-expense-main-menu>
+    </div>
+    <div *ngIf="sideNavOption==3" id="Training" class="container-fluid p-3">
+      <app-district-training-main-menu></app-district-training-main-menu>
+    </div>
 
-  <!--div class="pt-5">
-    <select ngModel class="form-control" name="districtId" [(ngModel)]='selectDistrictId'
-      (ngModelChange)='onSelected($event)'>
-      <option *ngFor="let dist of districtData" value={{dist.DistrictId}}>
-        {{dist.District}}
-      </option>
-    </select>
-    <button mat-raised-button color="primary" (click)="loadComponent()">
-      Show
-    </button>
-  </div>
-
-  <div *ngIf="boolval" id="PatientTaluka" class="container-fluid" 
-    style="padding-top:50px;padding-bottom:50px;background-color:rgb(159, 245, 202)">
-    <app-taluka-menu [districtId]="selectDistrictId"></app-taluka-menu>
-  </div-->
-
-  <div id="Expense" class="container-fluid"
-    style="padding-top:50px;padding-bottom:50px;background-color:rgb(24, 11, 11)">
-    <app-district-expense-main-menu  ></app-district-expense-main-menu>
-  </div>
-  <div id="Training" class="container-fluid"
-    style="padding-top:50px;padding-bottom:50px;background-color:rgb(7, 66, 114)">
-    <app-district-training-main-menu ></app-district-training-main-menu>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Normalise } from '../../Services/patient-count.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
-import * as XLSX from 'xlsx'; 
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-menu',
@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
   private mapName: string;
   private xColumn: string;
   private normalizeDisabled: boolean;
-  public data:any;
+  public data: any;
   public dataType;
   constructor(public dialog: MatDialog) { }
 
@@ -38,7 +38,7 @@ export class MenuComponent implements OnInit {
     this.normalizeDisabled = this.menuService.getNormalizeDisabled();
     this.toggleOptions_Sort = ["Rank", this.xColumn];
     this.dataType = this.menuService.getDataType();
-    this.menuService.getDataListener().subscribe((d)=>{
+    this.menuService.getDataListener().subscribe((d) => {
       this.columns = d.currkeys;
       this.data = d.data;
     })
@@ -82,15 +82,15 @@ export class MenuComponent implements OnInit {
     this.getYearDataFromServer(this.year);
   }*/
 
-  viewTable(){
-    let inputData =  {
-      data : this.data,
-      columns : this.columns,
-      xColumn : this.xColumn
+  viewTable() {
+    let inputData = {
+      data: this.data,
+      columns: this.columns,
+      xColumn: this.xColumn
     };
-    this.dialog.open(TabularDialog,{
+    this.dialog.open(TabularDialog, {
       width: '1500px',
-      data : inputData
+      data: inputData
     })
   }
 
@@ -105,30 +105,29 @@ export class TabularDialog {
   private columns;
   private data;
   private xColumn;
-  constructor(public dialogRef: MatDialogRef<TabularDialog>,@Inject(MAT_DIALOG_DATA) public inputData) {
+  constructor(public dialogRef: MatDialogRef<TabularDialog>, @Inject(MAT_DIALOG_DATA) public inputData) {
     this.columns = inputData.columns;
     this.data = inputData.data;
     this.xColumn = inputData.xColumn;
   }
 
 
-  /*name of the excel-file which will be downloaded. */ 
-fileName= 'ExcelSheet.xlsx';  
+  /*name of the excel-file which will be downloaded. */
+  fileName = 'ExcelSheet.xlsx';
 
-onClickDownload()
-    {
-       /* table id is passed over here */   
-       let element = document.getElementById('excel-table'); 
-       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+  onClickDownload() {
+    /* table id is passed over here */
+    let element = document.getElementById('excel-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-       /* generate workbook and add the worksheet */
-       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-       /* save to file */
-       XLSX.writeFile(wb, this.fileName);
-			
-    }
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
 
-   
+  }
+
+
 }

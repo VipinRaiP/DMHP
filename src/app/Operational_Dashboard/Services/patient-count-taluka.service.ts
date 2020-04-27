@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PatienCountTalukaService extends PatientCountService {
+export class PatientCountTalukaService extends PatientCountService {
   private districtId: number;
   private districtName: string;
   private districts = new Map<string, number>();
@@ -31,6 +31,7 @@ export class PatienCountTalukaService extends PatientCountService {
     this.districtName = "";
     this.setLabels("Taluka", "Cases");
     this.setxColumn("Taluka");
+    this.setDataType("PatientT");
     this.setYear(2018);
     this.setNormalizeDisabled(true);
   }

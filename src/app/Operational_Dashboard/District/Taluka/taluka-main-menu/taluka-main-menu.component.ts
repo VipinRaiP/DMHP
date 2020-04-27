@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { PatienCountTalukaService } from '../../../Services/patient-count-taluka.service'
+import { PatientCountTalukaService } from '../../../Services/patient-count-taluka.service'
 import { Title } from "@angular/platform-browser";
 const moment = _rollupMoment || _moment; _moment;
 
@@ -48,7 +48,7 @@ export class TalukaMainMenuComponent implements AfterViewInit, OnInit {
   @Input() private districtName: string;
    private districts : string[];
 
-  constructor(private http: HttpClient, private titleService: Title, private talukaService: PatienCountTalukaService) {
+  constructor(private http: HttpClient, private titleService: Title, private talukaService: PatientCountTalukaService) {
   }
 
   ngOnInit() {
