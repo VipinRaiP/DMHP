@@ -58,7 +58,7 @@ con.connect(function (err) {
   console.log("connected");
 });
 
-sql = "use clinical_db";
+//sql = "use ";
 
 con.query(sql, function (err, res) {
   if (err) console.log(err);

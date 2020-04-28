@@ -75,7 +75,7 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
         if (this.talukaPanelState)
           this.TalukaMainMenuRef.onDistrictSelect(this.districtName);
         this.talukaPanelState = true;
-        setTimeout(() => location.href = "#TalukaPanel", 200);
+        setTimeout(() => location.href = "#Talukas", 200);
       }
       else
         alert("No taluka view found for BBMP")
