@@ -251,7 +251,7 @@ export class MapComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "central")
       .style("font-size", "11.5px")
-      .attr("font-family", "san-serif arial ")
+      .style('font-family','Arial, Helvetica, sans-serif')
       .style("font-weight", "bold")
       .style("fill", "rgba(30, 0, 0, 0.9)")
       .attr("cursor", "pointer")

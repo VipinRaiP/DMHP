@@ -22,6 +22,7 @@ export abstract class LineService {
   private currData: any;
   private newData = new Subject<any>();
   private parameter = new Subject<any>();
+  private tableData = new Subject<any>();
   private xLabel: string;
   private yLabel: string;
   private xColumn: string;
@@ -50,6 +51,7 @@ export abstract class LineService {
           monthlyData: resMonthlyData,
           monthlyDataCummulative: this.calculateTotal(resMonthlyData)
         }
+        this.tableData.next({ keys: this.keys, tableData: this.data.monthlyDataCummulative });
         this.updateData();
       });
   }
@@ -113,6 +115,10 @@ export abstract class LineService {
 
   getParameterListener() {
     return this.parameter.asObservable();
+  }
+
+  getTableData() {
+    return this.tableData.asObservable();
   }
 
   getCumulative() {
