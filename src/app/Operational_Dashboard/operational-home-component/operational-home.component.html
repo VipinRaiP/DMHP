@@ -1,5 +1,6 @@
 <mat-sidenav-container style="padding-top: 4%;">
-  <mat-sidenav mode="side" opened="true" class="sidenav"
+  <mat-sidenav #sidenav mode="side" [mode]="mode.value" opened="true" class="sidenav" [(opened)]="opened" (opened)="events.push('open!')"
+  (closed)="events.push('close!')"
     style="background-color : 	#3b4147; width: 250px;  position: fixed; margin-top: 4%; margin-bottom: 2%;">
     <div class="pt-5"><button class="btn btn-light side-nav-button" (click)="onSideNavClick(1)">Patient Count </button>
     </div>
@@ -7,6 +8,7 @@
     <div><button class="btn btn-light side-nav-button" (click)="onSideNavClick(3)">Training </button></div>
   </mat-sidenav>
   <mat-sidenav-content>
+    <p><button mat-button (click)="sidenav.toggle()">Open Side Bar</button></p>
     <!--nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">DMHP : Operational Dashboard</a>

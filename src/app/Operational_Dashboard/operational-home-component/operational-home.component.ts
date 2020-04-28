@@ -4,6 +4,7 @@ import { ExpenseCountDistrictService } from '../Services/expense-count-district.
 import { PatientCountDistrictService } from '../Services/patient-count-district.service';
 import html2canvas from 'html2canvas';
 import * as FileSaver from 'file-saver';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-operational-home',
@@ -17,6 +18,8 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
 
   public sideNavOption: number;
 
+  opened: boolean;
+  mode = new FormControl('over');
   constructor(private districtExpenseService: ExpenseCountDistrictService,   private districtService: PatientCountDistrictService) { }
 
   ngOnInit() {
