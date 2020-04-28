@@ -35,7 +35,7 @@ export class StackedBarChartComponent implements OnInit {
   private xLabelName: string;
   private yLabelName: string;
   private xColumn: string;
-  private dataType:string;
+  private dataType: string;
 
   // Request Variables
   private normalize: boolean;
@@ -80,11 +80,11 @@ export class StackedBarChartComponent implements OnInit {
     //d3.select(this.xColumn).remove();
     //d3.select(element)
     //.append(this.xColumn);
-    d3.select("#" + this.xColumn +this.dataType+ "sbc").remove();
+    d3.select("#" + this.xColumn + this.dataType + "sbc").remove();
 
     this.svg = d3.select(element)
       .append('svg')
-      .attr("id", this.xColumn + this.dataType+"sbc")
+      .attr("id", this.xColumn + this.dataType + "sbc")
       .attr('width', element.offsetWidth + 300)
       .attr('height', element.offsetHeight + 60);
 
@@ -125,7 +125,7 @@ export class StackedBarChartComponent implements OnInit {
       .text(this.yLabelName);
 
     // set the colors 
-    this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired]);
+    this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired, ...d3.schemeTableau10]);
     this.z.domain(this.keys);
   }
 
@@ -148,7 +148,7 @@ export class StackedBarChartComponent implements OnInit {
       .enter().append("g")
       .attr("class", "legend")
       .style("opacity", (d) => this.currkeys.includes(d) ? 1 : 0.2)
-      .attr("transform", function (d, i) { return "translate(30," + i * 19 + ")"; })
+      .attr("transform", function (d, i) { return "translate(30," + i * 21 + ")"; })
       .attr("cursor", "pointer")
       .on('click', (d) => {
         //d3.select(this).style("opacity", !this.currkeys.includes(d) ? 1 : 0.2);
@@ -156,14 +156,14 @@ export class StackedBarChartComponent implements OnInit {
       });
 
     legend.append("rect")
-      .attr("x", this.width - 65)
+      .attr("x", this.width - this.margin.right)
       .attr("width", 18)
       .attr("height", 15)
       .attr("y", 3.5)
       .attr("fill", this.z);
 
     legend.append("text")
-      .attr("x", this.width - 35)
+      .attr("x", this.width - this.margin.right + 25)
       .attr("y", 11.5)
       .attr("dy", ".35em")
       .attr("font-size", "15px")
@@ -174,15 +174,18 @@ export class StackedBarChartComponent implements OnInit {
     /* tooptip */
     const tip = d3Tip();
     tip.attr("class", "d3-tip")
+      .style('z-index', '99999999999')
       .offset([-10, 0])
       .html((data) => {
         let keys = [...this.currkeys];
-
-        let ret = "<div style='text-align: center;'><strong>" + data[this.xColumn] + "</strong></div><br>";
-        ret += "<table style='width:200px;font-size: 17px;'><tbody>";
+        let a = (this.normalize) ? "%" : "";
+        let ret = "<div style='text-align: center;font-size: 19px;'>" + data[this.xColumn] + "<br>"
+        //ret += "<small> (Population  " + data["Population"].toLocaleString() + ")</small></div><br>";
+        ret += "</div><br><table style='width:200px;font-size: 17px;'><tbody>";
         for (let key of keys.reverse()) {
-          ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + "</td></tr>"
+          ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + a + "</td></tr>"
         }
+        ret += "<tr  style='font-size: 19px;'><td>Total</td><td style='text-align:right; padding-left:15px;'> " + data["Total"].toLocaleString() + a + "</td></tr>"
         ret += "</tbody></table>";
         return ret;
       });

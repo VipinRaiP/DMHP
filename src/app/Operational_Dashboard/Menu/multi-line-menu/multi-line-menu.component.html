@@ -1,0 +1,20 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Across Month
+        </mat-card-title>
+        <mat-card-subtitle>
+            Month v Cases
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="d-flex bd-highlight">
+            <div class=" mr-auto bd-highlight " style="padding-left: 200px;">
+                <mat-slide-toggle color="primary" [(ngModel)]="checkedCumulative" (change)="onCumulativeChange()">
+                    Cumulative
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <app-multi-line-chart [chartService]="menuService"></app-multi-line-chart>
+    </mat-card-content>
+</mat-card>

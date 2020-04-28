@@ -1,32 +1,39 @@
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, AfterViewInit} from '@angular/core';
 import { LineChartService } from '../Cards/services/line-chart.service';
 import { ExpenseCountDistrictService } from '../Services/expense-count-district.service';
 import { PatientCountDistrictService } from '../Services/patient-count-district.service';
 import html2canvas from 'html2canvas';
 import * as FileSaver from 'file-saver';
+
 @Component({
   selector: 'app-operational-home',
   templateUrl: './operational-home.component.html',
   styleUrls: ['./operational-home.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class OperationalHomeComponent implements OnInit {
+export class OperationalHomeComponent implements OnInit, AfterViewInit {
   public lineChartLoaded = false;
   public chartData;
 
-  constructor(private lineChartService:LineChartService,private districtExpenseService: ExpenseCountDistrictService,   private districtService: PatientCountDistrictService) { }
+  public sideNavOption: number;
+
+  constructor(private districtExpenseService: ExpenseCountDistrictService,   private districtService: PatientCountDistrictService) { }
 
   ngOnInit() {
-    this.lineChartService.getChartDataListener().subscribe((d)=>{
-      this.chartData = d;
-      this.lineChartLoaded = true;
-    })
+
   }
 
+  ngAfterViewInit(){
+    this.sideNavOption=1;
+
+  }
   onLineChartClose(){
     this.lineChartLoaded = false;
   }
 
+  onSideNavClick(val: number){
+    this.sideNavOption = val;
+  }
   Capture(){
     
     //let element = document.querySelector("#"+"this.dataType");
