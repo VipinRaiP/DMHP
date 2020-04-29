@@ -13,3 +13,4 @@ npm i d3-tip
 npm install xlsx
 npm install file-saver
 npm install html2canvas
+npm install @auth0/angular-jwt
