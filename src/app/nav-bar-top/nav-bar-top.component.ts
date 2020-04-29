@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import html2canvas from 'html2canvas';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar-top',
@@ -7,7 +9,7 @@ import html2canvas from 'html2canvas';
   styleUrls: ['./nav-bar-top.component.css']
 })
 export class NavBarTopComponent implements OnInit {
-  constructor() { }
+  constructor(private auth:AuthService,private router:Router) { }
 
   ngOnInit() {
   }
@@ -30,5 +32,10 @@ export class NavBarTopComponent implements OnInit {
 
       }, 'image/png');
     });
+  }
+
+  LogOut(){
+    this.auth.logout();
+    this.router.navigate(['login']);
   }
 }

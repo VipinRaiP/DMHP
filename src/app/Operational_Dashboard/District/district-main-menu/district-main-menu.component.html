@@ -36,7 +36,7 @@
     <app-menu [menuService]="districtService"></app-menu>
 </div>
 
-<div id="Talukas" class="container-fluid pt-3">
+<div #Talukas id="Talukas" class="container-fluid pt-3">
     <mat-expansion-panel (opened)="talukaPanelState = true" (closed)="talukaPanelState = false"
         [expanded]="talukaPanelState" (click)="onPanelExpand()">
         <mat-expansion-panel-header>

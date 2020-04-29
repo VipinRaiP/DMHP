@@ -1,5 +1,5 @@
 
-import { Component, AfterViewInit, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material';
 import * as _moment from 'moment';
 import { FormControl } from '@angular/forms';
@@ -57,6 +57,8 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   public lineChartLoaded = false;
   public chartData;
 
+  @ViewChild('Talukas', { static: true }) private TalukaBlock: ElementRef;
+
   //  @Input()
   //  private districtService: PatientCountDistrictService;
   constructor(private titleService: Title, private lineChartService: LineChartService, private districtService: PatientCountDistrictService, private districtLineService: PatientCountLineDistrictService) {
@@ -75,13 +77,18 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
         if (this.talukaPanelState)
           this.TalukaMainMenuRef.onDistrictSelect(this.districtName);
         this.talukaPanelState = true;
-        setTimeout(() => location.href = "#Talukas", 200);
+        setTimeout(() => {
+          var el: HTMLElement = document.getElementById("Talukas");
+          el.scrollIntoView();
+          //location.href = "#Talukas"
+        }, 200);
+
       }
       else
         alert("No taluka view found for BBMP")
     });
 
-    this.lineChartService.getChartDataListener().subscribe((d)=>{
+    this.lineChartService.getChartDataListener().subscribe((d) => {
       this.chartData = d;
       this.lineChartLoaded = true;
     })
@@ -101,11 +108,11 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
     //this.talukaView = !this.talukaView;
   }
 
-  onLineChartClose(){
+  onLineChartClose() {
     this.lineChartLoaded = false;
   }
 
-  onTabClick(val: number){
+  onTabClick(val: number) {
     setTimeout(() => location.href = "#TalukaPanel", 200);
 
   }

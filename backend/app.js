@@ -5,12 +5,37 @@ const jsonGroupBy = require("json-groupby");
 
 const app = express();
 
+// JWT Authentication
+
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
+app.use(function (req, res, next) {
+  /*var err = new Error('Not Found');
+   err.status = 404;
+   next(err);*/
+
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,X-Access-Token,XKey,Authorization');
+
+//  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  // Pass to next layer of middleware
+  next();
+});
+
+/*app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -21,7 +46,8 @@ app.use((req, res, next) => {
     "GET, POST, PATCH, DELETE, OPTIONS"
   );
   next();
-});
+});*/
+
 
 /**********************************************************************************************************************************
 *  Connecting to DB 
@@ -53,17 +79,38 @@ var con = mysql.createConnection({
   password: "qwerty78900"
 });*/
 
-con.connect(function (err) {
-  if (err) console.log(err);
-  console.log("connected");
-});
-
 //sql = "use ";
 
 con.query(sql, function (err, res) {
   if (err) console.log(err);
   console.log(res);
 });
+
+/*********************************************************************************************************************************
+ *  Authentication services
+ * 
+ * *******************************************************************************************************************************/
+
+var USERS = [
+  { 'id': 1, 'username': 'vipin.rai' },
+  { 'id': 2, 'username': 'harshabh.mahant' },
+  { 'id': 3, 'username': 'sameer.khurd' },
+  {'id': 4,'username': 'tk.srikanth'}
+];
+
+app.use(expressJwt({secret: 'dmhp-app-super-shared-secret'}).unless({path: ['/api/auth']}));
+
+app.post("/api/auth",(req,res)=>{
+  const body = req.body;
+  console.log("Auth req received");
+  console.log(body);
+  const user  = USERS.find(user=>user.username== body.username);
+  if(!user || body.password!='dmhp@2020') return res.sendStatus(401);
+
+  var token = jwt.sign({userId:user.id},'dmhp-app-super-shared-secret',{expiresIn:'2h'});
+  console.log(token);
+  res.send({token});
+})
 
 /****************************************************************************************************************** 
  *
