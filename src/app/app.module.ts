@@ -48,6 +48,15 @@ import { TrainingCountDistrictService } from './Operational_Dashboard/Services/t
 import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/expense-count-district.service';
 import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
 
+//Authentication 
+import { JwtModule } from '@auth0/angular-jwt';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
+
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
@@ -71,7 +80,8 @@ import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
     TabularDialog,
     DistrictTrainingMainMenuComponent,
     MultiLineMenuComponent,
-    NavBarTopComponent
+    NavBarTopComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +105,14 @@ import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
     MatSelectModule,
     MatIconModule,
     MatSidenavModule,
-    MatTabsModule
+    MatTabsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:3000'],
+        blacklistedRoutes: ['localhost:3000/api/auth']
+      }
+    })
   ],
   entryComponents:[
    // DistrictMapDialogComponent
@@ -109,7 +126,9 @@ import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
     PatientCountTalukaService,
     ExpenseCountDistrictService,
     TrainingCountDistrictService,
-    PatientCountLineDistrictService
+    PatientCountLineDistrictService,
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
