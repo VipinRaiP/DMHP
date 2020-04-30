@@ -77,9 +77,9 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "sameer",
   password: "qwerty78900"
-});*/
+});
 
-//sql = "use ";
+sql = "use clinical_db";*/
 
 con.query(sql, function (err, res) {
   if (err) console.log(err);

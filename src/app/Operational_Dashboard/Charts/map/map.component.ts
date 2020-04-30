@@ -138,8 +138,10 @@ export class MapComponent implements OnInit {
         let data = formattedDataTempCopy[d.properties.NAME_3];
         let keys = [...this.currkeys];
         let a = (this.normalize) ? "%" : "";
-        let ret = "<div style='text-align: center;font-size: 19px;'>" + data[this.xColumn] + "</div><br>";
-        ret += "<table style='width:200px;font-size: 17px;'><tbody>";
+        let ret = "<div style='text-align: center;font-size: 19px;'>" + data[this.xColumn] + "<br>";
+        if (this.xColumn != "Taluka")
+          ret += "<small> (Population  " + data["Population"].toLocaleString() + ")</small>";
+        ret += "</div><br><table style='width:200px;font-size: 17px;'><tbody>";
         for (let key of keys.reverse()) {
           ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + a + "</td></tr>"
         }
@@ -251,7 +253,7 @@ export class MapComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "central")
       .style("font-size", "11.5px")
-      .style('font-family','Arial, Helvetica, sans-serif')
+      .style('font-family', 'Arial, Helvetica, sans-serif')
       .style("font-weight", "bold")
       .style("fill", "rgba(30, 0, 0, 0.9)")
       .attr("cursor", "pointer")

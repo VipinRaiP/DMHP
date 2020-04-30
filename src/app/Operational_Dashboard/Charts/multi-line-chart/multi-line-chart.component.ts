@@ -15,7 +15,7 @@ export class MultiLineChartComponent implements OnInit {
   private data;
   private width;
   private height;
-  private margin = { top: 50, left: 150, bottom: 30, right: 100 };
+  private margin = { top: 50, left: 100, bottom: 30, right: 60 };
 
   private svg: any;
   private xAxis: any;
@@ -91,7 +91,7 @@ export class MultiLineChartComponent implements OnInit {
     // Y label 
     this.yLabel = this.g.append("text")
       .attr("x", (-this.height + this.margin.bottom + this.margin.top) / 2)
-      .attr("y", -this.margin.left / 2 - 10)
+      .attr("y", -this.margin.left / 1.2 )
       .attr("font-size", "18px")
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
@@ -217,9 +217,8 @@ export class MultiLineChartComponent implements OnInit {
     /* Add line into SVG */
     let line = d3.line()
       .x(d => this.x(d.date))
-      .y(d => this.y(d.dataValue));
-
-
+      .y(d => this.y(d.dataValue))
+      .curve(d3.curveMonotoneX);
 
     //lines.exit().remove();     
     this.svg.select(".lines").remove();
