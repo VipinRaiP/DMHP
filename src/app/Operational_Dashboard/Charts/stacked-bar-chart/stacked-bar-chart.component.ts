@@ -17,18 +17,20 @@ export class StackedBarChartComponent implements OnInit {
 
   // Chart Variables
   @ViewChild('chart', { static: true }) private chartContainer: ElementRef;
-  private margin = { top: 50, left: 100, bottom: 30, right: 60 };
+  private margin = { top: 50, left: 100, bottom: 30, right: 100 };
   private svg: any;
   private width: number;
   private height: number;
   private xAxis: any;
   private yAxis: any;
+  private yAxisRight: any;
   private yLabel: any;
   private xLabel: any;
   private g: any;
   private z: any;
   private x: any;
   private y: any;
+  private y1: any;
   private tooltip: any;
   private rects: any;
   private speed: number = 500;
@@ -47,11 +49,12 @@ export class StackedBarChartComponent implements OnInit {
   private columns = new Map<string, boolean>();
   private sortColumn: string;
   private parameterValue: string;
-
+  private checkedPopulationLine: boolean;
   // Output Parameter
   @Output() public chartLoaded: EventEmitter<any> = new EventEmitter();
 
   constructor() {
+    this.checkedPopulationLine = false;
   }
 
   ngOnInit() {
@@ -62,6 +65,7 @@ export class StackedBarChartComponent implements OnInit {
       this.dataType = newParameter.dataType;
       this.keys = newParameter.keys;
       this.createChart();
+      this.createPopulationLine();
     });
 
     this.chartService.getDataListener().subscribe((newData) => {
@@ -69,7 +73,19 @@ export class StackedBarChartComponent implements OnInit {
       this.data = newData.data;
       this.normalize = newData.normalise;
       this.updateChart();
+      if (this.checkedPopulationLine) this.updatePopulationLine();
     });
+  }
+
+  onPopulationLineChange() {
+    if (this.checkedPopulationLine) {
+      //this.createPopulationLine();
+      this.updatePopulationLine();
+    }
+    else {
+      this.svg.selectAll(".dot").remove()
+      this.svg.selectAll(".line").remove()
+    }
   }
 
   // Set up the chart
@@ -128,6 +144,31 @@ export class StackedBarChartComponent implements OnInit {
     this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired, ...d3.schemeTableau10]);
     this.z.domain(this.keys);
   }
+  private path
+  createPopulationLine() {
+    // Y-Right label 
+    this.g.append("text")
+      .attr("x", (this.height - this.margin.bottom - this.margin.top) / 2)
+      .attr("y", -this.width + this.margin.right / 2.5 + this.margin.left)
+      .attr("font-size", "18px")
+      .attr("text-anchor", "middle")
+      .attr("transform", "rotate(90)")
+      .attr("font-weight", "bold")
+      .attr("font-family", "sans-serif")
+      .text("Population");
+
+    // Y-Right Axis
+    this.y1 = d3.scaleLinear().rangeRound([this.height - this.margin.bottom, this.margin.top])
+
+    this.yAxisRight = this.svg.append("g")
+      .attr("transform", "translate(" + (this.width - this.margin.right + 5) + " ,0)")
+      .attr("class", "y1-axis")
+      .orient("right");
+
+    this.path = this.g.append("path")
+      .attr("class", "line")
+
+  }
 
   // Update the chart
   updateChart() {
@@ -156,14 +197,14 @@ export class StackedBarChartComponent implements OnInit {
       });
 
     legend.append("rect")
-      .attr("x", this.width - this.margin.right)
+      .attr("x", this.width - this.margin.right / 2 + 40)
       .attr("width", 18)
       .attr("height", 15)
       .attr("y", 3.5)
       .attr("fill", this.z);
 
     legend.append("text")
-      .attr("x", this.width - this.margin.right + 25)
+      .attr("x", this.width - this.margin.right / 2 + 65)
       .attr("y", 11.5)
       .attr("dy", ".35em")
       .attr("font-size", "15px")
@@ -180,7 +221,8 @@ export class StackedBarChartComponent implements OnInit {
         let keys = [...this.currkeys];
         let a = (this.normalize) ? "%" : "";
         let ret = "<div style='text-align: center;font-size: 19px;'>" + data[this.xColumn] + "<br>"
-        //ret += "<small> (Population  " + data["Population"].toLocaleString() + ")</small></div><br>";
+        if (this.xColumn != "Taluka")
+          ret += "<small> (Population  " + data["Population"].toLocaleString() + ")</small>";
         ret += "</div><br><table style='width:200px;font-size: 17px;'><tbody>";
         for (let key of keys.reverse()) {
           ret += "<tr style='color:" + this.z(key) + ";'><td>" + key + " </td><td style='text-align:right; padding-left:15px;'> " + data[key].toLocaleString() + a + "</td></tr>"
@@ -297,7 +339,47 @@ export class StackedBarChartComponent implements OnInit {
       .attr("y", this.x.bandwidth() / 2 + 3)
       .attr("x", 30)
       .text(d => (this.normalize) ? d.Total + " %" : d.Total.toLocaleString());
+  }
 
+  updatePopulationLine() {
+    let yDomainRight = [0, d3.max(this.data, d => (d.Population == 0) ? 0.1 : d.Population)];
+    this.y1.domain(yDomainRight).nice();
+
+    // Update Right-Y Axis
+    this.svg.selectAll(".y1-axis").transition().duration(this.speed)
+      .call(d3.axisRight(this.y1)
+        .tickFormat(d3.format(".0s"))
+        .ticks(10))
+      .attr("font-size", "14px");
+
+    var line = d3.line()
+      .x(d => this.x(d[this.xColumn]) + this.x.bandwidth() / 2)//+this.xScale(+d["Month"]); }) // set the x values for the line generator
+      .y(d => this.y1(d.Population))
+      .curve(d3.curveMonotoneX);
+
+    this.svg.selectAll(".dot").remove()
+    this.svg.selectAll("circle")
+      .data(this.data)
+      .enter()
+      .append("circle")
+      .attr("class", "dot")
+      .attr("cx", d => { return this.x(d[this.xColumn]) + this.x.bandwidth() / 2 })
+      .attr("cy", d => this.y1(d.Population))
+      .attr("r", 4)
+      .style('fill', "black")
+      .style('opacity', 0.5)
+
+
+    this.svg.selectAll(".line").remove()
+    this.svg.append("path")
+      .attr("class", "line")
+      .datum(this.data)
+      .style('opacity', 0.5)
+      .transition().duration(this.speed)
+      .attr("d", line)
+      .attr("fill", "none")
+      .attr("stroke", "black")
+      .attr("stroke-width", "3px")
 
 
   }

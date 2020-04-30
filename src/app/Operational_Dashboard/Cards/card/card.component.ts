@@ -13,11 +13,11 @@ export class CardComponent implements OnInit {
 
   @ViewChild('smallChart', { static: true }) private chartContainer: ElementRef;
   @Input() CardName: String;
-
+  @Input() color: string;
   //  @Input() data: any;
   private totalCases: number = 0;
   private year: number = 2019;
-  private margin: any = { top: 25, right: 20, bottom: 30, left: 5 };
+  private margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
   private width: number;
   private height: number;
   private g: any;
@@ -34,10 +34,10 @@ export class CardComponent implements OnInit {
   private yAxis;
 
   public chartData;
-  public loadChart=false;
+  public loadChart = false;
 
 
-  constructor(private http: HttpClient,private lineChartService:LineChartService) { }
+  constructor(private http: HttpClient, private lineChartService: LineChartService) { }
 
   ngOnInit() {
     this.getData();
@@ -58,7 +58,7 @@ export class CardComponent implements OnInit {
     else if (this.CardName == "SMD Cases") {
       this.http.get<any>("http://localhost:3000/getSMDCasesCurrentYear")
         .subscribe(responseData => {
-          this.chartData = responseData;  
+          this.chartData = responseData;
           this.createChart();
           this.createLineChart(responseData);
 
@@ -67,7 +67,7 @@ export class CardComponent implements OnInit {
     else if (this.CardName == "CMD Cases") {
       this.http.get<any>("http://localhost:3000/getCMDCasesCurrentYear")
         .subscribe(responseData => {
-          this.chartData = responseData;  
+          this.chartData = responseData;
           this.createChart();
           this.createLineChart(responseData);
 
@@ -76,7 +76,7 @@ export class CardComponent implements OnInit {
     else if (this.CardName == "Suicide Cases") {
       this.http.get<any>("http://localhost:3000/getSuicideCasesCurrentYear")
         .subscribe(responseData => {
-          this.chartData = responseData;  
+          this.chartData = responseData;
           this.createChart();
           this.createLineChart(responseData);
         })
@@ -89,17 +89,20 @@ export class CardComponent implements OnInit {
 
     this.svg = d3.select(element)
       .append('svg')
-      .attr('width', 400)
-      .attr('height', 130);
-
-    this.width = element.offsetWidth - this.margin.left - this.margin.right;
+      //.attr('width', 400)
+      //.attr('height', 130);
+      .attr('width', element.offsetWidth+40)
+      .attr('height', element.offsetHeight-40)
+      .style("cursor", "pointer");
+      
+    this.width = element.offsetWidth - this.margin.left - this.margin.right+40;
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
 
     //console.log(this.height);
 
     // chart plot area
     this.g = this.svg.append('g')
-      .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
+      .attr('transform', `translate(${this.margin.left-20}, ${this.margin.top})`);
 
 
     // set x scale
@@ -111,13 +114,13 @@ export class CardComponent implements OnInit {
     this.y = d3.scaleLinear()
       .rangeRound([this.height, 0]);
 
-   /* this.xAxis = this.g.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', `translate(50, ${this.height})`)
-
-    this.yAxis = this.g.append('g')
-      .attr('class', 'axis axis-y')
-      .attr('transform', `translate(50,0)`) */
+    /* this.xAxis = this.g.append('g')
+       .attr('class', 'x axis')
+       .attr('transform', `translate(50, ${this.height})`)
+ 
+     this.yAxis = this.g.append('g')
+       .attr('class', 'axis axis-y')
+       .attr('transform', `translate(50,0)`) */
   }
 
   createLineChart(data) {
@@ -142,8 +145,8 @@ export class CardComponent implements OnInit {
 
     this.yScaleLine.domain(yDomain);
 
-  /*  this.xAxis.transition().call(d3.axisBottom(this.x));
-    this.yAxis.transition().call(d3.axisLeft(this.y));*/
+    /*  this.xAxis.transition().call(d3.axisBottom(this.x));
+      this.yAxis.transition().call(d3.axisLeft(this.y));*/
 
     var line = d3.line()
       .x(d => this.x(d["Month"]) + (this.x.bandwidth() / 2)) // set the x values for the line generator
@@ -151,7 +154,7 @@ export class CardComponent implements OnInit {
       .curve(d3.curveMonotoneX) // apply smoothing to the line
     console.log(line);
 
-    this.g.append("path")
+    /*this.g.append("path")
       .datum(data) // 10. Binds data to the line 
       .attr("class", "lines") // Assign a class for styling 
       .attr("d", line)
@@ -159,26 +162,46 @@ export class CardComponent implements OnInit {
       .attr("stroke", "lightgrey")
       .attr("stroke-width", 4);
     //.attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);; // 11. Calls the line generator
+    */
+
+
+    // define the area
+    var area = d3.area()
+      .x(d => this.x(d["Month"]) + (this.x.bandwidth() / 2)) // set the x values for the line generator
+      .y0(this.height-this.margin.bottom)
+      .y1(d => this.y(d["Total Cases"])) // set the y values for the line generator 
+      .curve(d3.curveMonotoneX)
+
+    this.g.append("path")
+      .data([data])
+      .attr("class", "area")
+      .attr("d", area)
+      .attr("fill", this.color)
+      .style("opacity", 0.25)
+
 
     this.g.append("path")
       .datum(data) // 10. Binds data to the line 
       .attr("class", "lines") // Assign a class for styling 
       .attr("d", line)
       .attr("fill", "none")
-      .attr("stroke", "black")
-      .attr("stroke-width", 1.5); // 11. Calls the line generator
+      .attr("stroke", this.color)
+      .style("opacity", 0.7)
+
+      .attr("stroke-width", 3); // 11. Calls the line generator
   }
 
-  onClickLoadChart(){
+  onClickLoadChart() {
     //this.loadChart = true;
     //this.lineChartService.updateChartData(this.chartData);
-  }  
+  }
 
-  @HostListener("click") onClick(){
+  @HostListener("click") onClick() {
     console.log("User Click using Host Listener");
     this.lineChartService.updateChartData({
       caseName: this.CardName,
-      data: this.chartData
+      data: this.chartData,
+      color: this.color
     });
   }
 
