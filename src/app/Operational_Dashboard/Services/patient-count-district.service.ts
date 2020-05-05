@@ -8,6 +8,14 @@ export class PatientCountDistrictService extends PatientCountService {
   constructor(http: HttpClient) {
     super(http);
   }
+  
+  name(){
+    return "PatientCountDistrictService";
+  }
+  
+  getSortOptions(){
+    return ["Rank", this.getxColumn(), "Population"]
+  }
 
   initialize(){
     super.initialize();

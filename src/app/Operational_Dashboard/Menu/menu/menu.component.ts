@@ -26,6 +26,7 @@ export class MenuComponent implements OnInit {
   private normalizeDisabled: boolean;
   public data: any;
   public dataType;
+
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -36,7 +37,7 @@ export class MenuComponent implements OnInit {
     this.xColumn = this.menuService.getxColumn();
     this.mapName = this.menuService.getMapName();
     this.normalizeDisabled = this.menuService.getNormalizeDisabled();
-    this.toggleOptions_Sort = ["Rank", this.xColumn];
+    this.toggleOptions_Sort = this.menuService.getSortOptions();
     this.dataType = this.menuService.getDataType();
     this.menuService.getDataListener().subscribe((d) => {
       this.columns = d.currkeys;

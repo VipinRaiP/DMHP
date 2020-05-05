@@ -22,7 +22,10 @@ export enum SortOption {
 }
 
 @Injectable()
-export class PatientCountService {
+export abstract class PatientCountService {
+  abstract name(): string;
+  abstract getSortOptions(): string[];
+
   public onDoubleClick = new EventEmitter<any>();
   public onLegendClick = new EventEmitter<any>();
   public onRegionHover = new EventEmitter<any>();
@@ -194,6 +197,10 @@ export class PatientCountService {
       }
       case SortOption.RANKWISE: {
         this.sortKey = "Total";
+        break;
+      }
+      default :{
+        this.sortKey = "Population";
         break;
       }
     }

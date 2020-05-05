@@ -9,6 +9,14 @@ export class TrainingCountDistrictService extends PatientCountService {
         super(http);
     }
 
+    name() {
+        return "TrainingCountDistrictService";
+    }
+
+    getSortOptions() {
+        return ["Rank", this.getxColumn(), "Population"]
+    }
+
     initialize() {
         super.initialize();
 
