@@ -107,7 +107,7 @@ app.post("/api/auth",(req,res)=>{
   const user  = USERS.find(user=>user.username== body.username);
   if(!user || body.password!='dmhp@2020') 
   {
-    Console.log("INVALID CREDENTIALS");
+    console.log("INVALID CREDENTIALS");
     return res.sendStatus(401);
   }
 
