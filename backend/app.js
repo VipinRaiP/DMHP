@@ -105,7 +105,11 @@ app.post("/api/auth",(req,res)=>{
   console.log("Auth req received");
   console.log(body);
   const user  = USERS.find(user=>user.username== body.username);
-  if(!user || body.password!='dmhp@2020') return res.sendStatus(401);
+  if(!user || body.password!='dmhp@2020') 
+  {
+    Console.log("INVALID CREDENTIALS");
+    return res.sendStatus(401);
+  }
 
   var token = jwt.sign({userId:user.id},'dmhp-app-super-shared-secret',{expiresIn:'2h'});
   console.log(token);
