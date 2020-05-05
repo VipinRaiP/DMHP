@@ -61,9 +61,9 @@ app.get("/", function (req, res, next) {
 })
 
 var con = mysql.createConnection({
-  host: "localhost",
+  host: "dmhp.chq9wobmmpgo.us-east-2.rds.amazonaws.com",
   user: "root",
-  password: "root"
+  password: "root1234"
 });
 
 con.connect(function (err) {
