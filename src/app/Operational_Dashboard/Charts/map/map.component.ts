@@ -46,7 +46,7 @@ export class MapComponent implements OnInit {
       this.xColumn = newParameter.xColumn;
       this.dataType = newParameter.dataType;
       this.keys = newParameter.keys;
-      this.populationDisabled = newParameter.populationDisabled;
+      this.populationDisabled = (this.xColumn == "Taluka") ? true : false;//newParameter.populationDisabled;
       this.getMap();
       //this.mapService.onDistrictChanged.emit(this.mapName);
 

@@ -69,7 +69,7 @@ export class StackedBarChartComponent implements OnInit {
       this.xColumn = newParameter.xColumn
       this.dataType = newParameter.dataType;
       this.keys = newParameter.keys;
-      this.populationDisabled = newParameter.populationDisabled;
+      this.populationDisabled = (this.xColumn == "Taluka") ? true : false;//newParameter.populationDisabled;
       this.createChart();
       if (this.checkedPopulationLine) this.createPopulationLine();
     });
