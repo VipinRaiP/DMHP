@@ -165,7 +165,7 @@ export class PatientCountService {
       currkeys: this.currkeys,
       data: this.currData
     }
-    console.log("Data", this.newData);
+    console.log("Data", newData);
 
     this.newData.next(newData);
   }
@@ -180,6 +180,7 @@ export class PatientCountService {
       mapName: this.mapName,
       mapDirPath: this.mapDirPath,
       fileExt: this.fileExt,
+      populationDisabled: this.normalizeDisabled
     };
     this.parameter.next(parameter);
   }

@@ -8,7 +8,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="row">
+        <div class="row pl-5 pr-5 ">
             <div class="col-md-4">
                 <div *ngIf="bool" class="wrap pt-3">
                     <h6>Total Cases</h6>
@@ -27,7 +27,11 @@
                                 <td>{{d}}</td>
                                 <td style="text-align: right;">{{yearTotal[in].toLocaleString()}}</td>
                                 <td style="text-align: right;">{{monthTotal[in].toLocaleString()}}</td>
-                                <td style="font-size: x-small; color: gray;">{{diff[in].toLocaleString()}}<mat-icon>arrow_drop_up</mat-icon></td>
+                                <td style="font-size: x-small; color: gray;">
+                                    {{diff[in].toLocaleString()}}
+                                    <mat-icon *ngIf="diff[in]>=0">arrow_drop_up</mat-icon>
+                                    <mat-icon *ngIf="diff[in]<0">arrow_drop_down</mat-icon>
+                                </td>
                             </tr>
                             <!-- Some more tr's -->
                         </table>

@@ -22,7 +22,7 @@ export class MapComponent implements OnInit {
   private mapDirPath: string;
   private fileExt: string;
 
-  private margin: any = { top: 0, bottom: 0, left: 0, right: 0 };
+  private margin: any = { top: 0, bottom: 0, left: 100, right: 100 };
   private svg: any;
   private width: number;
   private height: number;
@@ -33,6 +33,7 @@ export class MapComponent implements OnInit {
   private keys: string[];
   private currkeys: string[];
   private z: any;
+  private populationDisabled: boolean;
   @ViewChild('map', { static: true }) private chartContainer: ElementRef;
 
   constructor(private http: HttpClient) { }
@@ -45,6 +46,7 @@ export class MapComponent implements OnInit {
       this.xColumn = newParameter.xColumn;
       this.dataType = newParameter.dataType;
       this.keys = newParameter.keys;
+      this.populationDisabled = newParameter.populationDisabled;
       this.getMap();
       //this.mapService.onDistrictChanged.emit(this.mapName);
 
@@ -105,8 +107,8 @@ export class MapComponent implements OnInit {
     this.svg = d3.select(element)
       .append('svg')
       .attr("id", this.xColumn + this.dataType)
-      .attr('width', this.width + 50)//500)
-      .attr('height', this.height + 60)//element.offsetHeight)
+      .attr('width', this.width)//500)
+      .attr('height', this.height)//element.offsetHeight)
       //.attr('viewBox',"0 0 480 450")
       .attr('preserveAspectRatio', "xMinYMax meet")
       .append('g')
@@ -120,7 +122,8 @@ export class MapComponent implements OnInit {
     projection.fitExtent(
       [
         [10, 5],
-        [element.offsetWidth, element.offsetHeight],   // [500,450]
+        //[element.offsetWidth, element.offsetHeight],   // [500,450]
+        [this.width, this.height],   // [500,450]
       ],
       state
     );
@@ -139,7 +142,7 @@ export class MapComponent implements OnInit {
         let keys = [...this.currkeys];
         let a = (this.normalize) ? "%" : "";
         let ret = "<div style='text-align: center;font-size: 19px;'>" + data[this.xColumn] + "<br>";
-        if (this.xColumn != "Taluka")
+        if (!this.populationDisabled)
           ret += "<small> (Population  " + data["Population"].toLocaleString() + ")</small>";
         ret += "</div><br><table style='width:200px;font-size: 17px;'><tbody>";
         for (let key of keys.reverse()) {
@@ -191,15 +194,16 @@ export class MapComponent implements OnInit {
         //scope of "this" here is to svg element so we can not call "regionSelected" directly
         // when used function(d) scope of "this" is to current svg element
         // when used (d)=> { } scope of "this" is same as angular "this"
-        fu(d.properties.NAME_3);
 
-        d3.select(this).transition()
-          .duration('50')
-          .attr("stroke-width", "3");
-        //.attr('fill', "grey")
 
-        tip.show(d, this);
-
+        if (formattedDataTempCopy[d.properties.NAME_3] != null) {
+          d3.select(this).transition()
+            .duration('50')
+            .attr("stroke-width", "3");
+          //.attr('fill', "grey")
+          tip.show(d, this);
+          fu(d.properties.NAME_3);
+        }
         //d3.select(this).style("fill","#cccccc");
         //abc(d.properties.district);
         //this.regionSelected(d.properties.district);
@@ -210,13 +214,13 @@ export class MapComponent implements OnInit {
         //      .attr('stroke', '#333333')
         // d3.select(this).classed('selected',false)
         //this.regionSelected(null);
-        tip.hide(d, this);
 
         if (formattedDataTempCopy[d.properties.NAME_3] != null) {
           d3.select(this).transition()
             .duration('50')
             .attr("stroke", "#660000")
             .attr("stroke-width", "0.5")
+          tip.hide(d, this);
         }
         else {
           d3.select(this).transition()
@@ -257,8 +261,8 @@ export class MapComponent implements OnInit {
       .style("font-weight", "bold")
       .style("fill", "rgba(30, 0, 0, 0.9)")
       .attr("cursor", "pointer")
-      .on('mouseover', function (d) { tip.show(d, this); })
-      .on('mouseout', function (d) { tip.hide(d, this); })
+      .on('mouseover', function (d) { if (formattedDataTempCopy[d.properties.NAME_3] != null) tip.show(d, this); })
+      .on('mouseout', function (d) { if (formattedDataTempCopy[d.properties.NAME_3] != null) tip.hide(d, this); })
       .on('dblclick', (d) => { this.mapService.onDoubleClick.emit(d.properties.NAME_3) });
 
   }
