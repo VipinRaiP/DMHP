@@ -8,16 +8,16 @@ export class PatientCountDistrictService extends PatientCountService {
   constructor(http: HttpClient) {
     super(http);
   }
-  
-  name(){
+
+  name() {
     return "PatientCountDistrictService";
   }
-  
-  getSortOptions(){
+
+  getSortOptions() {
     return ["Rank", this.getxColumn(), "Population"]
   }
 
-  initialize(){
+  initialize() {
     super.initialize();
     console.log("DISTRICT SERVICE");
     let dataURL = {
@@ -33,7 +33,7 @@ export class PatientCountDistrictService extends PatientCountService {
     this.setxColumn("District");
     this.setDataType("Patient");
     super.setMapParameter("assets/", "Karnataka", ".json");
-    
+
     this.setYear(2018);
   }
 }
