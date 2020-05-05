@@ -15,7 +15,7 @@ export class MultiLineChartComponent implements OnInit {
   private data;
   private width;
   private height;
-  private margin = { top: 50, left: 100, bottom: 30, right: 60 };
+  private margin = { top: 50, left: 100, bottom: 30, right: 75 };
 
   private svg: any;
   private xAxis: any;
@@ -34,6 +34,7 @@ export class MultiLineChartComponent implements OnInit {
   private xColumn: string;
   private keys: string[];
   private currkeys: string[];
+  g1: any;
 
   constructor() { }
 
@@ -78,6 +79,22 @@ export class MultiLineChartComponent implements OnInit {
       .attr("transform", `translate(${this.margin.left - 10},0)`)
       .attr("class", "y-axis");
 
+    // add the X gridlines
+    this.svg.append("g")
+      .attr("transform", `translate(0,${this.height - this.margin.bottom})`)
+      .attr("class", "x-axis-grid")
+      .style("color", "lightgray")
+      .style('opacity', 0.3);
+
+    // add the Y gridlines
+    this.svg.append("g")
+      .attr("transform", `translate(${this.margin.left - 10},0)`)
+      .attr("class", "y-axis-grid")
+      .style("color", "lightgray")
+      .style('opacity', 0.3);
+
+    this.g1 = this.svg.append("g");
+
     // X Label
     this.xLabel = this.g.append("text")
       .attr("y", this.height - this.margin.bottom / 2) // - this.margin.bottom/2)
@@ -91,7 +108,7 @@ export class MultiLineChartComponent implements OnInit {
     // Y label 
     this.yLabel = this.g.append("text")
       .attr("x", (-this.height + this.margin.bottom + this.margin.top) / 2)
-      .attr("y", -this.margin.left / 1.2 )
+      .attr("y", -this.margin.left / 1.2)
       .attr("font-size", "18px")
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
@@ -145,21 +162,21 @@ export class MultiLineChartComponent implements OnInit {
       .attr("cursor", "pointer")
       .on('click', (d) => {
         //d3.select(this).style("opacity", !this.currkeys.includes(d) ? 1 : 0.2);
-        if (d.display) hoverExit(d);
+        if (d.display) hoverExit();
         this.chartService.onLegendClick.emit(d.id);
       })
       .on("mouseenter", (d) => { if (d.display) hover(d.values) })
-      .on("mouseout", (d) => { if (d.display) hoverExit(d.values) });
+      .on("mouseout", (d) => { if (d.display) hoverExit() });
 
     legend.append("rect")
-      .attr("x", this.width - this.margin.right)
+      .attr("x", this.width - this.margin.right / 2 + 20)
       .attr("width", 18)
       .attr("height", 15)
       .attr("y", 3.5)
       .attr("fill", (d) => this.z(d.id));
 
     legend.append("text")
-      .attr("x", this.width - this.margin.right + 25)
+      .attr("x", this.width - this.margin.right / 2 + 45)
       .attr("y", 11.5)
       .attr("dy", ".35em")
       .style("background-color", "red")
@@ -203,7 +220,7 @@ export class MultiLineChartComponent implements OnInit {
     // Update Y Axis
     this.svg.selectAll(".y-axis").transition().duration(this.speed)
       .call(d3.axisLeft(this.y)
-        //.tickSize(-width+margin.left-margin.right)
+        //.tickSize(-this.width + this.margin.left + this.margin.right - 10)
         .ticks(10))
       .attr("font-size", "15px")
 
@@ -213,6 +230,21 @@ export class MultiLineChartComponent implements OnInit {
       .attr("font-size", "15px")
       .attr("text-anchor", "middle")
       .attr("y", 20);
+
+    // Update the Y gridlines
+    this.svg.selectAll(".y-axis-grid").transition().duration(this.speed)
+      .call(d3.axisLeft(this.y)
+        .ticks(10)
+        .tickSize(-this.width + this.margin.left + this.margin.right - 10)
+        .tickFormat("")
+      );
+
+    // Update the X gridlines
+    this.svg.selectAll(".x-axis-grid").transition().duration(this.speed)
+      .call(d3.axisBottom(this.x)
+        .tickSize(-this.height + this.margin.bottom + this.margin.top)
+        .tickFormat("")
+      );
 
     /* Add line into SVG */
     let line = d3.line()
@@ -231,16 +263,15 @@ export class MultiLineChartComponent implements OnInit {
       .append('g')
       .attr('class', 'line-group')
       .append('path')
-      .attr('class', 'line')
+      .attr('class', 'linemlc')
       .attr("id", (d) => d.id.split(' ').join(""))
       .attr('d', d => line(d.values))
       .style('stroke', (d) => this.z(d.id))
       .style("stroke-width", "4px")
       .style('opacity', lineOpacity)
       .on("mouseenter", (d) => hover(d.values))
-      .on("mouseout", (d) => hoverExit(d.values))
-      .transition().duration(this.speed + 500);
-
+      .on("mouseout", (d) => hoverExit())
+      .transition().duration(this.speed + 500).style("cursor", "pointer");
 
     /* Add circles in the line */
     lines.selectAll("circle-group")
@@ -252,16 +283,15 @@ export class MultiLineChartComponent implements OnInit {
       .data(d => d.values).enter()
 
       .append("g")
-      .attr("class", "circle")
-      .on("mouseenter", (d) => { hoverLine(d.id); hoverTittleText(d.id); })
-      .on("mouseout", (d) => { hoverLineExit(); hoverTittleTextExit(); })
+      .attr("class", "circlemlc")
       .append("circle")
       .attr("cx", d => this.x(d.date))
       .attr("cy", d => this.y(d.dataValue))
       .attr("r", circleRadius)
       .style('opacity', circleOpacity)
-    //.on("mouseenter", (d) => hover(d.name))
-    //.on("mouseout", (d) => hoverExit(d.name))
+      .style("cursor", "pointer")
+      .on("mouseenter", function (d) { hover(getData(d.id).values); })
+      .on("mouseout", function (d) { hoverExit(); });
 
     let hover = (data) => {
       hoverLine(data[0].id);
@@ -269,30 +299,30 @@ export class MultiLineChartComponent implements OnInit {
       hoverTextValue(data);
     }
 
-    let hoverExit = (d) => {
+    let hoverExit = () => {
       hoverLineExit();
       hoverTittleTextExit();
       hoverTextValueExit();
     }
 
     let hoverLine = (id) => {
-      d3.selectAll('.line')
+      this.svg.selectAll('.linemlc')
         .style('opacity', otherLinesOpacityHover);
 
-      d3.selectAll('.circle')
+      this.svg.selectAll('.circlemlc')
         .style('opacity', circleOpacityOnLineHover);
 
-      d3.select("#" + id.split(' ').join(""))
+      this.svg.select("#" + id.split(' ').join(""))
         .style('opacity', lineOpacity)
-        .style("cursor", "pointer");
+      //.style("cursor", "pointer");
     }
 
     let hoverLineExit = () => {
-      d3.selectAll(".line")
+      this.svg.selectAll(".linemlc")
         .style('opacity', lineOpacity)
-        .style("cursor", "none");
+      //.style("cursor", "none");
 
-      d3.selectAll('.circle')
+      this.svg.selectAll('.circlemlc')
         .style('opacity', circleOpacity);
     }
 
@@ -314,12 +344,11 @@ export class MultiLineChartComponent implements OnInit {
       this.svg.select(".title-text").remove();
     }
 
-
     let hoverTextValue = (data) => {
-      this.svg.select(".text-value").remove();
+      this.g1.select(".text-info").remove();
 
-      let textInfo = this.svg.append('g')
-        .attr('class', 'text-value')
+      let textInfo = this.g1.append("g")
+        .attr('class', 'text-info')
 
       textInfo.selectAll("textCircle-group")
         .data(data).enter()
@@ -345,7 +374,18 @@ export class MultiLineChartComponent implements OnInit {
     }
 
     let hoverTextValueExit = () => {
-      this.svg.select(".text-value").remove();
+      this.g1.select(".text-info").remove();
+    }
+
+    let getData = (id) => {
+      console.log(id);
+      for (let i = 0; i < data.length; i++) {
+        if (id == data[i].id) {
+          console.log(data[i]);
+
+          return data[i];
+        }
+      }
     }
   }
 }
