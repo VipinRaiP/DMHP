@@ -11,7 +11,7 @@ export class AuthService {
 
   login(username: string, password: string): Observable<boolean> {
     console.log("AUTH SERVICE : Login request received");
-    return this.http.post<{ token: string }>('http://localhost:3000/api/auth', { username: username, password: password })
+    return this.http.post<{ token: string }>('http://18.219.25.120:3000/api/auth', { username: username, password: password })
       .pipe(
         map(result => {
           console.log("Token Received: ");
