@@ -16,6 +16,14 @@ export class PatientCountTalukaService extends PatientCountService {
     super(http);
   }
 
+  name() {
+    return "PatientCountTalukaService";
+  }
+
+  getSortOptions() {
+    return ["Rank", this.getxColumn()]
+  }
+  
   initialize() {
     super.initialize();
 
@@ -72,7 +80,7 @@ export class PatientCountTalukaService extends PatientCountService {
     this.districtName = districtName;
   }
 
-  getDistrictName(){
+  getDistrictName() {
     return this.districtName;
   }
 
