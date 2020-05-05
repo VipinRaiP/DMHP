@@ -121,7 +121,7 @@ export function tokenGetter() {
   ],
   providers: [
     LineChartService,
-    PatientCountService,
+    //PatientCountService,
     PatientCountDistrictService,
     PatientCountTalukaService,
     ExpenseCountDistrictService,
