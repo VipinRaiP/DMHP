@@ -86,13 +86,13 @@ export abstract class PatientCountService {
 
   getYearDataFromServer(postData: { year: number, districtId?: number }) {
 
-    this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['annual'], postData)
+    this.http.post<any>("http://18.219.25.120:" + this.port + "/" + this.dataURL['annual'], postData)
       .subscribe(resAnnualData => {
 
-        this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['monthly'], postData)
+        this.http.post<any>("http://18.219.25.120:" + this.port + "/" + this.dataURL['monthly'], postData)
           .subscribe(resMonthlyData => {
 
-            this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['quarterly'], postData)
+            this.http.post<any>("http://18.219.25.120:" + this.port + "/" + this.dataURL['quarterly'], postData)
               .subscribe(resQuaterlyData => {
                 this.data = {
                   annualData: resAnnualData,

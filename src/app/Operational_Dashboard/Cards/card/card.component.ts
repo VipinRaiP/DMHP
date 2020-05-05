@@ -48,7 +48,7 @@ export class CardComponent implements OnInit {
 
     if (this.CardName == "Alcohol Cases") {
 
-      this.http.get<any>("http://localhost:3000/getAlcoholCasesCurrentYear")
+      this.http.get<any>("http://18.219.25.120:3000/getAlcoholCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -56,7 +56,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "SMD Cases") {
-      this.http.get<any>("http://localhost:3000/getSMDCasesCurrentYear")
+      this.http.get<any>("http://18.219.25.120:3000/getSMDCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -65,7 +65,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "CMD Cases") {
-      this.http.get<any>("http://localhost:3000/getCMDCasesCurrentYear")
+      this.http.get<any>("http://18.219.25.120:3000/getCMDCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -74,7 +74,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "Suicide Cases") {
-      this.http.get<any>("http://localhost:3000/getSuicideCasesCurrentYear")
+      this.http.get<any>("http://18.219.25.120:3000/getSuicideCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();

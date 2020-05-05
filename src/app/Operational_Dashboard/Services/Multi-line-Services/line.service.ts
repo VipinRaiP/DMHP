@@ -44,7 +44,7 @@ export abstract class LineService {
   }
 
   getYearDataFromServer(postData: { year: number, districtId?: number }) {
-    this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['monthly'], postData)
+    this.http.post<any>("http://18.219.25.120:" + this.port + "/" + this.dataURL['monthly'], postData)
       .subscribe(resMonthlyData => {
         resMonthlyData = JSON.parse(JSON.stringify(resMonthlyData));
         this.data = {

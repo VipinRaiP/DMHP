@@ -45,7 +45,7 @@ export class PatientCountTalukaService extends PatientCountService {
   }
 
   start() {
-    this.http.get("http://localhost:" + this.getPort() + "/getDistrictData").subscribe((responseData) => {
+    this.http.get("http://18.219.25.120:" + this.getPort() + "/getDistrictData").subscribe((responseData) => {
       this.createMap(responseData);
       this.setDistrictParameter(this.districtName);
       this.districtNames.next(Array.from(this.districts.keys()));
