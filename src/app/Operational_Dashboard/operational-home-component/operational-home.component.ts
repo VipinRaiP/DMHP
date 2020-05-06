@@ -15,7 +15,7 @@ import { FormControl } from '@angular/forms';
 export class OperationalHomeComponent implements OnInit, AfterViewInit {
   public lineChartLoaded = false;
   public chartData;
-
+  public events = [];
   public sideNavOption: number;
 
   opened: boolean;
