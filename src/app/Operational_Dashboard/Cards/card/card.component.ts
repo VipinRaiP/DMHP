@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, ViewEnca
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 import { LineChartService } from '../services/line-chart.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-card',
@@ -48,7 +49,7 @@ export class CardComponent implements OnInit {
 
     if (this.CardName == "Alcohol Cases") {
 
-      this.http.get<any>("http://18.219.25.120:3000/getAlcoholCasesCurrentYear")
+      this.http.get<any>(environment.backendIP+"3000/getAlcoholCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -56,7 +57,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "SMD Cases") {
-      this.http.get<any>("http://18.219.25.120:3000/getSMDCasesCurrentYear")
+      this.http.get<any>(environment.backendIP+"3000/getSMDCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -65,7 +66,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "CMD Cases") {
-      this.http.get<any>("http://18.219.25.120:3000/getCMDCasesCurrentYear")
+      this.http.get<any>(environment.backendIP+"3000/getCMDCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -74,7 +75,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "Suicide Cases") {
-      this.http.get<any>("http://18.219.25.120:3000/getSuicideCasesCurrentYear")
+      this.http.get<any>(environment.backendIP +"3000/getSuicideCasesCurrentYear")
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
