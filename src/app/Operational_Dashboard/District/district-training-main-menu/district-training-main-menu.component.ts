@@ -12,7 +12,7 @@ export class DistrictTrainingMainMenuComponent implements OnInit {
 
   // @Input()
   // private districtExpenseService: ExpenseCountDistrictService;
-  constructor(private http: HttpClient,private titleService: Title,private districtTrainingService: TrainingCountDistrictService ) { }
+  constructor(private http: HttpClient,private titleService: Title,public districtTrainingService: TrainingCountDistrictService ) { }
 
   ngOnInit() {
 

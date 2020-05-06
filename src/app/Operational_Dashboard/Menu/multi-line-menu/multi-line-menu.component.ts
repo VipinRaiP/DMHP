@@ -6,17 +6,17 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./multi-line-menu.component.css']
 })
 export class MultiLineMenuComponent implements OnInit {
-  @Input() private menuService: any;
-  private xColumn: string;
-  private year: number;
-  private checkedCumulative: boolean;
-  private tableData: any;
-  private keys: string[];
-  private yearTotal: number[];
-  private monthTotal: number[];
-  private diff: number[];
-  private bool: boolean = false;
-  private months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  @Input() public menuService: any;
+  public xColumn: string;
+  public year: number;
+  public checkedCumulative: boolean;
+  public tableData: any;
+  public keys: string[];
+  public yearTotal: number[];
+  public monthTotal: number[];
+  public diff: number[];
+  public bool: boolean = false;
+  public months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 
   constructor() { }

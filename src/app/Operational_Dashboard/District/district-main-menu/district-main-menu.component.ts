@@ -52,8 +52,8 @@ export const MY_FORMATS = {
 export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   @ViewChild(TalukaMainMenuComponent, { static: false }) TalukaMainMenuRef: TalukaMainMenuComponent;
 
-  private talukaPanelState = false;
-  private districtName: string = "";
+  public talukaPanelState = false;
+  public districtName: string = "";
   public lineChartLoaded = false;
   public chartData;
 
@@ -61,7 +61,7 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
 
   //  @Input()
   //  private districtService: PatientCountDistrictService;
-  constructor(private titleService: Title, private lineChartService: LineChartService, private districtService: PatientCountDistrictService, private districtLineService: PatientCountLineDistrictService) {
+  constructor(private titleService: Title, private lineChartService: LineChartService, public districtService: PatientCountDistrictService, private districtLineService: PatientCountLineDistrictService) {
   }
 
   ngOnInit() {

@@ -52,8 +52,8 @@ export class StackedBarChartComponent implements OnInit {
   private columns = new Map<string, boolean>();
   private sortColumn: string;
   private parameterValue: string;
-  private checkedPopulationLine: boolean;
-  private populationDisabled: boolean;
+  public checkedPopulationLine: boolean;
+  public populationDisabled: boolean;
   // Output Parameter
   @Output() public chartLoaded: EventEmitter<any> = new EventEmitter();
 

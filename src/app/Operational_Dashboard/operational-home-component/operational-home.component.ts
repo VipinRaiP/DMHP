@@ -20,7 +20,7 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
 
   opened: boolean;
   mode = new FormControl('over');
-  constructor(private districtExpenseService: ExpenseCountDistrictService,   private districtService: PatientCountDistrictService) { }
+  constructor(public districtExpenseService: ExpenseCountDistrictService,   public districtService: PatientCountDistrictService) { }
 
   ngOnInit() {
 

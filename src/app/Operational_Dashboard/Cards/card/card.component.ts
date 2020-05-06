@@ -13,26 +13,26 @@ import { environment } from 'src/environments/environment';
 export class CardComponent implements OnInit {
 
   @ViewChild('smallChart', { static: true }) private chartContainer: ElementRef;
-  @Input() CardName: String;
+  @Input() public CardName: String;
   @Input() color: string;
   //  @Input() data: any;
-  private totalCases: number = 0;
-  private year: number = 2019;
-  private margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
-  private width: number;
-  private height: number;
-  private g: any;
-  private x: any;
-  private y: any;
-  private yScaleLine: any;
+  public totalCases: number = 0;
+  public year: number = 2019;
+  public margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
+  public width: number;
+  public height: number;
+  public g: any;
+  public x: any;
+  public y: any;
+  public yScaleLine: any;
   yLabel: any;
   xLabel: any;
-  private svg: any;
+  public svg: any;
 
   expenseData: any;
 
-  private xAxis;
-  private yAxis;
+  public xAxis;
+  public yAxis;
 
   public chartData;
   public loadChart = false;
