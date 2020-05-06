@@ -61,7 +61,7 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
 
   //  @Input()
   //  private districtService: PatientCountDistrictService;
-  constructor(private titleService: Title, private lineChartService: LineChartService, public districtService: PatientCountDistrictService, private districtLineService: PatientCountLineDistrictService) {
+  constructor(public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService, public districtLineService: PatientCountLineDistrictService) {
   }
 
   ngOnInit() {

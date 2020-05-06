@@ -12,7 +12,7 @@ export class DistrictExpenseMainMenuComponent implements OnInit {
 
   // @Input()
   // private districtExpenseService: ExpenseCountDistrictService;
-  constructor(private http: HttpClient,private titleService: Title,public districtExpenseService: ExpenseCountDistrictService ) { }
+  constructor(private http: HttpClient,public titleService: Title,public districtExpenseService: ExpenseCountDistrictService ) { }
 
   ngOnInit() {
 
