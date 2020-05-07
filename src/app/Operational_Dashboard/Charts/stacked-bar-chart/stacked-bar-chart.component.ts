@@ -52,8 +52,8 @@ export class StackedBarChartComponent implements OnInit {
   private columns = new Map<string, boolean>();
   private sortColumn: string;
   private parameterValue: string;
-  private checkedPopulationLine: boolean;
-  private populationDisabled: boolean;
+  public checkedPopulationLine: boolean;
+  public populationDisabled: boolean;
   // Output Parameter
   @Output() public chartLoaded: EventEmitter<any> = new EventEmitter();
 
@@ -75,6 +75,8 @@ export class StackedBarChartComponent implements OnInit {
     });
 
     this.chartService.getDataListener().subscribe((newData) => {
+      console.log("STACK CHART: New data received");
+      console.log(newData);
       this.currkeys = newData.currkeys;
       this.data = newData.data;
       this.normalize = newData.normalise;

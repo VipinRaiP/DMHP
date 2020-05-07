@@ -7,10 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MapInfoComponent implements OnInit {
   @Input()
-  private mapService;
+  public mapService;
 
-  private region: string;
-  private total_cases: number;
+  public region: string="Hover Map";
+  public total_cases: number;
 
   constructor() { }
 

@@ -6,18 +6,18 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./multi-line-menu.component.css']
 })
 export class MultiLineMenuComponent implements OnInit {
-  @Input() private menuService: any;
-  private xColumn: string;
-  private year: number;
-  private checkedCumulative: boolean;
-  private tableData: any;
-  private keys: string[];
-  private yearTotal: number[];
-  private monthTotal: number[];
-  private diff: number[];
-  private bool: boolean = false;
-  private months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+  @Input() public menuService: any;
+  public xColumn: string;
+  public year: number;
+  public checkedCumulative: boolean;
+  public tableData: any;
+  public keys: string[];
+  public yearTotal: number[];
+  public monthTotal: number[];
+  public diff: number[];
+  public bool: boolean = false;
+  public months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  public lastMonthName;
 
   constructor() { }
 
@@ -26,8 +26,10 @@ export class MultiLineMenuComponent implements OnInit {
     //this.year = this.menuService.getYear();
     //this.xColumn = this.menuService.getxColumn();
     this.checkedCumulative = this.menuService.getCumulative();
+    this.year = this.menuService.getYear();
     this.menuService.getTableData().subscribe((d) => {
       this.tableData = d.tableData;
+      this.lastMonthName = this.months[this.tableData[this.tableData.length-1].Month-1];
       this.keys = d.keys;
       this.yearTotal = [];
       this.monthTotal = [];
@@ -35,6 +37,8 @@ export class MultiLineMenuComponent implements OnInit {
       let d1=this.tableData[this.tableData.length - 1];
       let d2=this.tableData[this.tableData.length - 2];
       let d3=this.tableData[this.tableData.length - 3];
+      console.log("MULTILINE SERVICE");
+      console.log(this.tableData[this.tableData.length-1].Month);
       for (let k1 of this.keys) {
         this.yearTotal.push(d1[k1]);
         let t1 = d1[k1]-d2[k1];

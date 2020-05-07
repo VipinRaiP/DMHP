@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { Normalise } from '../../Services/patient-count.service';
+import { Normalise, START_YEAR } from '../../Services/patient-count.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-menu',
@@ -9,27 +10,29 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  @Input() private menuService: any;
-  private year: number = 2018;
+  @Input() public menuService: any;
+  public year: number = 2018;
   public quarterChoosen: number = 1;
-  private monthChoosen: number = 1;
-  private months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  public monthChoosen: number = 1;
+  public months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   public monthName = "January";
   public granularChoosen: number = 0; // Granualirity : 0: Annual , 1 : Month , 2: Quarter
-  private checkedNormalize: boolean = false;
-  private columns: string[] = [];// = ["Alcohol Cases", "Suicide Cases", "SMD Cases", "CMD Cases", "Psychiatric Disorder Cases", "O1 Cases", "O2 Cases", "O3 Cases", "O4 Cases", "O5 Cases"];
-  private toggleOptions_Sort: string[];
-  private toggleValue_Sort: number;
-  private toggleOptions_Granularity: string[] = ["Annual", "Month", "Quarter"];
-  private mapName: string;
-  private xColumn: string;
-  private normalizeDisabled: boolean;
+  public checkedNormalize: boolean = false;
+  public columns: string[] = [];// = ["Alcohol Cases", "Suicide Cases", "SMD Cases", "CMD Cases", "Psychiatric Disorder Cases", "O1 Cases", "O2 Cases", "O3 Cases", "O4 Cases", "O5 Cases"];
+  public toggleOptions_Sort: string[];
+  public toggleValue_Sort: number;
+  public toggleOptions_Granularity: string[] = ["Annual", "Month", "Quarter"];
+  public mapName: string;
+  public xColumn: string;
+  public normalizeDisabled: boolean;
   public data: any;
   public dataType;
+  public yearChoosen;
 
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.yearChoosen = this.menuService.getYear();
     this.granularChoosen = this.menuService.getGranularity();
     this.toggleValue_Sort = this.menuService.getSortOption();
     this.checkedNormalize = this.menuService.getNormalize() == Normalise.YES ? true : false;
@@ -69,6 +72,14 @@ export class MenuComponent implements OnInit {
     this.menuService.setNormalise(this.checkedNormalize ? Normalise.YES : Normalise.NO);
   }
 
+  /*onYearChange(event:any){
+    console.log("MENU: Year change received");
+    let year = START_YEAR + event.value;
+    this.yearChoosen = event.value;//year;
+    this.menuService.setYear(this.yearChoosen);
+    this.menuService.getYearDataFromServer({year:this.yearChoosen});
+  }*/
+
   /*public yearObj = new FormControl(moment());
   choosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
     //this.radioPresent=!this.radioPresent;
@@ -103,9 +114,9 @@ export class MenuComponent implements OnInit {
   templateUrl: 'tabular-data.html',
 })
 export class TabularDialog {
-  private columns;
-  private data;
-  private xColumn;
+  public columns;
+  public data;
+  public xColumn;
   constructor(public dialogRef: MatDialogRef<TabularDialog>, @Inject(MAT_DIALOG_DATA) public inputData) {
     this.columns = inputData.columns;
     this.data = inputData.data;

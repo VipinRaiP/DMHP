@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 // Enum - Granularity option
 export enum Granualirity {
@@ -20,6 +21,8 @@ export enum SortOption {
   RANKWISE = 0,
   ALPHABETICALLY = 1
 }
+
+export const START_YEAR = 2018;
 
 @Injectable()
 export abstract class PatientCountService {
@@ -85,14 +88,13 @@ export abstract class PatientCountService {
   }
 
   getYearDataFromServer(postData: { year: number, districtId?: number }) {
-
-    this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['annual'], postData)
+    this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['annual'], postData)
       .subscribe(resAnnualData => {
 
-        this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['monthly'], postData)
+        this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['monthly'], postData)
           .subscribe(resMonthlyData => {
 
-            this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['quarterly'], postData)
+            this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['quarterly'], postData)
               .subscribe(resQuaterlyData => {
                 this.data = {
                   annualData: resAnnualData,
@@ -168,8 +170,6 @@ export abstract class PatientCountService {
       currkeys: this.currkeys,
       data: this.currData
     }
-    console.log("Data", newData);
-
     this.newData.next(newData);
   }
 

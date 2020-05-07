@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PatientCountService } from './patient-count.service'
 import { Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class PatientCountTalukaService extends PatientCountService {
   }
 
   start() {
-    this.http.get("http://localhost:" + this.getPort() + "/getDistrictData").subscribe((responseData) => {
+    this.http.get(environment.backendIP + this.getPort() + "/getDistrictData").subscribe((responseData) => {
       this.createMap(responseData);
       this.setDistrictParameter(this.districtName);
       this.districtNames.next(Array.from(this.districts.keys()));
