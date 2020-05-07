@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //backendIP: "http://18.219.25.120:",
-  backendIP: "http://localhost:",
+  backendIP: "http://18.219.25.120:",
+  // backendIP: "http://localhost:",
 };
 
 /*
