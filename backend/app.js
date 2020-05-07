@@ -964,5 +964,75 @@ app.post("/getMonthlyTotalCases", (req, res) => {
   });
 })
 
+app.post("/getMonthlyTotalTaining", (req, res) => {
+  var year = req.body.year;
+
+  sql = `SELECT  
+    CASE 
+      WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+      WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+      WHEN MONTH(ReportingMonthyear)=3  THEN 3
+      WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+      WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+      WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+      WHEN MONTH(ReportingMonthyear)=7 THEN 7
+      WHEN MONTH(ReportingMonthyear)=8 THEN 8
+      WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+      WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+      WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+      WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+      END as Month,`+ TrainingFields +  `        
+    FROM District_Training 
+    WHERE year(ReportingMonthyear) = ?
+    GROUP BY Month
+    order by Month`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(response);
+    }
+    else
+      res.json(response);
+  });
+})
+
+app.post("/getMonthlyTotalExpense", (req, res) => {
+  var year = req.body.year;
+
+  sql = `SELECT  
+    CASE 
+      WHEN MONTH(ReportingMonthyear)=1 THEN 1 
+      WHEN MONTH(ReportingMonthyear)=2 THEN 2 
+      WHEN MONTH(ReportingMonthyear)=3  THEN 3
+      WHEN MONTH(ReportingMonthyear)=4 THEN 4 
+      WHEN MONTH(ReportingMonthyear)=5 THEN 5 
+      WHEN MONTH(ReportingMonthyear)=6  THEN 6 
+      WHEN MONTH(ReportingMonthyear)=7 THEN 7
+      WHEN MONTH(ReportingMonthyear)=8 THEN 8
+      WHEN MONTH(ReportingMonthyear)=9  THEN 9 
+      WHEN MONTH(ReportingMonthyear)=10 THEN 10 
+      WHEN MONTH(ReportingMonthyear)=11 THEN 11 
+      WHEN MONTH(ReportingMonthyear)=12  THEN 12 
+      END as Month,`+ expenseFields +  `        
+    FROM District_Expense 
+    WHERE year(ReportingMonthyear) = ?
+    GROUP BY Month
+    order by Month`;
+
+  con.query(sql, [year], function (err, response) {
+    if (err) console.log(err);
+
+    if (response != null) {
+      var responseGrouped = jsonGroupBy(response, ['Month']);
+      res.json(response);
+    }
+    else
+      res.json(response);
+  });
+})
+
 module.exports = app;
 
