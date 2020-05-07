@@ -2,7 +2,7 @@
     <span style="color: #555555; font-family: Arial, Helvetica, sans-serif;">
         <h4><strong>Patient Count</strong></h4>
         <h6><strong>Total cases across karnataka state</strong></h6>
-        <h6>Year 2018</h6>
+        <h6>Year {{year}}</h6>
     </span>
     <nav mat-tab-nav-bar>
         <a mat-tab-link href="#Cards">Summary </a>
@@ -14,16 +14,16 @@
 <div id="Cards" class="container-fluid pt-3">
     <div class="row">
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0" >
-            <app-card CardName="CMD Cases" color="#66c2a5"></app-card>
+            <app-card CardName="CMD Cases" color="#66c2a5" [year]="year"></app-card>
         </div>
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-            <app-card CardName="Alcohol Cases" color="#fc8d62"></app-card>
+            <app-card CardName="Alcohol Cases" color="#fc8d62" [year]="year"></app-card>
         </div>
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-            <app-card CardName="SMD Cases" color="#8da0cb"></app-card>
+            <app-card CardName="SMD Cases" color="#8da0cb" [year]="year"></app-card>
         </div>
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-            <app-card CardName="Suicide Cases" color="#e78ac3"></app-card>
+            <app-card CardName="Suicide Cases" color="#e78ac3" [year]="year"></app-card>
         </div>
     </div>
     <app-line-chart *ngIf="lineChartLoaded" (close)="onLineChartClose()" [data]="chartData" ></app-line-chart>
@@ -49,7 +49,7 @@
         </mat-expansion-panel-header>
 
         <div *ngIf="talukaPanelState">
-            <app-taluka-main-menu [districtName]="districtName"></app-taluka-main-menu>
+            <app-taluka-main-menu [districtName]="districtName" [year]="year"></app-taluka-main-menu>
         </div>
     </mat-expansion-panel>
 </div>

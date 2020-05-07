@@ -61,9 +61,11 @@ app.get("/", function (req, res, next) {
 })
 
 var con = mysql.createConnection({
-  host: "localhost",
+  //host: "dmhp.chq9wobmmpgo.us-east-2.rds.amazonaws.com",
+  host:"localhost",
   user: "root",
-  password: "root"
+  password:"root"
+  //password: "root1234"
 });
 
 con.connect(function (err) {
@@ -95,7 +97,8 @@ var USERS = [
   { 'id': 1, 'username': 'vipin.rai' },
   { 'id': 2, 'username': 'harshabh.mahant' },
   { 'id': 3, 'username': 'sameer.khurd' },
-  {'id': 4,'username': 'tk.srikanth'}
+  {'id': 4,'username': 'tk.srikanth'},
+  {'id':5,'username':'dmhp'}
 ];
 
 app.use(expressJwt({secret: 'dmhp-app-super-shared-secret'}).unless({path: ['/api/auth']}));
@@ -105,7 +108,11 @@ app.post("/api/auth",(req,res)=>{
   console.log("Auth req received");
   console.log(body);
   const user  = USERS.find(user=>user.username== body.username);
-  if(!user || body.password!='dmhp@2020') return res.sendStatus(401);
+  if(!user || body.password!='dmhp@2020') 
+  {
+    console.log("INVALID CREDENTIALS");
+    return res.sendStatus(401);
+  }
 
   var token = jwt.sign({userId:user.id},'dmhp-app-super-shared-secret',{expiresIn:'2h'});
   console.log(token);
@@ -399,8 +406,8 @@ app.post("/getAlcoholYearlyDistrictforMap", (req, res) => {
  * 
  ******************************************************************************************************************************/
 
-app.get("/getAlcoholCasesCurrentYear", (req, res) => {
-  var year = 2018;
+app.post("/getAlcoholCasesPerYear", (req, res) => {
+  var year = req.body.year;
   /*sql = `select d.district ,sum(new_alcohal_male)+sum(new_alcohal_female)+sum(old_alcohal_male)+sum(old_alcohal_female) as 'Total Cases'
   from Clinical_Data c , Districts d where d.Districtid = c.Districtid
   group by d.district order by d.district ;`;*/
@@ -433,8 +440,8 @@ app.get("/getAlcoholCasesCurrentYear", (req, res) => {
   })
 });
 
-app.get("/getSuicideCasesCurrentYear", (req, res) => {
-  var year = 2018;
+app.post("/getSuicideCasesPerYear", (req, res) => {
+  var year = req.body.year;
   /*sql = `select d.district ,sum(new_male_suicidecases)+sum(old_male_suicidecases)+sum(new_female_suicidecases)+sum(old_female_suicidecases) as 'Total Cases'
   from Clinical_Data c , Districts d where d.Districtid = c.Districtid and Year(ReportingMonthYear) = ?
   group by d.district order by d.district ;`;*/
@@ -467,8 +474,8 @@ app.get("/getSuicideCasesCurrentYear", (req, res) => {
   })
 });
 
-app.get("/getSMDCasesCurrentYear", (req, res) => {
-  var year = 2018;
+app.post("/getSMDCasesPerYear", (req, res) => {
+  var year = req.body.year;
   /*sql = `select d.district ,sum(new_smd_male)+sum(new_smd_female)+sum(old_smd_male)+sum(old_smd_female)  as 'Total Cases'
     from Clinical_Data c , Districts d where d.Districtid = c.Districtid and Year(ReportingMonthYear) = ?
     group by d.district order by d.district ;`;*/
@@ -499,8 +506,8 @@ app.get("/getSMDCasesCurrentYear", (req, res) => {
   })
 });
 
-app.get("/getCMDCasesCurrentYear", (req, res) => {
-  var year = 2018;
+app.post("/getCMDCasesPerYear", (req, res) => {
+  var year = req.body.year;
   /*sql = `select d.district ,sum(new_cmd_male)+sum(new_cmd_female)+sum(old_cmd_male)+sum(old_cmd_female) as 'Total Cases'
   from Clinical_Data c , Districts d where d.Districtid = c.Districtid and Year(ReportingMonthYear) = ?
   group by d.district order by d.district ;`;*/

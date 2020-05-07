@@ -12,13 +12,17 @@ export class DistrictExpenseMainMenuComponent implements OnInit {
 
   // @Input()
   // private districtExpenseService: ExpenseCountDistrictService;
-  constructor(private http: HttpClient,private titleService: Title,private districtExpenseService: ExpenseCountDistrictService ) { }
+  @Input()
+  public year;
+
+  constructor(private http: HttpClient,public titleService: Title,public districtExpenseService: ExpenseCountDistrictService ) { }
 
   ngOnInit() {
 
     this.titleService.setTitle("District | Expense");
     console.log("EXPENSE COMPONENT");
     this.districtExpenseService.initialize();
+    this.districtExpenseService.setYear(this.year);
   }
 
   ngAfterViewInit() {

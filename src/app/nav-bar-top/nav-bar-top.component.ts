@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar-top',
@@ -9,9 +9,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-bar-top.component.css']
 })
 export class NavBarTopComponent implements OnInit {
-  constructor(private auth:AuthService,private router:Router) { }
-
+  constructor(private route:ActivatedRoute,private auth:AuthService,private router:Router) { }
+  public year;
+  public sideNavOption;
+  public isLoaded=false;
   ngOnInit() {
+    this.sideNavOption = this.route.snapshot.params['sideNavOption'];
+    this.year = this.route.snapshot.params['year'];
+    this.isLoaded = true
   }
 
   Capture() {

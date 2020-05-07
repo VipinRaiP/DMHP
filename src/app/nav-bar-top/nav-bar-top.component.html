@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" >Operational<span class="sr-only">(current)</span></a>
+                <a class="nav-link" >Operations<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" >Performance Analysis</a>
@@ -31,8 +31,10 @@
         </div>
     </div>
 </nav>
+
 <div  class="container-fluid p-3" style=" background-color: rgb(245, 245, 245);">
     <!--app-operational-home></app-operational-home-->
     <app-group-menu></app-group-menu>
+    <app-operational-home *ngIf="isLoaded" [sideNavOption]="sideNavOption" [year]="year"></app-operational-home>
 </div>
 
