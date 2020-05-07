@@ -5,7 +5,7 @@ import { PatientCountDistrictService } from '../Services/patient-count-district.
 import html2canvas from 'html2canvas';
 import * as FileSaver from 'file-saver';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-operational-home',
@@ -24,10 +24,11 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
 
   opened: boolean;
   mode = new FormControl('over');
-  constructor(public router:Router,public districtExpenseService: ExpenseCountDistrictService,   public districtService: PatientCountDistrictService) { }
+  constructor(public route:ActivatedRoute,public router:Router,public districtExpenseService: ExpenseCountDistrictService,   public districtService: PatientCountDistrictService) { }
 
   ngOnInit() {
-
+    this.sideNavOption = this.route.snapshot.params['sideNavOption'];
+    this.year = this.route.snapshot.params['year'];
   }
 
   ngAfterViewInit(){

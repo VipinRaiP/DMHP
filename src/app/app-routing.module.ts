@@ -4,10 +4,15 @@ import { OperationalHomeComponent } from './Operational_Dashboard/operational-ho
 import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
+import { GroupMenuComponent } from './PA-GroupChart/group-menu/group-menu.component';
 
 
 const routes: Routes = [
-  {path:"home/:year/:sideNavOption",component: NavBarTopComponent,canActivate: [AuthGuard]},
+  {path:"home", component:NavBarTopComponent,canActivate: [AuthGuard], children:[
+    {path:":year/:sideNavOption",component:OperationalHomeComponent},
+    {path:"performance",component:GroupMenuComponent}
+  ]},
+
   {path:"",component:LoginComponent},
   {path:"login",component:LoginComponent},
   { path: '**', redirectTo: 'home' }

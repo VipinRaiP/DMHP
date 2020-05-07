@@ -8,14 +8,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" >Operations<span class="sr-only">(current)</span></a>
+                <a class="nav-link" routerLink="/home/2018/1" routerLinkActive="active">Operations<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" >Performance Analysis</a>
+                <a class="nav-link" routerLink="/home/performance">Performance Analysis</a>
             </li>
-            <li class="nav-item">
+            <!--li class="nav-item">
                 <a class="nav-link">Metrics</a>
-            </li>
+            </li-->
         </ul>
         <div class="topnav-right">
             <ul class="navbar-nav mr-auto">
@@ -32,9 +32,11 @@
     </div>
 </nav>
 
-<div  class="container-fluid p-3" style=" background-color: rgb(245, 245, 245);">
-    <!--app-operational-home></app-operational-home-->
-    <app-group-menu></app-group-menu>
+<router-outlet></router-outlet>
+
+<!--div  class="container-fluid p-3" style=" background-color: rgb(245, 245, 245);">
+    <app-operational-home></app-operational-home-->
+    <!--app-group-menu></app-group-menu>
     <app-operational-home *ngIf="isLoaded" [sideNavOption]="sideNavOption" [year]="year"></app-operational-home>
-</div>
+</div-->
 
