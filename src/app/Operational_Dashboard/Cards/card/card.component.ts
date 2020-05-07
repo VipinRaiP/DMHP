@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, ViewEnca
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 import { LineChartService } from '../services/line-chart.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-card',
@@ -12,26 +13,27 @@ import { LineChartService } from '../services/line-chart.service';
 export class CardComponent implements OnInit {
 
   @ViewChild('smallChart', { static: true }) private chartContainer: ElementRef;
-  @Input() CardName: String;
+  @Input() public CardName: String;
   @Input() color: string;
   //  @Input() data: any;
-  private totalCases: number = 0;
-  private year: number = 2019;
-  private margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
-  private width: number;
-  private height: number;
-  private g: any;
-  private x: any;
-  private y: any;
-  private yScaleLine: any;
+  @Input() year:number;
+
+  public totalCases: number = 0;
+  public margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
+  public width: number;
+  public height: number;
+  public g: any;
+  public x: any;
+  public y: any;
+  public yScaleLine: any;
   yLabel: any;
   xLabel: any;
-  private svg: any;
+  public svg: any;
 
   expenseData: any;
 
-  private xAxis;
-  private yAxis;
+  public xAxis;
+  public yAxis;
 
   public chartData;
   public loadChart = false;
@@ -45,10 +47,10 @@ export class CardComponent implements OnInit {
   }
 
   getData() {
-
+    let postData = {year:this.year};
     if (this.CardName == "Alcohol Cases") {
 
-      this.http.get<any>("http://localhost:3000/getAlcoholCasesCurrentYear")
+      this.http.post<any>(environment.backendIP+"3000/getAlcoholCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -56,7 +58,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "SMD Cases") {
-      this.http.get<any>("http://localhost:3000/getSMDCasesCurrentYear")
+      this.http.post<any>(environment.backendIP+"3000/getSMDCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -65,7 +67,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "CMD Cases") {
-      this.http.get<any>("http://localhost:3000/getCMDCasesCurrentYear")
+      this.http.post<any>(environment.backendIP+"3000/getCMDCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -74,7 +76,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "Suicide Cases") {
-      this.http.get<any>("http://localhost:3000/getSuicideCasesCurrentYear")
+      this.http.post<any>(environment.backendIP +"3000/getSuicideCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();

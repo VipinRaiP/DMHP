@@ -38,6 +38,15 @@
                 </div>
 
             </div>
+            <!--div style="float:left; padding-left: 5;">
+                <div class="pl-5" style="float:left;"><strong>Year <br></strong>{{yearChoosen}}</div>
+                <div class="pl-5" style="float:left;">
+                    <mat-slider class="pl-5" color="primary" #slider min="2018" max="2019" step="1" value="2018"
+                        tickInterval="1" thumbLabel="thumbLabel" (input)="onYearChange($event)"
+                        style="width: 200px;"></mat-slider>
+                </div>
+            </div-->
+
             <div class="p-3 bd-highlight">
                 <mat-slide-toggle color="primary" [disabled]="normalizeDisabled" [(ngModel)]="checkedNormalize"
                     (change)="onNormaliseChange()">
@@ -56,7 +65,7 @@
             <div class="row border border-light">
                 <!--Map-->
                 <div class="col-md-4">
-                    <strong>Year - {{year}}</strong>
+                    <strong>Year - {{yearChoosen}}</strong>
                     <strong *ngIf="granularChoosen==1" class="pl-3">Month - {{monthName}}</strong>
                     <strong *ngIf="granularChoosen==2" class="pl-3">Qaurter - {{quarterChoosen}}</strong>
                     <app-map-info [mapService]="menuService"></app-map-info>
@@ -65,7 +74,7 @@
                 <!--Bar Chart-->
                 <div class="col-md-8">
                     <!--strong style="float: right;">Select type of cases</strong-->
-                    <strong>Year - {{year}}</strong>
+                    <strong>Year - {{yearChoosen}}</strong>
                     <strong *ngIf="granularChoosen==1" class="pl-3">Month - {{monthName}}</strong>
                     <strong *ngIf="granularChoosen==2" class="pl-3">Qaurter - {{quarterChoosen}}</strong>
                     <app-stacked-bar-chart [chartService]="menuService">
