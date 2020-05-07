@@ -1,0 +1,13 @@
+#grouped-pie-chart-area{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+#grouped-pie-chart-label{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    height: 400px;
+    width: 260px;
+
+}

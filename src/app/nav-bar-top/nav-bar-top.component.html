@@ -31,8 +31,10 @@
         </div>
     </div>
 </nav>
-<br>
-<div class="container-fluid p-3" style=" background-color: rgb(245, 245, 245);">
+
+<div  class="container-fluid p-3" style=" background-color: rgb(245, 245, 245);">
+    <!--app-operational-home></app-operational-home-->
+    <app-group-menu></app-group-menu>
     <app-operational-home *ngIf="isLoaded" [sideNavOption]="sideNavOption" [year]="year"></app-operational-home>
 </div>
 
