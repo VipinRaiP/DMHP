@@ -95,7 +95,8 @@ var USERS = [
   { 'id': 1, 'username': 'vipin.rai' },
   { 'id': 2, 'username': 'harshabh.mahant' },
   { 'id': 3, 'username': 'sameer.khurd' },
-  {'id': 4,'username': 'tk.srikanth'}
+  {'id': 4,'username': 'tk.srikanth'},
+  {'id':5,'username':'dmhp'}
 ];
 
 app.use(expressJwt({secret: 'dmhp-app-super-shared-secret'}).unless({path: ['/api/auth']}));
