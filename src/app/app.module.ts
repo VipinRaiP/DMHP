@@ -36,6 +36,7 @@ import { DistrictExpenseMainMenuComponent } from './Operational_Dashboard/Distri
 import { DistrictTrainingMainMenuComponent } from './Operational_Dashboard/District/district-training-main-menu/district-training-main-menu.component';
 import { MultiLineMenuComponent } from './Operational_Dashboard/Menu/multi-line-menu/multi-line-menu.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { GroupedBarChartComponent } from './PA-GroupChart/grouped-bar-chart/grouped-bar-chart.component';
 
 
 //Services
@@ -47,12 +48,20 @@ import { PatientCountLineDistrictService } from './Operational_Dashboard/Service
 import { TrainingCountDistrictService } from './Operational_Dashboard/Services/training-count-district.service';
 import { ExpenseCountDistrictService } from './Operational_Dashboard/Services/expense-count-district.service';
 import { NavBarTopComponent } from './nav-bar-top/nav-bar-top.component';
+import {GroupedBarChartService } from './PA-GroupChart/Service/grouped-bar-chart.service'
+import {GroupedLineChartService } from './PA-GroupChart/Service/grouped-line-chart.service'
 
 //Authentication 
 import { JwtModule } from '@auth0/angular-jwt';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { GroupMenuComponent } from './PA-GroupChart/group-menu/group-menu.component';
+import { GroupLineChartComponent } from './PA-GroupChart/group-line-chart/group-line-chart.component';
+import { GroupPieChartComponent } from './PA-GroupChart/group-pie-chart/group-pie-chart.component';
+import { GroupedPieChartCasesService } from './PA-GroupChart/Service/grouped-pie-chart-cases.service';
+import { GroupedPieChartTainingService } from './PA-GroupChart/Service/grouped-pie-chart-training.service';
+import { GroupedPieChartExpenseService } from './PA-GroupChart/Service/grouped-pie-chart-expense.service';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -81,7 +90,11 @@ export function tokenGetter() {
     DistrictTrainingMainMenuComponent,
     MultiLineMenuComponent,
     NavBarTopComponent,
-    LoginComponent
+    LoginComponent,
+    GroupedBarChartComponent,
+    GroupMenuComponent,
+    GroupLineChartComponent,
+    GroupPieChartComponent
   ],
   imports: [
     BrowserModule,
@@ -121,14 +134,18 @@ export function tokenGetter() {
   ],
   providers: [
     LineChartService,
-    
     PatientCountDistrictService,
     PatientCountTalukaService,
     ExpenseCountDistrictService,
     TrainingCountDistrictService,
     PatientCountLineDistrictService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    GroupedBarChartService,
+    GroupedLineChartService,
+    GroupedPieChartCasesService,
+    GroupedPieChartTainingService,
+    GroupedPieChartExpenseService
   ],
   bootstrap: [AppComponent]
 })
