@@ -22,6 +22,8 @@ export enum SortOption {
   ALPHABETICALLY = 1
 }
 
+export const START_YEAR = 2018;
+
 @Injectable()
 export abstract class PatientCountService {
   abstract name(): string;
@@ -86,7 +88,6 @@ export abstract class PatientCountService {
   }
 
   getYearDataFromServer(postData: { year: number, districtId?: number }) {
-
     this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['annual'], postData)
       .subscribe(resAnnualData => {
 
@@ -169,8 +170,6 @@ export abstract class PatientCountService {
       currkeys: this.currkeys,
       data: this.currData
     }
-    console.log("Data", newData);
-
     this.newData.next(newData);
   }
 

@@ -14,6 +14,7 @@ import { TalukaMainMenuComponent } from '../Taluka/taluka-main-menu/taluka-main-
 import { LineChartService } from '../../Cards/services/line-chart.service';
 
 import { Title } from "@angular/platform-browser";
+import { Router } from '@angular/router';
 
 const moment = _rollupMoment || _moment; _moment;
 
@@ -56,19 +57,22 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   public districtName: string = "";
   public lineChartLoaded = false;
   public chartData;
+  @Input()
+  public year;
 
   @ViewChild('Talukas', { static: true }) private TalukaBlock: ElementRef;
 
   //  @Input()
   //  private districtService: PatientCountDistrictService;
-  constructor(public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService, public districtLineService: PatientCountLineDistrictService) {
+  constructor(public route:Router,public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService, public districtLineService: PatientCountLineDistrictService) {
   }
 
   ngOnInit() {
     this.titleService.setTitle("District | Cases");
     this.districtService.initialize();
     this.districtLineService.initialize();
-
+    this.districtService.setYear(this.year);
+    this.districtLineService.setYear(this.year);
     //this.columns = this.districtService.getKeys();
     this.districtService.onDoubleClick.subscribe((districtName) => {
       if (districtName != "Bbmp") {
@@ -115,6 +119,9 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   onTabClick(val: number) {
     setTimeout(() => location.href = "#TalukaPanel", 200);
 
+  }
+  onYearChange(){
+    this.route.navigate(["/home"]);
   }
 }
 

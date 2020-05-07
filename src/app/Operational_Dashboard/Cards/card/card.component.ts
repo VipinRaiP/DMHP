@@ -16,8 +16,9 @@ export class CardComponent implements OnInit {
   @Input() public CardName: String;
   @Input() color: string;
   //  @Input() data: any;
+  @Input() year:number;
+
   public totalCases: number = 0;
-  public year: number = 2019;
   public margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
   public width: number;
   public height: number;
@@ -46,10 +47,10 @@ export class CardComponent implements OnInit {
   }
 
   getData() {
-
+    let postData = {year:this.year};
     if (this.CardName == "Alcohol Cases") {
 
-      this.http.get<any>(environment.backendIP+"3000/getAlcoholCasesCurrentYear")
+      this.http.post<any>(environment.backendIP+"3000/getAlcoholCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -57,7 +58,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "SMD Cases") {
-      this.http.get<any>(environment.backendIP+"3000/getSMDCasesCurrentYear")
+      this.http.post<any>(environment.backendIP+"3000/getSMDCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -66,7 +67,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "CMD Cases") {
-      this.http.get<any>(environment.backendIP+"3000/getCMDCasesCurrentYear")
+      this.http.post<any>(environment.backendIP+"3000/getCMDCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();
@@ -75,7 +76,7 @@ export class CardComponent implements OnInit {
         })
     }
     else if (this.CardName == "Suicide Cases") {
-      this.http.get<any>(environment.backendIP +"3000/getSuicideCasesCurrentYear")
+      this.http.post<any>(environment.backendIP +"3000/getSuicideCasesPerYear",postData)
         .subscribe(responseData => {
           this.chartData = responseData;
           this.createChart();

@@ -12,6 +12,8 @@ export class DistrictTrainingMainMenuComponent implements OnInit {
 
   // @Input()
   // private districtExpenseService: ExpenseCountDistrictService;
+  @Input()
+  public year;
   constructor(private http: HttpClient,private titleService: Title,public districtTrainingService: TrainingCountDistrictService ) { }
 
   ngOnInit() {
@@ -19,6 +21,7 @@ export class DistrictTrainingMainMenuComponent implements OnInit {
     this.titleService.setTitle("District | Expense");
     console.log("EXPENSE COMPONENT");
     this.districtTrainingService.initialize();
+    this.districtTrainingService.setYear(this.year);
   }
 
   ngAfterViewInit() {

@@ -126,6 +126,10 @@ export abstract class LineService {
     return this.cumulative;
   }
 
+  getYear(){
+    return this.year;
+  }
+
   setDataURL(dataURL: { monthly: string }) {
     this.dataURL = dataURL;
   }

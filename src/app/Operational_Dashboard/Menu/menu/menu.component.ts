@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { Normalise } from '../../Services/patient-count.service';
+import { Normalise, START_YEAR } from '../../Services/patient-count.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-menu',
@@ -26,10 +27,12 @@ export class MenuComponent implements OnInit {
   public normalizeDisabled: boolean;
   public data: any;
   public dataType;
+  public yearChoosen;
 
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.yearChoosen = this.menuService.getYear();
     this.granularChoosen = this.menuService.getGranularity();
     this.toggleValue_Sort = this.menuService.getSortOption();
     this.checkedNormalize = this.menuService.getNormalize() == Normalise.YES ? true : false;
@@ -68,6 +71,14 @@ export class MenuComponent implements OnInit {
   onNormaliseChange() {
     this.menuService.setNormalise(this.checkedNormalize ? Normalise.YES : Normalise.NO);
   }
+
+  /*onYearChange(event:any){
+    console.log("MENU: Year change received");
+    let year = START_YEAR + event.value;
+    this.yearChoosen = event.value;//year;
+    this.menuService.setYear(this.yearChoosen);
+    this.menuService.getYearDataFromServer({year:this.yearChoosen});
+  }*/
 
   /*public yearObj = new FormControl(moment());
   choosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {

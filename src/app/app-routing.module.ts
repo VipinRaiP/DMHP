@@ -7,13 +7,14 @@ import { AuthGuard } from './auth.guard';
 
 
 const routes: Routes = [
-  {path:"home",component: NavBarTopComponent,canActivate: [AuthGuard]},
+  {path:"home/:year/:sideNavOption",component: NavBarTopComponent,canActivate: [AuthGuard]},
+  {path:"",component:LoginComponent},
   {path:"login",component:LoginComponent},
   { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
-})
+})  
 export class AppRoutingModule { }

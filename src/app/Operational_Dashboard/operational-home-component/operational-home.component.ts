@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, AfterViewInit, Input} from '@angular/core';
 import { LineChartService } from '../Cards/services/line-chart.service';
 import { ExpenseCountDistrictService } from '../Services/expense-count-district.service';
 import { PatientCountDistrictService } from '../Services/patient-count-district.service';
 import html2canvas from 'html2canvas';
 import * as FileSaver from 'file-saver';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-operational-home',
@@ -16,19 +17,21 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
   public lineChartLoaded = false;
   public chartData;
   public events = [];
-  public sideNavOption: number;
+  @Input()
+  public sideNavOption: number=1;
+  @Input()
+  public year:number;
 
   opened: boolean;
   mode = new FormControl('over');
-  constructor(public districtExpenseService: ExpenseCountDistrictService,   public districtService: PatientCountDistrictService) { }
+  constructor(public router:Router,public districtExpenseService: ExpenseCountDistrictService,   public districtService: PatientCountDistrictService) { }
 
   ngOnInit() {
 
   }
 
   ngAfterViewInit(){
-    this.sideNavOption=1;
-
+    //this.sideNavOption=1;
   }
   onLineChartClose(){
     this.lineChartLoaded = false;
@@ -57,5 +60,11 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
   });
   }
 
+  onYearChange(year:number){
+    console.log("NAVBAR : Year changed");
+    console.log(year);
+    let routeURL = "/home/"+year+"/"+this.sideNavOption;
+    window.location.href = routeURL;
+  }
 
 }

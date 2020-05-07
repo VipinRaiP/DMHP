@@ -46,6 +46,7 @@ export const MY_FORMATS = {
 
 export class TalukaMainMenuComponent implements AfterViewInit, OnInit {
   @Input() public districtName: string;
+  @Input() public year;
    public districts : string[];
 
   constructor(private http: HttpClient, private titleService: Title, public talukaService: PatientCountTalukaService) {
@@ -54,6 +55,7 @@ export class TalukaMainMenuComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.titleService.setTitle("Taluka | Cases");
     this.talukaService.initialize();
+    this.talukaService.setYear(this.year);
   }
 
 

@@ -1,6 +1,6 @@
 <mat-sidenav-container style="padding-top: 4%;">
-  <mat-sidenav #sidenav mode="side" [mode]="mode.value" opened="true" class="sidenav" [(opened)]="opened" (opened)="events.push('open!')"
-  (closed)="events.push('close!')"
+  <mat-sidenav #sidenav mode="side" [mode]="mode.value" opened="true" class="sidenav" [(opened)]="opened"
+    (opened)="events.push('open!')" (closed)="events.push('close!')"
     style="background-color : 	#3b4147; width: 250px;  position: fixed; padding-top: 4%; ">
     <div class="pt-5"><button class="btn btn-light side-nav-button" (click)="onSideNavClick(1)">Patient Count </button>
     </div>
@@ -32,16 +32,24 @@
     </div>
     </ul>
   </nav-->
-
+    <div class="col-md-2">
+      <strong>Select Year</strong>
+      <select ngModel class="form-control" name="year" [(ngModel)]='year'
+      (ngModelChange)='onYearChange($event)'>
+        <option value=2018>2018</option>
+        <option value=2019>2019</option>
+      </select>
+    </div>
+    
     <div *ngIf="sideNavOption==1" id="Patient" class="container-fluid p-3">
-      <app-district-main-menu></app-district-main-menu>
+      <app-district-main-menu [year]="year"></app-district-main-menu>
     </div>
 
     <div *ngIf="sideNavOption==2" id="Expense" class="container-fluid p-3">
-      <app-district-expense-main-menu></app-district-expense-main-menu>
+      <app-district-expense-main-menu [year]="year"></app-district-expense-main-menu>
     </div>
     <div *ngIf="sideNavOption==3" id="Training" class="container-fluid p-3">
-      <app-district-training-main-menu></app-district-training-main-menu>
+      <app-district-training-main-menu [year]="year"></app-district-training-main-menu>
     </div>
 
   </mat-sidenav-content>

@@ -17,7 +17,7 @@ export class MultiLineMenuComponent implements OnInit {
   public diff: number[];
   public bool: boolean = false;
   public months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+  public lastMonthName;
 
   constructor() { }
 
@@ -26,8 +26,10 @@ export class MultiLineMenuComponent implements OnInit {
     //this.year = this.menuService.getYear();
     //this.xColumn = this.menuService.getxColumn();
     this.checkedCumulative = this.menuService.getCumulative();
+    this.year = this.menuService.getYear();
     this.menuService.getTableData().subscribe((d) => {
       this.tableData = d.tableData;
+      this.lastMonthName = this.months[this.tableData[this.tableData.length-1].Month-1];
       this.keys = d.keys;
       this.yearTotal = [];
       this.monthTotal = [];
@@ -35,6 +37,8 @@ export class MultiLineMenuComponent implements OnInit {
       let d1=this.tableData[this.tableData.length - 1];
       let d2=this.tableData[this.tableData.length - 2];
       let d3=this.tableData[this.tableData.length - 3];
+      console.log("MULTILINE SERVICE");
+      console.log(this.tableData[this.tableData.length-1].Month);
       for (let k1 of this.keys) {
         this.yearTotal.push(d1[k1]);
         let t1 = d1[k1]-d2[k1];
