@@ -9,7 +9,7 @@ export class MapInfoComponent implements OnInit {
   @Input()
   public mapService;
 
-  public region: string;
+  public region: string="Hover Map";
   public total_cases: number;
 
   constructor() { }
