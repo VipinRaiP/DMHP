@@ -5,17 +5,10 @@
         <h6>Year {{year}}</h6>
     </span>
     <nav mat-tab-nav-bar>
-<<<<<<< HEAD
         <a mat-tab-link (click)="onClickScroll('Cards')">Summary </a>
         <a mat-tab-link (click)="onClickScroll('Months')">Across Months </a>
         <a mat-tab-link (click)="onClickScroll('Districts')">Across Districts </a>
         <a mat-tab-link (click)="onClickScroll('Talukas')">Across Talukas </a>
-=======
-        <a mat-tab-link href="#Cards">Summary </a>
-        <a mat-tab-link href="#Months">Across Months </a>
-        <a mat-tab-link [routerLink]="['/']" fragment="Districts">Across Districts </a>
-        <a mat-tab-link href="#Talukas">Across Talukas </a>
->>>>>>> a04c355a1559bd9b2cb538e1193e6dfd128c2504
     </nav>
 </div>
 <div id="Cards" class="container-fluid pt-3">
