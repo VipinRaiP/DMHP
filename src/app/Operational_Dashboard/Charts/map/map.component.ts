@@ -37,7 +37,7 @@ export class MapComponent implements OnInit {
   @ViewChild('map', { static: true }) private chartContainer: ElementRef;
 
   constructor(private http: HttpClient) { }
-
+  public isMapLoaded=false;
   ngOnInit() {
     this.mapService.getParameterListener().subscribe((newParameter) => {
       this.mapName = newParameter.mapName;
@@ -56,7 +56,8 @@ export class MapComponent implements OnInit {
       this.mapdata = newData.data;
       this.normalize = newData.normalise;
       this.currkeys = newData.currkeys;
-      this.createMap();
+      if(this.isMapLoaded)
+        this.createMap();
     });
 
   }
@@ -65,10 +66,12 @@ export class MapComponent implements OnInit {
     this.http.get(this.mapDirPath + this.mapName + this.fileExt).subscribe(responseData => {
       this.mapName = this.mapName.replace(" ", "_");
       this.jsondata = responseData;
-    })
-    // set the colors 
-    this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired, ...d3.schemeTableau10]);
-    this.z.domain(this.keys);
+      this.isMapLoaded=true;
+      // set the colors 
+      this.z = d3.scaleOrdinal([...d3.schemeSet2, ...d3.schemePaired, ...d3.schemeTableau10]);
+      this.z.domain(this.keys);
+      this.createMap();
+    }) 
   }
 
   createMap() {
