@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import { GroupedPieChartCasesService } from './grouped-pie-chart-cases.service';
 import { GroupedPieChartExpenseService } from './grouped-pie-chart-expense.service';
 import { GroupedPieChartTainingService } from './grouped-pie-chart-training.service';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -118,13 +120,13 @@ export class GroupedBarChartService {
 
   getYearDataFromServer(postData: { year: number }) {
 
-    this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['cases'], postData)
+    this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['cases'], postData)
       .subscribe(resCasesData => {
 
-        this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['training'], postData)
+        this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['training'], postData)
           .subscribe(resTrainingData => {
 
-            this.http.post<any>("http://localhost:" + this.port + "/" + this.dataURL['expense'], postData)
+            this.http.post<any>(environment.backendIP + this.port + "/" + this.dataURL['expense'], postData)
               .subscribe(resExpenseData => {
                 this.data = {
                   cases: resCasesData,
