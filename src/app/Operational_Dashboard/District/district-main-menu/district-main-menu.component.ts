@@ -15,6 +15,7 @@ import { LineChartService } from '../../Cards/services/line-chart.service';
 
 import { Title } from "@angular/platform-browser";
 import { Router } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
 
 const moment = _rollupMoment || _moment; _moment;
 
@@ -61,10 +62,11 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   public year;
 
   @ViewChild('Talukas', { static: true }) private TalukaBlock: ElementRef;
-
+  
   //  @Input()
   //  private districtService: PatientCountDistrictService;
-  constructor(public route:Router,public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService, public districtLineService: PatientCountLineDistrictService) {
+  constructor(public route:Router,public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService,
+     public districtLineService: PatientCountLineDistrictService, private viewportScroller: ViewportScroller) {
   }
 
   ngOnInit() {
@@ -90,6 +92,7 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
       }
       else
         alert("No taluka view found for BBMP")
+
     });
 
     this.lineChartService.getChartDataListener().subscribe((d) => {
@@ -123,6 +126,11 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   onYearChange(){
     this.route.navigate(["/home"]);
   }
+
+  public onClickScroll(elementId: string): void { 
+     this.viewportScroller.scrollToAnchor(elementId);
+  }
+
 }
 
 

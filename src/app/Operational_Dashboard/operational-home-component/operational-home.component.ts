@@ -21,7 +21,7 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
   public sideNavOption: number=1;
   @Input()
   public year:number;
-
+  
   opened: boolean;
   mode = new FormControl('over');
   constructor(public route:ActivatedRoute,public router:Router,public districtExpenseService: ExpenseCountDistrictService,   public districtService: PatientCountDistrictService) { }
