@@ -202,8 +202,9 @@ export class GroupPieChartComponent implements OnInit {
       .on("mouseout", (d) => arcHoverExitFunc(d.data.key))
       .transition().duration(1000)
       .attr('d', arc)
-      //.attr("stroke", "black")
-      .style("stroke-width", "5px")
+      .style("stroke-width", "0.5px")
+      .attr("stroke", this.color[0])
+      .attr("stroke-opacity", 0.3)
 
     this.g2.select(".name-text")
       .text("Total " + this.xColumn);
@@ -217,7 +218,7 @@ export class GroupPieChartComponent implements OnInit {
         .transition().duration(100)
         .attr('d', arcHover)
         .attr("stroke", this.color[0])
-        .attr("stroke-opacity", 0.3)
+        .style("stroke-width", "5px")
     }
 
     let arcHoverExitFunc = (key) => {
@@ -225,7 +226,7 @@ export class GroupPieChartComponent implements OnInit {
       this.g1.select("#a" + key)
         .transition().duration(100)
         .attr('d', arc)
-        .attr("stroke", "none")
-    }
+        .style("stroke-width", "0.5px")
+      }
   }
 }
