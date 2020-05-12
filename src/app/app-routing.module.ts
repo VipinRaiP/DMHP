@@ -15,8 +15,8 @@ const routerOptions: ExtraOptions = {
 
 const routes: Routes = [
   {path:"home", component:NavBarTopComponent,canActivate: [AuthGuard], children:[
-    {path:":year/:sideNavOption",component:OperationalHomeComponent},
-    {path:"performance",component:GroupMenuComponent}
+    {path:"operations/:year/:sideNavOption",component:OperationalHomeComponent},
+    {path:"performance/:year",component:GroupMenuComponent}
   ]},
 
   {path:"",component:LoginComponent},  

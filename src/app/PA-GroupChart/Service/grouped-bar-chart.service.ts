@@ -258,4 +258,9 @@ export class GroupedBarChartService {
     }
     this.updateData();
   }
+
+  setYear(year:number){
+    this.year = year;
+  }
+
 }
