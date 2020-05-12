@@ -129,6 +129,8 @@ export class GroupedBarChartComponent implements OnInit {
       .attr("width", 18)
       .attr("height", 15)
       .attr("y", 3.5)
+      .attr("stroke", "black")
+      .style("stroke-width", 0.5)
       .attr("fill", (d) => this.z(d));
 
     legend.append("text")

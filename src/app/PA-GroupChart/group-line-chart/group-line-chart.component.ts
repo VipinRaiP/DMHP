@@ -174,6 +174,8 @@ export class GroupLineChartComponent implements OnInit {
       .attr("width", 18)
       .attr("height", 15)
       .attr("y", 3.5)
+      .attr("stroke", "black")
+      .style("stroke-width", 0.5)
       .attr("fill", (d) => this.z(d.id));
 
     legend.append("text")
