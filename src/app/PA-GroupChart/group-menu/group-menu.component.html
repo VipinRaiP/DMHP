@@ -5,8 +5,16 @@
         </mat-card-title>
 
     </mat-card-header>
+    <div class="col mx-auto" style="width:150px">
+        <strong>Select Year</strong>
+        <select ngModel class="form-control" name="year" [(ngModel)]='year'
+        (ngModelChange)='onYearChange($event)'>
+          <option value=2018>2018</option>
+          <option value=2019>2019</option>
+        </select>
+      </div>
     <mat-card-content>
-                <mat-card-subtitle><h6 style="text-align: center;">From April 2018  -  To December 2018</h6> </mat-card-subtitle>
+        <!--mat-card-subtitle><h6 style="text-align: center;">For Year : {{year}}</h6> </mat-card-subtitle-->
 
         <div class="p-5 border border">
             <div class="row">

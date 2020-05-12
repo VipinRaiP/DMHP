@@ -64,7 +64,7 @@ export class OperationalHomeComponent implements OnInit, AfterViewInit {
   onYearChange(year:number){
     console.log("NAVBAR : Year changed");
     console.log(year);
-    let routeURL = "/home/"+year+"/"+this.sideNavOption;
+    let routeURL = "/home/operations/"+year+"/"+this.sideNavOption;
     window.location.href = routeURL;
   }
 
