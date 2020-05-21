@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
 import { LineChartService } from '../services/line-chart.service';
 import { environment } from 'src/environments/environment';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-card',
@@ -16,7 +17,8 @@ export class CardComponent implements OnInit {
   @Input() public CardName: String;
   @Input() color: string;
   //  @Input() data: any;
-  @Input() year:number;
+  @Input() year: number;
+  @Input() cardService: any;
 
   public totalCases: number = 0;
   public margin: any = { top: 50, right: 0, bottom: 0, left: 0 };
@@ -42,49 +44,19 @@ export class CardComponent implements OnInit {
   constructor(private http: HttpClient, private lineChartService: LineChartService) { }
 
   ngOnInit() {
-    this.getData();
-
+    this.cardService.initialise({
+      year: this.year,
+      cardName: this.CardName
+    })
+    this.cardService.getDataListener(this.CardName)
+    .pipe(take(1))
+    .subscribe((data) => {
+      this.chartData = data;
+      this.createChart();
+      this.createLineChart(data);
+    })
   }
-
-  getData() {
-    let postData = {year:this.year};
-    if (this.CardName == "Alcohol Cases") {
-
-      this.http.post<any>(environment.backendIP+"3000/getAlcoholCasesPerYear",postData)
-        .subscribe(responseData => {
-          this.chartData = responseData;
-          this.createChart();
-          this.createLineChart(responseData);
-        })
-    }
-    else if (this.CardName == "SMD Cases") {
-      this.http.post<any>(environment.backendIP+"3000/getSMDCasesPerYear",postData)
-        .subscribe(responseData => {
-          this.chartData = responseData;
-          this.createChart();
-          this.createLineChart(responseData);
-
-        })
-    }
-    else if (this.CardName == "CMD Cases") {
-      this.http.post<any>(environment.backendIP+"3000/getCMDCasesPerYear",postData)
-        .subscribe(responseData => {
-          this.chartData = responseData;
-          this.createChart();
-          this.createLineChart(responseData);
-
-        })
-    }
-    else if (this.CardName == "Suicide Cases") {
-      this.http.post<any>(environment.backendIP +"3000/getSuicideCasesPerYear",postData)
-        .subscribe(responseData => {
-          this.chartData = responseData;
-          this.createChart();
-          this.createLineChart(responseData);
-        })
-    }
-  }
-
+  
   createChart() {
     // create the svg
     let element = this.chartContainer.nativeElement;
@@ -93,18 +65,18 @@ export class CardComponent implements OnInit {
       .append('svg')
       //.attr('width', 400)
       //.attr('height', 130);
-      .attr('width', element.offsetWidth+40)
-      .attr('height', element.offsetHeight-40)
+      .attr('width', element.offsetWidth + 40)
+      .attr('height', element.offsetHeight - 40)
       .style("cursor", "pointer");
-      
-    this.width = element.offsetWidth - this.margin.left - this.margin.right+40;
+
+    this.width = element.offsetWidth - this.margin.left - this.margin.right + 40;
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
 
     //console.log(this.height);
 
     // chart plot area
     this.g = this.svg.append('g')
-      .attr('transform', `translate(${this.margin.left-20}, ${this.margin.top})`);
+      .attr('transform', `translate(${this.margin.left - 20}, ${this.margin.top})`);
 
 
     // set x scale
@@ -170,7 +142,7 @@ export class CardComponent implements OnInit {
     // define the area
     var area = d3.area()
       .x(d => this.x(d["Month"]) + (this.x.bandwidth() / 2)) // set the x values for the line generator
-      .y0(this.height-this.margin.bottom)
+      .y0(this.height - this.margin.bottom)
       .y1(d => this.y(d["Total Cases"])) // set the y values for the line generator 
       .curve(d3.curveMonotoneX)
 

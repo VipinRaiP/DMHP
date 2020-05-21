@@ -62,6 +62,7 @@ import { GroupPieChartComponent } from './PA-GroupChart/group-pie-chart/group-pi
 import { GroupedPieChartCasesService } from './PA-GroupChart/Service/grouped-pie-chart-cases.service';
 import { GroupedPieChartTainingService } from './PA-GroupChart/Service/grouped-pie-chart-training.service';
 import { GroupedPieChartExpenseService } from './PA-GroupChart/Service/grouped-pie-chart-expense.service';
+import { PatientCountCardService } from './Operational_Dashboard/Cards/services/patient-count.card.service';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -133,6 +134,7 @@ export function tokenGetter() {
    TabularDialog
   ],
   providers: [
+    PatientCountCardService,
     LineChartService,
     PatientCountDistrictService,
     PatientCountTalukaService,

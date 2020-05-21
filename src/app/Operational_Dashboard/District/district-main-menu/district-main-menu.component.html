@@ -14,16 +14,16 @@
 <div id="Cards" class="container-fluid pt-3">
     <div class="row">
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0" >
-            <app-card CardName="CMD Cases" color="#66c2a5" [year]="year"></app-card>
+            <app-card [cardService]="patientCountCardService" CardName="CMD Cases" color="#66c2a5" [year]="year"></app-card>
         </div>
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-            <app-card CardName="Alcohol Cases" color="#fc8d62" [year]="year"></app-card>
+            <app-card [cardService]="patientCountCardService" CardName="Alcohol Cases" color="#fc8d62" [year]="year"></app-card>
         </div>
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-            <app-card CardName="SMD Cases" color="#8da0cb" [year]="year"></app-card>
+            <app-card [cardService]="patientCountCardService" CardName="SMD Cases" color="#8da0cb" [year]="year"></app-card>
         </div>
         <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
-            <app-card CardName="Suicide Cases" color="#e78ac3" [year]="year"></app-card>
+            <app-card [cardService]="patientCountCardService" CardName="Suicide Cases" color="#e78ac3" [year]="year"></app-card>
         </div>
     </div>
     <app-line-chart *ngIf="lineChartLoaded" (close)="onLineChartClose()" [data]="chartData" ></app-line-chart>

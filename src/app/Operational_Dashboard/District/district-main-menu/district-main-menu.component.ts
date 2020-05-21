@@ -16,6 +16,7 @@ import { LineChartService } from '../../Cards/services/line-chart.service';
 import { Title } from "@angular/platform-browser";
 import { Router } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { PatientCountCardService } from '../../Cards/services/patient-count.card.service';
 
 const moment = _rollupMoment || _moment; _moment;
 
@@ -66,7 +67,8 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   //  @Input()
   //  private districtService: PatientCountDistrictService;
   constructor(public route:Router,public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService,
-     public districtLineService: PatientCountLineDistrictService, private viewportScroller: ViewportScroller) {
+     public districtLineService: PatientCountLineDistrictService, private viewportScroller: ViewportScroller,
+     public patientCountCardService:PatientCountCardService) {
   }
 
   ngOnInit() {
