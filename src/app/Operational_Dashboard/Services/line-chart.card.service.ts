@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 
-export class LineChartService{
+export class CardLineChartService{
 
     private chartData:any;
     private chartDataUpdated = new Subject<any>();

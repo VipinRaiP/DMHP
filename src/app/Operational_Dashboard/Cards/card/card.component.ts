@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
-import { LineChartService } from '../services/line-chart.service';
+import { CardLineChartService } from '../services/line-chart.service';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs/operators';
 
@@ -41,7 +41,7 @@ export class CardComponent implements OnInit {
   public loadChart = false;
 
 
-  constructor(private http: HttpClient, private lineChartService: LineChartService) { }
+  constructor(private http: HttpClient, private lineChartService: CardLineChartService) { }
 
   ngOnInit() {
     this.cardService.initialise({

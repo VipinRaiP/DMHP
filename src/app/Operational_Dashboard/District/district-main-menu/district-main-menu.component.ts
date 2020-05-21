@@ -11,7 +11,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { PatientCountDistrictService } from '../../Services/patient-count-district.service'
 import { PatientCountLineDistrictService } from '../../Services/Multi-line-Services/patient-count-line-district.service'
 import { TalukaMainMenuComponent } from '../Taluka/taluka-main-menu/taluka-main-menu.component'
-import { LineChartService } from '../../Cards/services/line-chart.service';
+import { CardLineChartService } from '../../Cards/services/line-chart.card.service';
 
 import { Title } from "@angular/platform-browser";
 import { Router } from '@angular/router';
@@ -66,7 +66,7 @@ export class DistrictMainMenuComponent implements AfterViewInit, OnInit {
   
   //  @Input()
   //  private districtService: PatientCountDistrictService;
-  constructor(public route:Router,public titleService: Title, public lineChartService: LineChartService, public districtService: PatientCountDistrictService,
+  constructor(public route:Router,public titleService: Title, public lineChartService: CardLineChartService, public districtService: PatientCountDistrictService,
      public districtLineService: PatientCountLineDistrictService, private viewportScroller: ViewportScroller,
      public patientCountCardService:PatientCountCardService) {
   }

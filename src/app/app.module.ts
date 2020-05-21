@@ -40,7 +40,7 @@ import { GroupedBarChartComponent } from './PA-GroupChart/grouped-bar-chart/grou
 
 
 //Services
-import { LineChartService } from './Operational_Dashboard/Cards/services/line-chart.service';
+import { CardLineChartService } from './Operational_Dashboard/Services/line-chart.card.service';
 import { PatientCountService } from './Operational_Dashboard/Services/patient-count.service';
 import { PatientCountDistrictService } from './Operational_Dashboard/Services/patient-count-district.service';
 import { PatientCountTalukaService } from './Operational_Dashboard/Services/patient-count-taluka.service';
@@ -62,7 +62,7 @@ import { GroupPieChartComponent } from './PA-GroupChart/group-pie-chart/group-pi
 import { GroupedPieChartCasesService } from './PA-GroupChart/Service/grouped-pie-chart-cases.service';
 import { GroupedPieChartTainingService } from './PA-GroupChart/Service/grouped-pie-chart-training.service';
 import { GroupedPieChartExpenseService } from './PA-GroupChart/Service/grouped-pie-chart-expense.service';
-import { PatientCountCardService } from './Operational_Dashboard/Cards/services/patient-count.card.service';
+import { PatientCountCardService } from './Operational_Dashboard/Services/patient-count.card.service';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -135,7 +135,7 @@ export function tokenGetter() {
   ],
   providers: [
     PatientCountCardService,
-    LineChartService,
+    CardLineChartService,
     PatientCountDistrictService,
     PatientCountTalukaService,
     ExpenseCountDistrictService,
