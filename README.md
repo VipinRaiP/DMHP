@@ -1,27 +1,7 @@
-# DMHP
+Web Application to visualize data of District Mental Health Programme of Karnataka
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.22.
+Languages and Technologies used : ANGULAR, D3, NODEJS, MYSQL, JAVASCRIPT
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+• Main objective was to make each module of the project (especially charts) reusable. These modules (charts) can be reused for visualization of any other data source.
+• Angular 8 is used in the front-end along with D3 . D3 is javascript data visualization library. NodeJs is used in the back-end to get the data from the MySQL database.
+• Angular components were created for some commonly used charts with all controls to vary the granularity. Angular component will subscribe to a Angular service to get the data. Angular Services will get the data from Node Server in the backend using RESTful APIs.
