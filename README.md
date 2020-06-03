@@ -1,4 +1,4 @@
-Web Application to visualise data of District Mental Health Programme of Karnataka
+# Web Application to visualise data of District Mental Health Programme of Karnataka
 
 Languages and Technologies used : ANGULAR, D3, NODEJS, MYSQL, JAVASCRIPT
 
