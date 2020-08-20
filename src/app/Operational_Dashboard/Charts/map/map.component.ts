@@ -65,6 +65,8 @@ export class MapComponent implements OnInit {
   getMap() {
     this.http.get(this.mapDirPath + this.mapName + this.fileExt).subscribe(responseData => {
       this.mapName = this.mapName.replace(" ", "_");
+      console.log("MAP : DATA");
+      console.log(responseData);
       this.jsondata = responseData;
       this.isMapLoaded=true;
       // set the colors 
@@ -120,7 +122,8 @@ export class MapComponent implements OnInit {
 
 
     let state = topojson.feature(this.jsondata, this.jsondata.objects[this.mapName]);
-
+    console.log("MAP FEATURES")
+    console.log(state.features);
     const projection = d3.geoMercator();
     projection.fitExtent(
       [

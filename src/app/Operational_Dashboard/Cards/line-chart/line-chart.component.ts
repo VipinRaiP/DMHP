@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as d3 from 'd3';
-import { CardLineChartService } from '../services/line-chart.card.service';
+import { CardLineChartService } from '../../Services/line-chart.card.service';
 
 
 @Component({

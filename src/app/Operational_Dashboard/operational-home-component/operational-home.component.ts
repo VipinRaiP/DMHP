@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, AfterViewInit, Input} from '@angular/core';
-import { CardLineChartService } from '../Cards/services/line-chart.card.service';
+import { CardLineChartService } from '../Services/line-chart.card.service';
 import { ExpenseCountDistrictService } from '../Services/expense-count-district.service';
 import { PatientCountDistrictService } from '../Services/patient-count-district.service';
 import html2canvas from 'html2canvas';

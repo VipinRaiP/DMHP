@@ -11,12 +11,12 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { PatientCountDistrictService } from '../../Services/patient-count-district.service'
 import { PatientCountLineDistrictService } from '../../Services/Multi-line-Services/patient-count-line-district.service'
 import { TalukaMainMenuComponent } from '../Taluka/taluka-main-menu/taluka-main-menu.component'
-import { CardLineChartService } from '../../Cards/services/line-chart.card.service';
+import { CardLineChartService } from '../../Services/line-chart.card.service';
 
 import { Title } from "@angular/platform-browser";
 import { Router } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
-import { PatientCountCardService } from '../../Cards/services/patient-count.card.service';
+import { PatientCountCardService } from '../../Services/patient-count.card.service';
 
 const moment = _rollupMoment || _moment; _moment;
 
