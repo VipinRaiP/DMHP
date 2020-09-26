@@ -61,11 +61,8 @@ app.get("/", function (req, res, next) {
 })
 
 var con = mysql.createConnection({
-  //host: "dmhp.chq9wobmmpgo.us-east-2.rds.amazonaws.com",
-  //host : "http://15.207.104.52:3306",
   host:"localhost",
   user: "root",
-  // password:"root"
   password: "dmhp@2020"
 });
 
