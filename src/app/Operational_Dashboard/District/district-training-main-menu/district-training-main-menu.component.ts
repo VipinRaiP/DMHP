@@ -23,7 +23,7 @@ export class DistrictTrainingMainMenuComponent implements OnInit {
     this.districtTrainingService.initialize();
     this.districtTrainingService.setYear(this.year);
   }
-
+  
   ngAfterViewInit() {
     this.districtTrainingService.updateParameter();
     let postData = {

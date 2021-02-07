@@ -62,8 +62,9 @@ app.get("/", function (req, res, next) {
 
 var con = mysql.createConnection({
   host:"localhost",
+  //host:"http://15.207.104.52",
   user: "root",
-  password: "dmhp@2020"
+  password: "root"
 });
 
 con.connect(function (err) {
